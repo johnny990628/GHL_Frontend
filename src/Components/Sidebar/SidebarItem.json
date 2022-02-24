@@ -1,0 +1,27 @@
+[
+    {
+        "display_name": "首頁",
+        "name": "home",
+        "route": "/"
+    },
+    {
+        "display_name": "排程",
+        "name": "schedule",
+        "route": "/schedule"
+    },
+    {
+        "display_name": "病歷",
+        "name": "records",
+        "route": "/records"
+    },
+    {
+        "display_name": "病人資訊",
+        "name": "patient",
+        "route": "/patient"
+    },
+    {
+        "display_name": "設定",
+        "name": "setting",
+        "route": "/setting"
+    }
+]
