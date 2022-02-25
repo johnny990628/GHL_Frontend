@@ -17,6 +17,9 @@ const theme = createTheme({
       primary: "#000000",
     },
   },
+  typography: {
+    fontFamily: `'cwTeXYen', sans-serif`,
+  },
 });
 
 ReactDOM.render(

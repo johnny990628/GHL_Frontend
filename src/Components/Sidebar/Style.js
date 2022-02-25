@@ -7,7 +7,6 @@ const useStyles = makeStyles((theme) => ({
   list: {
     height: "100vh",
     backgroundColor: "#F5D7DE",
-    borderRight: "1px solid #C8DCC3",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
