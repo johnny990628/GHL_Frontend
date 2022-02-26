@@ -35,7 +35,7 @@ const Schedule = () => {
     return (
         <>
             <Box className={classes.container}>
-                <Box className={classes.title}>今日排程</Box>
+                <Box className={classes.title}>排程管理</Box>
                 <CustomTable rows={rows} columns={columns} />
             </Box>
             <Fab color="primary" aria-label="add" variant="extended" sx={{ position: 'fixed', right: 100, bottom: 50, p: 3 }}>

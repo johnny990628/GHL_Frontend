@@ -41,7 +41,7 @@ const Patient = () => {
             </Box>
             <Fab color="primary" aria-label="add" variant="extended" sx={{ position: 'fixed', right: 100, bottom: 50, p: 3 }}>
                 <Add />
-                <Box sx={{ fontSize: '1.5rem', marginLeft: '.3rem' }}>新增排程</Box>
+                <Box sx={{ fontSize: '1.5rem', marginLeft: '.3rem' }}>新增病人</Box>
             </Fab>
         </>
     );

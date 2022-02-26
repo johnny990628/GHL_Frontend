@@ -1,4 +1,4 @@
-import { Home, EventAvailable, ReceiptLong, Accessible, Settings, CreateNewFolder } from '@mui/icons-material';
+import { Home, EventAvailable, ReceiptLong, Accessible, Settings, CreateNewFolder, Person } from '@mui/icons-material';
 
 const data = [
     {
@@ -30,6 +30,12 @@ const data = [
         name: 'report',
         route: '/report',
         icon: <CreateNewFolder />,
+    },
+    {
+        display_name: '使用者管理',
+        name: 'user',
+        route: '/user',
+        icon: <Person />,
     },
     {
         display_name: '設定',

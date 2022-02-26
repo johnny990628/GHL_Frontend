@@ -6,6 +6,7 @@ import Record from '../Pages/Record/Record';
 import Patient from '../Pages/Patient/Patient';
 import Setting from '../Pages/Setting/Setting';
 import Report from '../Pages/Report/Report';
+import User from '../Pages/User/User';
 
 const Router = () => {
     return (
@@ -16,6 +17,7 @@ const Router = () => {
             <Route path="/patient" element={<Patient />} />
             <Route path="/setting" element={<Setting />} />
             <Route path="/report" element={<Report />} />
+            <Route path="/user" element={<User />} />
         </Routes>
     );
 };
