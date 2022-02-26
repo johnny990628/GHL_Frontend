@@ -6,14 +6,14 @@ import useStyles from './Style';
 
 const columns = [
     { field: 'id', headerName: '身分證字號', width: 250 },
-    { field: 'firstName', headerName: '姓氏', width: 200 },
+    { field: 'firstName', headerName: '姓氏', width: 250 },
     { field: 'lastName', headerName: '名', width: 250 },
     {
         field: 'age',
         headerName: '年齡',
-        width: 150,
+        width: 200,
     },
-    { field: 'time', headerName: '時間', type: 'date', width: 250 },
+    { field: 'time', headerName: '時間', type: 'date', width: 300 },
 ];
 
 const rows = [
@@ -37,10 +37,18 @@ const Schedule = () => {
             <Box className={classes.container}>
                 <Box className={classes.title}>排程</Box>
                 <Box className={classes.table}>
-                    <DataGrid rows={rows} columns={columns} pageSize={8} checkboxSelection sx={{ fontSize: '1.3rem', backgroundColor: '#F5D7DE', p: 2 }} />
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        pageSize={9}
+                        autoHeight
+                        checkboxSelection
+                        scrollbarSize={5}
+                        sx={{ fontSize: '1.2rem', backgroundColor: '#F5D7DE', p: 2, borderRadius: '1rem' }}
+                    />
                 </Box>
             </Box>
-            <Fab color="primary" aria-label="add" variant="extended" sx={{ position: 'fixed', right: 80, bottom: 50, p: 3 }}>
+            <Fab color="primary" aria-label="add" variant="extended" sx={{ position: 'fixed', right: 100, bottom: 40, p: 3 }}>
                 <Add />
                 <Box sx={{ fontSize: '1.5rem', marginLeft: '.3rem' }}>新增排程</Box>
             </Fab>

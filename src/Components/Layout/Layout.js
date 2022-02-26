@@ -10,7 +10,7 @@ const Layout = () => {
     const classes = useStyles();
     return (
         <BrowserRouter>
-            <Box>
+            <Box sx={{ height: '100vh' }}>
                 <Sidebar />
 
                 <Box className={classes.container}>
