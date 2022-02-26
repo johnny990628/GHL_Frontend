@@ -35,7 +35,7 @@ const Schedule = () => {
     return (
         <>
             <Box className={classes.container}>
-                <Box className={classes.title}>排程</Box>
+                <Box className={classes.title}>今日排程</Box>
                 <Box className={classes.table}>
                     <DataGrid
                         rows={rows}

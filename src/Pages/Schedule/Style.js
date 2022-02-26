@@ -8,12 +8,15 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
     },
     title: {
-        fontSize: '3rem',
-        margin: theme.spacing(1),
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: '3.5rem',
+        margin: theme.spacing(2),
     },
     table: {
-        margin: theme.spacing(1),
-        width: '96%',
+        margin: theme.spacing(0.4),
+        width: '100%',
     },
 }));
 
