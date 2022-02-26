@@ -31,20 +31,20 @@ const rows = [
     { id: 'A000000010', name: 'Roxie', birth: '2022/2/27', time: '2022/2/28', status: '未完成' },
 ];
 
-const Record = () => {
+const Report = () => {
     const classes = useStyles();
     return (
         <>
             <Box className={classes.container}>
-                <Box className={classes.title}>病歷查詢</Box>
+                <Box className={classes.title}>報告查詢</Box>
                 <CustomTable rows={rows} columns={columns} />
             </Box>
             <Fab color="primary" aria-label="add" variant="extended" sx={{ position: 'fixed', right: 100, bottom: 50, p: 3 }}>
                 <Add />
-                <Box sx={{ fontSize: '1.5rem', marginLeft: '.3rem' }}>新增病歷</Box>
+                <Box sx={{ fontSize: '1.5rem', marginLeft: '.3rem' }}>新增報告</Box>
             </Fab>
         </>
     );
 };
 
-export default Record;
+export default Report;
