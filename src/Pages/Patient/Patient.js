@@ -5,16 +5,17 @@ import useStyles from './Style';
 import CustomTable from '../../Components/CustomTable/CustomTable';
 
 const columns = [
-    { field: 'id', headerName: '身分證字號', width: 250 },
-    { field: 'name', headerName: '病患姓名', width: 250 },
-    { field: 'birth', headerName: '生日', width: 250 },
+    { field: 'id', headerName: '身分證字號', width: 250, editable: true },
+    { field: 'name', headerName: '病患姓名', width: 250, editable: true },
+    { field: 'birth', headerName: '生日', type: 'date', width: 250, editable: true },
     {
         field: 'time',
         type: 'date',
         headerName: '檢查日期',
         width: 200,
+        editable: true,
     },
-    { field: 'contact', headerName: '聯絡方式', width: 300 },
+    { field: 'contact', headerName: '聯絡方式', width: 300, editable: true },
 ];
 
 const rows = [

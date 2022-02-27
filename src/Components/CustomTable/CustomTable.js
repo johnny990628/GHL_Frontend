@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
+
 import {
     DataGrid,
     GridToolbarContainer,
@@ -8,6 +9,7 @@ import {
     GridToolbarDensitySelector,
     GridToolbarExport,
 } from '@mui/x-data-grid';
+
 import useStyles from './Style';
 
 const CustomToolbar = () => {
@@ -16,7 +18,7 @@ const CustomToolbar = () => {
             <GridToolbarColumnsButton />
             <GridToolbarFilterButton />
             <GridToolbarDensitySelector />
-            <GridToolbarExport csvOptions={{ fileName: '診所檔案', utf8WithBom: true }} />
+            <GridToolbarExport csvOptions={{ fileName: '診所檔案', utf8WithBom: true }} printOptions={{ hideToolbar: true, hideFooter: true }} />
         </GridToolbarContainer>
     );
 };
@@ -32,6 +34,7 @@ const CustomTable = ({ rows, columns }) => {
                 pageSize={pageSize}
                 onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
                 rowsPerPageOptions={[5, 10, 20]}
+                editMode="row"
                 checkboxSelection
                 components={{ Toolbar: CustomToolbar }}
                 sx={{ fontSize: '1.3rem', backgroundColor: '#F5D7DE', p: 2, borderRadius: '1rem' }}

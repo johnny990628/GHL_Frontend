@@ -15,7 +15,7 @@ const theme = createTheme({
             default: '#EAA7B8',
         },
         text: {
-            primary: '#000000',
+            primary: 'rgba(0,0,0,.6)',
         },
     },
     typography: {
