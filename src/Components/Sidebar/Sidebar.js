@@ -15,9 +15,9 @@ const Sidebar = () => {
 
             <List className={classes.list}>
                 {SidebarItem.map((item, index) => (
-                    <Link to={item.route} className={classes.link}>
+                    <Link to={item.route} className={`${classes.link} ${index === activeItem && 'active'}`}>
                         <ListItem button disableRipple key={item.display_name}>
-                            {item.icon}
+                            <Box className={classes.icon}>{item.icon}</Box>
                             <Box className={`${classes.text} ${index === activeItem && 'active'}`}>{item.display_name}</Box>
                         </ListItem>
                     </Link>

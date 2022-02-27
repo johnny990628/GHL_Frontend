@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
     },
     list: {
         height: '100%',
-        backgroundColor: '#F5D7DE',
+        backgroundColor: 'rgba(245, 215, 222)', //hex: #F5D7DE
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -15,6 +15,14 @@ const useStyles = makeStyles((theme) => ({
     link: {
         textDecoration: 'none',
         margin: theme.spacing(1),
+        borderRadius: '1rem',
+        transition: 'transform .3s ease-out',
+        '&.active': {
+            backgroundColor: theme.palette.primary.secondary,
+        },
+        '&:hover': {
+            transform: 'scale(1.03)',
+        },
     },
     text: {
         color: '#000000',
@@ -26,6 +34,12 @@ const useStyles = makeStyles((theme) => ({
     },
     logo: {
         margin: '1rem',
+    },
+    icon: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: theme.palette.primary.main,
     },
 }));
 
