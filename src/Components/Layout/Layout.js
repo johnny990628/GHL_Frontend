@@ -1,23 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Router from '../Router';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useLocation } from 'react-router-dom';
 import { Box } from '@mui/material';
 import useStyles from './Style';
 
 import Sidebar from '../Sidebar/Sidebar';
+import SidebarItem from '../Sidebar/SidebarItem';
 
 const Layout = () => {
-    const classes = useStyles();
     return (
         <BrowserRouter>
             <Box sx={{ height: '100vh' }}>
                 <Sidebar />
-
-                <Box className={classes.container}>
-                    <Router />
-                </Box>
+                <Main />
             </Box>
         </BrowserRouter>
+    );
+};
+const Main = () => {
+    const classes = useStyles();
+    const location = useLocation();
+    const pathName = location.pathname;
+
+    const [page, setPage] = useState({});
+
+    useEffect(() => {
+        setPage(SidebarItem.find((item) => item.route === pathName));
+    }, [location]);
+
+    return (
+        <Box className={classes.container}>
+            <Box className={classes.header}>
+                <Box className={classes.title}>{page.display_name}</Box>
+            </Box>
+            <Router />
+        </Box>
     );
 };
 

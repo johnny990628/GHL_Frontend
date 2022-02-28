@@ -22,14 +22,7 @@ const rows = [
 
 const User = () => {
     const classes = useStyles();
-    return (
-        <>
-            <Box className={classes.container}>
-                <Box className={classes.title}>使用者管理</Box>
-                <CustomTable rows={rows} columns={columns} />
-            </Box>
-        </>
-    );
+    return <CustomTable rows={rows} columns={columns} />;
 };
 
 export default User;

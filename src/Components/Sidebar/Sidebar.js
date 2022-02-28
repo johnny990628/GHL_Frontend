@@ -9,6 +9,7 @@ const Sidebar = () => {
     const classes = useStyles();
     const location = useLocation();
     const activeItem = SidebarItem.findIndex((item) => item.route === location.pathname);
+
     return (
         <Drawer variant={'permanent'} classes={{ paper: classes.container }}>
             <img src={require('../../Assets/Image/GHL.png')} className={classes.logo} alt="logo" />
