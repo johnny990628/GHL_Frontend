@@ -16,9 +16,10 @@ const columns = [
     headerName: "操作",
     width: 100,
     cellClassName: "actions",
-    getActions: ({ id }) => {
+    getActions: (params) => {
+      console.log(params);
       return [
-        <GridActionsCellItem icon={<Edit />} label="Edit" className="textPrimary" color="inherit" />,
+        // <GridActionsCellItem icon={<Edit />} label="Edit" className="textPrimary" color="inherit" />,
         <GridActionsCellItem icon={<Delete />} label="Delete" color="inherit" />,
       ];
     },
