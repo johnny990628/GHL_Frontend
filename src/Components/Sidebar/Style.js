@@ -4,10 +4,11 @@ const useStyles = makeStyles((theme) => ({
   container: {
     width: "var(--sidebar-width)",
     borderRadius: "0 2rem 2rem 0 ",
+    // boxShadow: "6px 6px 10px rgba(0,0,0,0.2)",
   },
   list: {
     height: "100%",
-    backgroundColor: theme.palette.primary.secondary,
+    backgroundColor: theme.palette.secondary.main,
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "1rem",
     transition: "transform .3s ease-out",
     "&.active": {
-      backgroundColor: theme.palette.primary.main_light,
+      backgroundColor: theme.palette.primary.light,
     },
     "&:hover": {
       transform: "scale(1.03)",

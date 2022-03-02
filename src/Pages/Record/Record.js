@@ -38,7 +38,7 @@ const Record = () => {
   return (
     <>
       <CustomTable rows={rows} columns={columns} />
-      <Fab color="primary" aria-label="add" variant="extended" sx={{ position: "fixed", right: 100, bottom: 50, p: 3 }}>
+      <Fab color="primary" aria-label="add" variant="extended" sx={{ position: "fixed", right: 100, bottom: 50, p: 3 }} className={classes.fab}>
         <Add />
         <Box sx={{ fontSize: "1.5rem", marginLeft: ".3rem" }}>新增病歷</Box>
       </Fab>
