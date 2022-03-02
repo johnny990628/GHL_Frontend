@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         marginTop: theme.spacing(2),
+        marginLeft: theme.spacing(2),
     },
     cardIcon: {
         marginRight: theme.spacing(2),

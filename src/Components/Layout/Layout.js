@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Router from '../Router';
 import { BrowserRouter, useLocation } from 'react-router-dom';
-import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon } from '@mui/material';
-import { FileCopy, Save, Print, Share } from '@mui/icons-material';
+import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, Fab } from '@mui/material';
+import { FileCopy, Save, Print, Share, Dehaze } from '@mui/icons-material';
 import useStyles from './Style';
 
 import Sidebar from '../Sidebar/Sidebar';
@@ -17,17 +17,27 @@ const actions = [
 ];
 
 const Layout = () => {
+    const [openDrawer, setOpenDrawer] = useState(false);
+    const handleDrawerOpen = () => {
+        setOpenDrawer(true);
+    };
+    const handleDrawerClose = () => {
+        setOpenDrawer(false);
+    };
     return (
         <BrowserRouter>
             <Box sx={{ height: '100vh', display: 'flex' }}>
                 <Sidebar />
                 <Main />
-                {/* <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'absolute', bottom: 40, right: 40 }} icon={<SpeedDialIcon />}>
+                <Fab color="primary" aria-label="add" sx={{ position: 'absolute', top: 40, right: 40 }} onClick={handleDrawerOpen}>
+                    <Dehaze />
+                </Fab>
+                <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'absolute', bottom: 40, right: 40 }} icon={<SpeedDialIcon />}>
                     {actions.map((action) => (
                         <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} />
                     ))}
-                </SpeedDial> */}
-                <AnotherSidebar />
+                </SpeedDial>
+                <AnotherSidebar open={openDrawer} setClose={handleDrawerClose} />
             </Box>
         </BrowserRouter>
     );

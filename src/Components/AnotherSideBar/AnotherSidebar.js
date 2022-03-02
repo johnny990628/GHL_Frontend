@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { List, ListItem, Box, Drawer, Divider, IconButton, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
-import { Cancel } from '@mui/icons-material';
+import { Cancel, Done, Close } from '@mui/icons-material';
 import useStyles from './Style';
 
-const LittleCard = ({ title }) => {
+const LittleCard = ({ title, icon }) => {
     const classes = useStyles();
     return (
         <Box className={classes.cardContainer}>
-            <Box className={classes.cardIcon}>
-                <IconButton>
-                    <Cancel />
-                </IconButton>
-            </Box>
+            <Box className={classes.cardIcon}>{icon}</Box>
             <Box className={classes.cardBody}>
                 <Box className={classes.cardTopic}>{title}</Box>
                 <Box>1000人</Box>
@@ -61,22 +57,25 @@ const Schedule = () => {
     );
 };
 
-const AnotherSidebar = () => {
+const AnotherSidebar = ({ open, setClose }) => {
     const classes = useStyles();
     const location = useLocation();
 
     return (
-        <Drawer anchor={'right'} variant="temporary" open={true} classes={{ paper: classes.container }}>
+        <Drawer anchor={'right'} variant="temporary" open={open} onClose={setClose} classes={{ paper: classes.container }}>
             <Box className={classes.header}>
                 <Box className={classes.headerText}>今日檢查</Box>
-                <IconButton>
-                    <Cancel />
+                <IconButton onClick={setClose}>
+                    <Close />
                 </IconButton>
             </Box>
             <Divider />
             <Box className={classes.cardWrapper}>
-                {['已完成', '未完成'].map((item) => (
-                    <LittleCard title={item} />
+                {[
+                    { title: '已完成', icon: <Done /> },
+                    { title: '未完成', icon: <Close /> },
+                ].map((item) => (
+                    <LittleCard title={item.title} icon={item.icon} />
                 ))}
             </Box>
             <Box className={classes.header}>
