@@ -13,7 +13,7 @@ const theme = createTheme({
       secondary: "rgba(245, 215, 222)", //hex: #F5D7DE
     },
     background: {
-      default: "#EAA7B8",
+      default: "#EAA7B8", //123
     },
     text: {
       primary: "rgba(0,0,0,.6)",
