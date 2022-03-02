@@ -3,6 +3,7 @@
     --main-bg: #e4ece2;
     --text-color: #000000;
     --sidebar-width: 15rem;
+    --sidedrawer-width: 20rem;
 }
 body {
     position: relative;
