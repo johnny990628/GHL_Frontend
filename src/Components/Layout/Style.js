@@ -4,7 +4,7 @@ const useStyles = makeStyles((theme) => ({
     container: {
         position: 'relative',
         height: '100%',
-        width: 'calc(100% - var(--sidebar-width) - var(--sidedrawer-width))',
+        width: 'calc(100% - var(--sidebar-width))',
         left: 'var(--sidebar-width)',
         display: 'flex',
         flexDirection: 'column',

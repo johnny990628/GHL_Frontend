@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { List, ListItem, Box, Drawer, Divider, IconButton, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
 import { Cancel } from '@mui/icons-material';
@@ -66,7 +66,7 @@ const AnotherSidebar = () => {
     const location = useLocation();
 
     return (
-        <Drawer anchor={'right'} variant={'permanent'} classes={{ paper: classes.container }}>
+        <Drawer anchor={'right'} variant="temporary" open={true} classes={{ paper: classes.container }}>
             <Box className={classes.header}>
                 <Box className={classes.headerText}>今日檢查</Box>
                 <IconButton>
@@ -85,7 +85,7 @@ const AnotherSidebar = () => {
             <Divider />
             <Schedule />
             <Box className={classes.header}>
-                <Box className={classes.headerText}>新增病患</Box>
+                <Box className={classes.headerText}>近期新增</Box>
             </Box>
             <Divider />
             <Schedule />

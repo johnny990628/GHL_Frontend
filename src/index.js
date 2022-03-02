@@ -15,7 +15,7 @@ const pinkTheme = createTheme({
             main: 'rgba(245, 215, 222)', //hex: #F5D7DE
         },
         background: {
-            default: '#EAA7B8', //123
+            default: '#EAA7B8',
         },
         text: {
             primary: 'rgba(0,0,0,.6)',
