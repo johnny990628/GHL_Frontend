@@ -8,26 +8,24 @@ import LittleTable from '../../Components/LittleTable/LittleTable';
 const Home = () => {
     const classes = useStyles();
     return (
-        <Grid container>
-            <Grid item xs={8}>
-                <Grid container sx={{ height: '30%', marginBottom: '1rem' }}>
-                    <Grid item xs={4}>
+        <Grid container spacing={2}>
+            <Grid item lg={12} xl={8} spacing={2}>
+                <Grid container spacing={2}>
+                    <Grid item lg={4} xl={4}>
                         <Box className={classes.box}>
                             <LittleCard title={'已完成'} value={60} />
                         </Box>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item lg={4} xl={4}>
                         <Box className={classes.box}>
                             <LittleCard title={'未完成'} value={80} />
                         </Box>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item lg={4} xl={4}>
                         <Box className={classes.box}>
                             <LittleCard title={'總人數'} value={140} />
                         </Box>
                     </Grid>
-                </Grid>
-                <Grid container sx={{ height: '65%' }}>
                     <Grid item xs={12}>
                         <Box className={classes.box}>
                             <LittleTable title={'目前報告'} />
@@ -35,7 +33,7 @@ const Home = () => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item lg={12} xl={4}>
                 <Grid container>
                     <Grid item xs={12} sx={{ marginBottom: '1rem' }}>
                         <Box className={classes.box}>
@@ -58,7 +56,7 @@ const LittleCard = ({ title, value }) => {
 
     return (
         <Box className={classes.cardContainer}>
-            <Box className={classes.cardIcon}>
+            <Box className={classes.cardHeader}>
                 <Progressbar value={value} />
             </Box>
             <Box className={classes.cardBody}>

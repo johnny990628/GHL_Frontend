@@ -5,21 +5,17 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.secondary.main,
         height: '100%',
         borderRadius: '2rem',
-        marginRight: theme.spacing(2),
+        // marginRight: theme.spacing(2),
         padding: theme.spacing(2),
         boxShadow: '6px 6px 10px rgba(0,0,0,0.2)',
     },
-    cardWrapper: {
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
-    },
     cardContainer: {
         display: 'flex',
-        alignItems: 'center',
-        marginTop: theme.spacing(2),
-        marginLeft: theme.spacing(2),
+        // alignItems: 'center',
+        justifyContent: 'center',
+        padding: theme.spacing(1),
     },
-    cardIcon: {
+    cardHeader: {
         marginRight: theme.spacing(2),
         width: 140,
         height: 140,

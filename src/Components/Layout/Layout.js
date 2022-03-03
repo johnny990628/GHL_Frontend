@@ -29,10 +29,10 @@ const Layout = () => {
             <Box sx={{ height: '100vh', display: 'flex' }}>
                 <Sidebar />
                 <Main />
-                <IconButton color="primary" aria-label="add" sx={{ position: 'absolute', top: 40, right: 40 }} onClick={handleDrawerOpen}>
+                <IconButton color="primary" aria-label="add" sx={{ position: 'fixed', top: 40, right: 40 }} onClick={handleDrawerOpen}>
                     <Dehaze />
                 </IconButton>
-                <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'absolute', bottom: 40, right: 40 }} icon={<SpeedDialIcon />}>
+                <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'fixed', bottom: 40, right: 40 }} icon={<SpeedDialIcon />}>
                     {actions.map((action) => (
                         <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} />
                     ))}
