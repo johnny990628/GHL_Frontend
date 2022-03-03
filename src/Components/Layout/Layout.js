@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Router from '../Router';
 import { BrowserRouter, useLocation } from 'react-router-dom';
-import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, Fab } from '@mui/material';
+import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, Fab, IconButton } from '@mui/material';
 import { FileCopy, Save, Print, Share, Dehaze } from '@mui/icons-material';
 import useStyles from './Style';
 
 import Sidebar from '../Sidebar/Sidebar';
 import SidebarItem from '../Sidebar/SidebarItem';
-import AnotherSidebar from '../AnotherSideBar/AnotherSidebar';
+import AnotherSidebar from '../RightSidebar/RightSidebar';
 
 const actions = [
     { icon: <FileCopy />, name: 'Copy' },
@@ -29,9 +29,9 @@ const Layout = () => {
             <Box sx={{ height: '100vh', display: 'flex' }}>
                 <Sidebar />
                 <Main />
-                <Fab color="primary" aria-label="add" sx={{ position: 'absolute', top: 40, right: 40 }} onClick={handleDrawerOpen}>
+                <IconButton color="primary" aria-label="add" sx={{ position: 'absolute', top: 40, right: 40 }} onClick={handleDrawerOpen}>
                     <Dehaze />
-                </Fab>
+                </IconButton>
                 <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'absolute', bottom: 40, right: 40 }} icon={<SpeedDialIcon />}>
                     {actions.map((action) => (
                         <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} />
@@ -51,7 +51,7 @@ const Main = () => {
 
     useEffect(() => {
         setPage(SidebarItem.find((item) => item.route === pathName));
-    }, [location]);
+    }, [location.pathname]);
 
     return (
         <Box className={classes.container}>

@@ -8,8 +8,8 @@ const useStyles = makeStyles((theme) => ({
         left: 'var(--sidebar-width)',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        padding: theme.spacing(8),
+        alignItems: 'left',
+        padding: '2rem 8rem 2rem 4rem',
         backgroundColor: theme.palette.background.default,
     },
     title: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: '2.5rem',
-        marginBottom: theme.spacing(2),
+        marginBottom: theme.spacing(1),
     },
     header: {
         width: '100%',
