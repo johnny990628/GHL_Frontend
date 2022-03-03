@@ -5,6 +5,11 @@ import { CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import './Assets/Css/index.css';
 
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import RootReducer from './Redux/Reducer';
+import { composeWithDevTools } from 'redux-devtools-extension';
+
 const pinkTheme = createTheme({
     palette: {
         primary: {
@@ -49,12 +54,16 @@ const whiteTheme = createTheme({
     },
 });
 
+const store = createStore(RootReducer, composeWithDevTools());
+
 ReactDOM.render(
     <React.StrictMode>
-        <ThemeProvider theme={pinkTheme}>
-            <CssBaseline />
-            <App />
-        </ThemeProvider>
+        <Provider store={store}>
+            <ThemeProvider theme={pinkTheme}>
+                <CssBaseline />
+                <App />
+            </ThemeProvider>
+        </Provider>
     </React.StrictMode>,
     document.getElementById('root')
 );
