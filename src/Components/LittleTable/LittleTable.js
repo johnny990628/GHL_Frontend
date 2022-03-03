@@ -15,7 +15,7 @@ const LittleTable = ({ title }) => {
                 <Box className={classes.headerText}>{title}</Box>
             </Box>
             <Divider />
-            <TableContainer sx={{ padding: '.2rem' }} className={classes.table}>
+            <TableContainer sx={{ padding: '.2rem' }} className={classes.tableContainer}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -35,7 +35,7 @@ const LittleTable = ({ title }) => {
                                 sx={{
                                     '&:last-child td, &:last-child th': { border: 0 },
                                     transition: 'transform .3s ease-out',
-                                    '&:hover': { cursor: 'pointer', background: 'rgba(163, 64, 89,.2)', transform: 'scale(1.01)' },
+                                    '&:hover': { cursor: 'pointer', background: 'rgba(163, 64, 89,.2)', transform: 'scale(1.013)' },
                                 }}
                             >
                                 <TableCell component="th" scope="row" sx={{ fontSize: '1.2rem' }}>

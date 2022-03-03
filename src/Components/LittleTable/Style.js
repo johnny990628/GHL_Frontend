@@ -11,15 +11,15 @@ const useStyles = makeStyles((theme) => ({
     header: {
         padding: theme.spacing(1),
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'left',
         alignItems: 'center',
     },
     headerText: {
         fontSize: '1.5rem',
-        fontWeight: 'bold',
+        color: theme.palette.primary.main,
     },
-    table: {
-        fontSize: '1rem',
+    tableContainer: {
+        overflowX: 'hidden',
     },
 }));
 

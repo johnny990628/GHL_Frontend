@@ -16,8 +16,10 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontSize: '2.5rem',
         marginBottom: theme.spacing(1),
+        fontSize: '2.5rem',
+        fontWeight: 'bold',
+        color: theme.palette.primary.main,
     },
     header: {
         width: '100%',

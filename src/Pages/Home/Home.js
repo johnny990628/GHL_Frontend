@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid, Box, Drawer, Divider, IconButton, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import { Cancel, Done, Close } from '@mui/icons-material';
 import Progressbar from '../../Components/Progressbar/Progressbar';
 import useStyles from './Style';
@@ -27,9 +27,11 @@ const Home = () => {
                         </Box>
                     </Grid>
                 </Grid>
-                <Grid container sx={{ height: '40%' }}>
+                <Grid container sx={{ height: '65%' }}>
                     <Grid item xs={12}>
-                        <Box className={classes.box}></Box>
+                        <Box className={classes.box}>
+                            <LittleTable title={'目前報告'} />
+                        </Box>
                     </Grid>
                 </Grid>
             </Grid>
