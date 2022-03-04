@@ -5,12 +5,9 @@ import { CssBaseline } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import './Assets/Css/index.css';
 
-import { createStore, applyMiddleware } from 'redux';
+import store from './Redux/store';
+import { fetchPatients } from './Redux/Slices/Patient';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import RootReducer from './Redux/Reducer';
-import { composeWithDevTools } from 'redux-devtools-extension';
-const store = createStore(RootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
 const pinkTheme = createTheme({
     palette: {
@@ -55,6 +52,8 @@ const whiteTheme = createTheme({
         fontFamily: `'cwTeXYen', sans-serif`,
     },
 });
+
+// store.dispatch(fetchPatients());
 
 ReactDOM.render(
     <React.StrictMode>

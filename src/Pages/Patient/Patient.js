@@ -5,7 +5,7 @@ import useStyles from './Style';
 import CustomTable from '../../Components/CustomTable/CustomTable';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { getPatients } from '../../Redux/Action/patient';
+import { fetchPatients } from '../../Redux/Slices/Patient';
 
 const columns = [
     { field: 'id', headerName: '身分證字號', width: 200, editable: true },
@@ -23,10 +23,10 @@ const columns = [
 
 const Patient = () => {
     const classes = useStyles();
-    const patients = useSelector((state) => state.patient);
+    const patients = useSelector((state) => state.patients);
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getPatients());
+        dispatch(fetchPatients());
     }, []);
 
     return (
