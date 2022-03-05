@@ -30,12 +30,12 @@ const Patient = () => {
     }, []);
 
     return (
-        <Grid container spacing={2} className={classes.container}>
+        <Grid container className={classes.container}>
             <Grid item xs={12} className={classes.table}>
                 <Box className={classes.tableHeader}>新增病人</Box>
                 <Form />
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <CustomTable data={data} columns={columns} loading={loading} />
             </Grid>
         </Grid>
