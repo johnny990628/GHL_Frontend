@@ -2,7 +2,8 @@
 :root {
     --main-bg: #e4ece2;
     --text-color: #000000;
-    --sidebar-width: 15rem;
+    --sidebar-open-width: 15rem;
+    --sidebar-close-width: 5rem;
     --sidedrawer-width: 25rem;
 }
 body {

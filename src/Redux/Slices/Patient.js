@@ -1,5 +1,5 @@
 import { randomTraderName } from '@mui/x-data-grid-generator';
-import axios from 'axios';
+import { apiGetPatients } from '../../Axios/Patient';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 const initialState = { loading: false, data: [], error: '' };
 // const initialState = [
@@ -17,7 +17,7 @@ const initialState = { loading: false, data: [], error: '' };
 // ];
 
 export const fetchPatients = createAsyncThunk('patients/fetchPatients', async () => {
-    const response = await axios.get('https://jsonplaceholder.typicode.com/users');
+    const response = await apiGetPatients();
     return response.data;
 });
 

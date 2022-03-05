@@ -23,7 +23,7 @@ const columns = [
 
 const Patient = () => {
     const classes = useStyles();
-    const patients = useSelector((state) => state.patients);
+    const { data, loading } = useSelector((state) => state.patients);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchPatients());
@@ -31,7 +31,7 @@ const Patient = () => {
 
     return (
         <>
-            <CustomTable data={patients.data} columns={columns} loading={patients.loading} />
+            <CustomTable data={data} columns={columns} loading={loading} />
         </>
     );
 };

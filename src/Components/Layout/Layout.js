@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Router from '../Router';
 import { BrowserRouter, useLocation } from 'react-router-dom';
-import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, Fab, IconButton } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, IconButton } from '@mui/material';
 import { FileCopy, Save, Print, Share, Dehaze } from '@mui/icons-material';
 import useStyles from './Style';
 
 import Sidebar from '../Sidebar/Sidebar';
 import SidebarItem from '../Sidebar/SidebarItem';
 import AnotherSidebar from '../RightSidebar/RightSidebar';
+import { openDrawer } from '../../Redux/Slices/Drawer';
 
 const actions = [
     { icon: <FileCopy />, name: 'Copy' },
@@ -17,19 +19,14 @@ const actions = [
 ];
 
 const Layout = () => {
-    const [openDrawer, setOpenDrawer] = useState(false);
-    const handleDrawerOpen = () => {
-        setOpenDrawer(true);
-    };
-    const handleDrawerClose = () => {
-        setOpenDrawer(false);
-    };
+    const dispatch = useDispatch();
+
     return (
         <BrowserRouter>
             <Box sx={{ height: '100vh', display: 'flex' }}>
                 <Sidebar />
                 <Main />
-                <IconButton color="primary" aria-label="add" sx={{ position: 'fixed', top: 40, right: 40 }} onClick={handleDrawerOpen}>
+                <IconButton color="primary" aria-label="add" sx={{ position: 'fixed', top: 40, right: 40 }} onClick={() => dispatch(openDrawer())}>
                     <Dehaze />
                 </IconButton>
                 <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'fixed', bottom: 40, right: 40 }} icon={<SpeedDialIcon />}>
@@ -37,7 +34,7 @@ const Layout = () => {
                         <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} />
                     ))}
                 </SpeedDial>
-                <AnotherSidebar open={openDrawer} setClose={handleDrawerClose} />
+                {/* <AnotherSidebar /> */}
             </Box>
         </BrowserRouter>
     );
@@ -46,6 +43,7 @@ const Main = () => {
     const classes = useStyles();
     const location = useLocation();
     const pathName = location.pathname;
+    const { open } = useSelector((state) => state.drawer);
 
     const [page, setPage] = useState({});
 
@@ -54,7 +52,7 @@ const Main = () => {
     }, [location.pathname]);
 
     return (
-        <Box className={classes.container}>
+        <Box className={`${classes.container} ${open || 'close'}`}>
             <Box className={classes.header}>
                 <Box className={classes.title}>{page.display_name}</Box>
             </Box>
