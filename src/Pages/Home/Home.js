@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Grid, Box } from '@mui/material';
 import Progressbar from '../../Components/Progressbar/Progressbar';
 import useStyles from './Style';
@@ -8,19 +8,19 @@ const Home = () => {
     const classes = useStyles();
     return (
         <Grid container spacing={2}>
-            <Grid item lg={12} xl={8} spacing={2}>
+            <Grid item md={12} xl={8} spacing={2}>
                 <Grid container spacing={2}>
-                    <Grid item lg={4} xl={4}>
+                    <Grid item xs={6} lg={4}>
                         <Box className={classes.box}>
                             <LittleCard title={'已完成'} value={60} />
                         </Box>
                     </Grid>
-                    <Grid item lg={4} xl={4}>
+                    <Grid item xs={6} lg={4}>
                         <Box className={classes.box}>
                             <LittleCard title={'未完成'} value={80} />
                         </Box>
                     </Grid>
-                    <Grid item lg={4} xl={4}>
+                    <Grid item xs={6} lg={4}>
                         <Box className={classes.box}>
                             <LittleCard title={'總人數'} value={140} />
                         </Box>
@@ -32,9 +32,9 @@ const Home = () => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item lg={12} xl={4}>
-                <Grid container>
-                    <Grid item xs={12} sx={{ marginBottom: '1rem' }}>
+            <Grid item md={12} xl={4}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
                         <Box className={classes.box}>
                             <LittleTable title={'尚未檢查'} />
                         </Box>

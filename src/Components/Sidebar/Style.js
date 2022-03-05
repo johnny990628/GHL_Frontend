@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
         color: '#000000',
         fontSize: '1.3rem',
         marginLeft: '1rem',
-
+        whiteSpace: 'nowrap',
         '&.active': {
             color: theme.palette.primary.main,
         },
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.primary.main,
     },
     openIcon: {
-        padding: '1.5rem',
+        padding: '3rem 1.5rem',
         backgroundColor: theme.palette.secondary.main,
         color: theme.palette.primary.main,
         '&:hover': {

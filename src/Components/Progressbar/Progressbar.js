@@ -22,7 +22,7 @@ const Progressbar = ({ value }) => {
                         rotation: 0.25,
                         strokeLinecap: 'round',
                         textSize: '1.3rem',
-                        pathTransitionDuration: 2,
+                        pathTransitionDuration: 4,
                         pathColor: `#A34059`,
                         textColor: '#A34059',
                         trailColor: 'rgba(163, 64, 89,.2)',

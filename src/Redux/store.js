@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import patientsReducer from './Slices/Patient';
-import drawerReducer from './Slices/Drawer';
+import sidebarReducer from './Slices/Sidebar';
+import dashboardReducer from './Slices/Dashboard';
 import scheduleReducer from './Slices/Schedule';
 
 export default configureStore({
     reducer: {
         patients: patientsReducer,
         schedule: scheduleReducer,
-        drawer: drawerReducer,
+        sidebar: sidebarReducer,
+        dashboard: dashboardReducer,
     },
 });

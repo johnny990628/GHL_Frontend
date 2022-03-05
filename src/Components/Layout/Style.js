@@ -31,6 +31,38 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'flex-start',
     },
+    dashboardButton: {
+        position: 'fixed',
+        top: '50%',
+        right: -30,
+        borderRadius: '50%',
+        backgroundColor: theme.palette.secondary.main,
+        // '&::before': {
+        //     content: '""',
+        //     display: 'block',
+        //     width: 60,
+        //     height: 60,
+        //     position: 'absolute',
+        //     right: 0,
+        //     top: -50,
+        //     zIndex: -1,
+        //     backgroundColor: theme.palette.background.default,
+        //     borderRadius: '50%',
+        // },
+        // '&::after': {
+        //     content: '""',
+        //     display: 'block',
+        //     width: 60,
+        //     height: 60,
+        //     position: 'absolute',
+        //     right: 0,
+        //     top: 60,
+        //     zIndex: -1,
+        //     // backgroundColor: theme.palette.primary.light,
+        //     backgroundColor: theme.palette.background.default,
+        //     borderRadius: '50%',
+        // },
+    },
 }));
 
 export default useStyles;
