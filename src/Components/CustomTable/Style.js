@@ -5,13 +5,13 @@ const useStyles = makeStyles((theme) => ({
         // margin: theme.spacing(0.4),
 
         width: '100%',
-        height: '60vh',
+        height: '96%',
         boxShadow: '6px 6px 10px rgba(0,0,0,0.2)',
     },
     table: {
         backgroundColor: theme.palette.secondary.main,
-        fontSize: '1.2rem ',
-        padding: '1.5rem',
+        fontSize: '1.1rem ',
+        padding: '1.3rem',
         borderRadius: '1rem',
     },
 }));

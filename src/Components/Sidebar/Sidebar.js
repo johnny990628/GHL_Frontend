@@ -29,8 +29,9 @@ const Sidebar = () => {
 
     return (
         <Drawer variant={'permanent'} classes={{ paper: `${classes.container} ${isOpen || 'close'}` }}>
-            {isOpen && <img src={require('../../Assets/Image/GHL.png')} className={classes.logo} alt="logo" />}
-            {isOpen || (
+            {isOpen ? (
+                <img src={require('../../Assets/Image/GHL.png')} className={classes.logo} alt="logo" />
+            ) : (
                 <Box className={classes.openIcon} onClick={() => dispatch(openSidebar())}>
                     <Dehaze />
                 </Box>

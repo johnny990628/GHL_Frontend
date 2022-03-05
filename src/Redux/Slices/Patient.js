@@ -24,7 +24,11 @@ export const fetchPatients = createAsyncThunk('patients/fetchPatients', async ()
 const patientsSlice = createSlice({
     name: 'patients',
     initialState,
-    reducers: {},
+    reducers: {
+        addPatient: (state, action) => {
+            state.data.push(action.payload);
+        },
+    },
     extraReducers: {
         [fetchPatients.pending]: (state, action) => {
             state.loading = true;
@@ -39,5 +43,7 @@ const patientsSlice = createSlice({
         },
     },
 });
+
+export const { addPatient } = patientsSlice.actions;
 
 export default patientsSlice.reducer;

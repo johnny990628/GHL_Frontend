@@ -22,7 +22,7 @@ const pinkTheme = createTheme({
             default: '#EAA7B8',
         },
         text: {
-            primary: 'rgba(0,0,0,.6)',
+            primary: 'rgba(0,0,0,.8)',
             secondary: '#A34059',
             // secondary: '#EAA7B8',
         },
@@ -53,8 +53,6 @@ const whiteTheme = createTheme({
         fontFamily: `'cwTeXYen', sans-serif`,
     },
 });
-
-// store.dispatch(fetchPatients());
 
 ReactDOM.render(
     <React.StrictMode>
