@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.js';
 import { CssBaseline } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
 import './Assets/Css/index.css';
 
 import store from './Redux/store';
@@ -23,7 +23,8 @@ const pinkTheme = createTheme({
         },
         text: {
             primary: 'rgba(0,0,0,.6)',
-            secondary: '#EAA7B8',
+            secondary: '#A34059',
+            // secondary: '#EAA7B8',
         },
     },
     typography: {
@@ -58,10 +59,12 @@ const whiteTheme = createTheme({
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-            <ThemeProvider theme={pinkTheme}>
-                <CssBaseline />
-                <App />
-            </ThemeProvider>
+            <StyledEngineProvider injectFirst>
+                <ThemeProvider theme={pinkTheme}>
+                    <CssBaseline />
+                    <App />
+                </ThemeProvider>
+            </StyledEngineProvider>
         </Provider>
     </React.StrictMode>,
     document.getElementById('root')

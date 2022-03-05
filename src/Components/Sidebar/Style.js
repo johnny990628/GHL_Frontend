@@ -4,7 +4,7 @@ const useStyles = makeStyles((theme) => ({
     container: {
         borderRadius: '0 2rem 2rem 0',
         width: 'var(--sidebar-open-width)',
-        transition: 'width .4s ease-in !important',
+        transition: 'width .4s ease-in',
         '&.close': {
             width: 'var(--sidebar-close-width)',
         },
