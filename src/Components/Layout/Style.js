@@ -32,11 +32,14 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'flex-start',
     },
     dashboardButton: {
-        position: 'fixed',
+        position: 'fixed !important',
         top: '50%',
         right: -30,
         borderRadius: '50%',
-        backgroundColor: theme.palette.secondary.main,
+        backgroundColor: `${theme.palette.secondary.main} !important`,
+        '&.hover': {
+            backgroundColor: theme.palette.background.default,
+        },
         // '&::before': {
         //     content: '""',
         //     display: 'block',

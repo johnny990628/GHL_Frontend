@@ -19,7 +19,6 @@ const actions = [
 ];
 
 const Layout = () => {
-    const dispatch = useDispatch();
     const classes = useStyles();
 
     return (
@@ -27,21 +26,19 @@ const Layout = () => {
             <Box sx={{ height: '100vh', display: 'flex' }}>
                 <Sidebar />
                 <Main />
-                <IconButton color="primary" aria-label="add" className={classes.dashboardButton} onClick={() => dispatch(openDashboard())}>
-                    <Apps sx={{ margin: '20px 30px 20px 5px' }} />
-                </IconButton>
+
                 {/* <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'fixed', bottom: 40, right: 40 }} icon={<SpeedDialIcon />}>
                     {actions.map((action) => (
                         <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} />
                     ))}
                 </SpeedDial> */}
-                <Dashboard />
             </Box>
         </BrowserRouter>
     );
 };
 const Main = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const location = useLocation();
     const pathName = location.pathname;
     const { isOpen } = useSelector((state) => state.sidebar);
@@ -58,6 +55,10 @@ const Main = () => {
                 <Box className={classes.title}>{page.display_name}</Box>
             </Box>
             <Router />
+            <IconButton color="primary" aria-label="add" className={classes.dashboardButton} onClick={() => dispatch(openDashboard())}>
+                <Apps sx={{ margin: '20px 30px 20px 8px' }} />
+            </IconButton>
+            <Dashboard />
         </Box>
     );
 };

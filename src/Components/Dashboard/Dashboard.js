@@ -12,7 +12,14 @@ const Dashboard = () => {
     const classes = useStyles();
 
     return (
-        <Drawer anchor={'right'} variant="temporary" open={isOpen} onClose={() => dispatch(closeDashboard())} classes={{ paper: classes.container }}>
+        <Drawer
+            anchor={'right'}
+            variant="temporary"
+            transitionDuration={{ enter: 500, exit: 500 }}
+            open={isOpen}
+            onClose={() => dispatch(closeDashboard())}
+            classes={{ paper: classes.container }}
+        >
             <LittleTable title={'尚未檢查'} />
             <LittleTable title={'病患名單'} />
         </Drawer>

@@ -4,7 +4,7 @@ const useStyles = makeStyles((theme) => ({
     container: {
         borderRadius: '0 2rem 2rem 0',
         width: 'var(--sidebar-open-width)',
-        transition: 'width .4s ease-in',
+        transition: 'width .4s ease-in !important',
         '&.close': {
             width: 'var(--sidebar-close-width)',
         },
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.primary.main,
     },
     openIcon: {
-        padding: '3rem 1.5rem',
+        padding: '4rem 1.5rem',
         backgroundColor: theme.palette.secondary.main,
         color: theme.palette.primary.main,
         '&:hover': {
