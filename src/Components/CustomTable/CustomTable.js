@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Button } from '@mui/material'
 import { Delete } from '@mui/icons-material'
+import { useDispatch } from 'react-redux'
+import { openSnackbar } from '../../Redux/Slices/Snackbar'
 
 import {
     DataGrid,
@@ -30,15 +32,18 @@ const CustomToolbar = ({ handleDelete }) => {
     )
 }
 
-const CustomTable = ({ data, columns, loading }) => {
+const CustomTable = ({ deleteAction, data, columns, loading }) => {
     const [pageSize, setPageSize] = useState(5)
     const [selectionModel, setSelectionModel] = useState([])
+    const dispatch = useDispatch()
 
     const classes = useStyles()
 
-    // const handleDelete = () => {
-    //     setData((rows) => rows.filter((r) => !selectionModel.includes(r.id)));
-    // };
+    const handleDelete = () => {
+        dispatch(deleteAction(selectionModel))
+        dispatch(openSnackbar('刪除成功'))
+        // setData(rows => rows.filter(r => !selectionModel.includes(r.id)))
+    }
     return (
         <Box className={classes.container}>
             <DataGrid
@@ -51,7 +56,7 @@ const CustomTable = ({ data, columns, loading }) => {
                 selectionModel={selectionModel}
                 checkboxSelection
                 components={{ Toolbar: CustomToolbar }}
-                // componentsProps={{ toolbar: { handleDelete } }}
+                componentsProps={{ toolbar: { handleDelete } }}
                 className={classes.table}
                 loading={loading}
             />

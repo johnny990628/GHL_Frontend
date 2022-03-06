@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
         textDecoration: 'none',
         margin: theme.spacing(1),
         borderRadius: '1rem',
-        transition: 'transform .3s ease-out',
+        transition: 'transform .4s ease-out',
         '&.active': {
             backgroundColor: theme.palette.primary.light,
         },

@@ -39,7 +39,15 @@ const Sidebar = () => {
             <List className={classes.list}>
                 {SidebarItem.map((item, index) => (
                     <Link to={item.route} className={`${classes.link} ${index === activeItem && 'active'}`} key={item.display_name}>
-                        <ListItem button disableRipple>
+                        <ListItem
+                            button
+                            disableRipple
+                            sx={{
+                                '&:hover': {
+                                    backgroundColor: 'transparent',
+                                },
+                            }}
+                        >
                             {isOpen ? (
                                 <Box className={classes.icon}>{item.icon}</Box>
                             ) : (

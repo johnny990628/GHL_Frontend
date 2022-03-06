@@ -5,9 +5,11 @@ import DatePicker from 'react-modern-calendar-datepicker'
 import 'react-modern-calendar-datepicker/lib/DatePicker.css'
 import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
+import CustomSnackbar from '../../Components/CustomSnackbar/CustomSnackbar'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchPatients, addPatient } from '../../Redux/Slices/Patient'
+import { fetchPatients, addPatient, removePatient } from '../../Redux/Slices/Patient'
+import { openSnackbar } from '../../Redux/Slices/Snackbar'
 
 const columns = [
     { field: 'id', headerName: '身分證字號', width: 150, editable: true },
@@ -41,7 +43,7 @@ const Patient = () => {
                 <Form />
             </Grid>
             <Grid item xs={12} xl={9} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <CustomTable data={data} columns={columns} loading={loading} />
+                <CustomTable data={data} columns={columns} loading={loading} deleteAction={removePatient} />
             </Grid>
         </Grid>
     )
@@ -94,6 +96,7 @@ const Form = () => {
                 updateTime: new Date(),
             })
         )
+        dispatch(openSnackbar('新增成功'))
         handleDelete()
     }
 
@@ -108,7 +111,6 @@ const Form = () => {
                     style: {
                         fontSize: '1.3rem',
                         color: theme.palette.primary.main,
-                        opacity: 1,
                     },
                 }}
                 InputLabelProps={{ style: { fontSize: '1.3rem', color: theme.palette.primary.main } }}
@@ -229,7 +231,7 @@ const Form = () => {
                     清除
                 </Button>
             </Box>
-
+            <CustomSnackbar />
             {/* <table border="1">
                 <tr>
                     <td>姓名</td>

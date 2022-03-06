@@ -28,6 +28,9 @@ const patientsSlice = createSlice({
         addPatient: (state, action) => {
             state.data.push(action.payload)
         },
+        removePatient: (state, action) => {
+            state.data = state.data.filter(data => !action.payload.includes(data.id))
+        },
     },
     extraReducers: {
         [fetchPatients.pending]: (state, action) => {
@@ -44,6 +47,6 @@ const patientsSlice = createSlice({
     },
 })
 
-export const { addPatient } = patientsSlice.actions
+export const { addPatient, removePatient } = patientsSlice.actions
 
 export default patientsSlice.reducer
