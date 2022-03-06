@@ -1,5 +1,5 @@
-import axios from 'axios';
+import axios from 'axios'
 
-const patientRequest = axios.create({ baseURL: 'https://jsonplaceholder.typicode.com' });
+const patientRequest = axios.create({ baseURL: 'https://jsonplaceholder.typicode.com' })
 
-export const apiGetPatients = (data) => patientRequest.get('/users', data);
+export const apiGetPatients = data => patientRequest.get('/users', data)

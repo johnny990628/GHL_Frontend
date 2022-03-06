@@ -1,14 +1,18 @@
-import React from 'react';
-import { Box, Divider, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material';
+import React from 'react'
+import { Box, Divider, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material'
 
-import useStyles from './Style';
+import useStyles from './Style'
 
 const LittleTable = ({ title }) => {
-    const classes = useStyles();
+    const classes = useStyles()
     const createData = (id, name, gender) => {
-        return { id, name, gender };
-    };
-    const rows = [createData('A123456789', '王曉明', '男'), createData('A121251789', '王曉明', '女'), createData('A122134789', '王曉明', '其他')];
+        return { id, name, gender }
+    }
+    const rows = [
+        createData('A123456789', '王曉明', '男'),
+        createData('A121251789', '王曉明', '女'),
+        createData('A122134789', '王曉明', '其他'),
+    ]
     return (
         <Box classes={{ paper: classes.container }}>
             <Box className={classes.header}>
@@ -29,7 +33,7 @@ const LittleTable = ({ title }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {rows.map(row => (
                             <TableRow
                                 key={row.id}
                                 sx={{
@@ -54,7 +58,7 @@ const LittleTable = ({ title }) => {
                 <Box sx={{ padding: '1rem' }}>查看更多...</Box>
             </TableContainer>
         </Box>
-    );
-};
+    )
+}
 
-export default LittleTable;
+export default LittleTable

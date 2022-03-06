@@ -1,11 +1,11 @@
-import React from 'react';
-import { Grid, Box } from '@mui/material';
-import Progressbar from '../../Components/Progressbar/Progressbar';
-import useStyles from './Style';
-import LittleTable from '../../Components/LittleTable/LittleTable';
+import React from 'react'
+import { Grid, Box } from '@mui/material'
+import Progressbar from '../../Components/Progressbar/Progressbar'
+import useStyles from './Style'
+import LittleTable from '../../Components/LittleTable/LittleTable'
 
 const Home = () => {
-    const classes = useStyles();
+    const classes = useStyles()
     return (
         <Grid container spacing={2}>
             <Grid item md={12} xl={8} spacing={2}>
@@ -47,11 +47,11 @@ const Home = () => {
                 </Grid>
             </Grid>
         </Grid>
-    );
-};
+    )
+}
 
 const LittleCard = ({ title, value }) => {
-    const classes = useStyles();
+    const classes = useStyles()
 
     return (
         <Box className={classes.cardContainer}>
@@ -62,6 +62,6 @@ const LittleCard = ({ title, value }) => {
                 <Box className={classes.cardTopic}>{title}</Box>
             </Box>
         </Box>
-    );
-};
-export default Home;
+    )
+}
+export default Home

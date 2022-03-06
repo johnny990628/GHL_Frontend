@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button } from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import React, { useEffect, useState } from 'react'
+import { Box, Button } from '@mui/material'
+import { Delete } from '@mui/icons-material'
 
 import {
     DataGrid,
@@ -9,9 +9,9 @@ import {
     GridToolbarFilterButton,
     GridToolbarDensitySelector,
     GridToolbarExport,
-} from '@mui/x-data-grid';
+} from '@mui/x-data-grid'
 
-import useStyles from './Style';
+import useStyles from './Style'
 
 const CustomToolbar = ({ handleDelete }) => {
     return (
@@ -19,19 +19,22 @@ const CustomToolbar = ({ handleDelete }) => {
             <GridToolbarColumnsButton />
             <GridToolbarFilterButton />
             <GridToolbarDensitySelector />
-            <GridToolbarExport csvOptions={{ fileName: '診所檔案', utf8WithBom: true }} printOptions={{ hideToolbar: true, hideFooter: true }} />
+            <GridToolbarExport
+                csvOptions={{ fileName: '診所檔案', utf8WithBom: true }}
+                printOptions={{ hideToolbar: true, hideFooter: true }}
+            />
             <Button startIcon={<Delete />} variant="text" color="primary" onClick={handleDelete}>
                 Delete
             </Button>
         </GridToolbarContainer>
-    );
-};
+    )
+}
 
 const CustomTable = ({ data, columns, loading }) => {
-    const [pageSize, setPageSize] = useState(5);
-    const [selectionModel, setSelectionModel] = useState([]);
+    const [pageSize, setPageSize] = useState(5)
+    const [selectionModel, setSelectionModel] = useState([])
 
-    const classes = useStyles();
+    const classes = useStyles()
 
     // const handleDelete = () => {
     //     setData((rows) => rows.filter((r) => !selectionModel.includes(r.id)));
@@ -42,7 +45,7 @@ const CustomTable = ({ data, columns, loading }) => {
                 rows={data}
                 columns={columns}
                 pageSize={pageSize}
-                onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+                onPageSizeChange={newPageSize => setPageSize(newPageSize)}
                 rowsPerPageOptions={[5, 10, 20]}
                 onSelectionModelChange={setSelectionModel}
                 selectionModel={selectionModel}
@@ -53,7 +56,7 @@ const CustomTable = ({ data, columns, loading }) => {
                 loading={loading}
             />
         </Box>
-    );
-};
+    )
+}
 
-export default CustomTable;
+export default CustomTable

@@ -1,6 +1,6 @@
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
     container: {
         position: 'relative',
         height: '100%',
@@ -66,6 +66,6 @@ const useStyles = makeStyles((theme) => ({
         //     borderRadius: '50%',
         // },
     },
-}));
+}))
 
-export default useStyles;
+export default useStyles

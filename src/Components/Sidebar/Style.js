@@ -1,6 +1,6 @@
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
     container: {
         borderRadius: '0 2rem 2rem 0',
         width: 'var(--sidebar-open-width)',
@@ -66,6 +66,6 @@ const useStyles = makeStyles((theme) => ({
             cursor: 'pointer',
         },
     },
-}));
+}))
 
-export default useStyles;
+export default useStyles

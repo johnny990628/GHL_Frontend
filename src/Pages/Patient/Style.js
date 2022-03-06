@@ -1,6 +1,6 @@
-import { makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
     container: {
         display: 'flex',
         margin: '.5rem 0',
@@ -44,6 +44,6 @@ const useStyles = makeStyles((theme) => ({
         fontSize: '1.2rem',
         margin: '1rem',
     },
-}));
+}))
 
-export default useStyles;
+export default useStyles

@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import Router from '../Router';
-import { BrowserRouter, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, IconButton } from '@mui/material';
-import { FileCopy, Save, Print, Share, Apps } from '@mui/icons-material';
-import useStyles from './Style';
+import React, { useEffect, useState } from 'react'
+import Router from '../Router'
+import { BrowserRouter, useLocation } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, IconButton } from '@mui/material'
+import { FileCopy, Save, Print, Share, Apps } from '@mui/icons-material'
+import useStyles from './Style'
 
-import Sidebar from '../Sidebar/Sidebar';
-import SidebarItem from '../Sidebar/SidebarItem';
-import Dashboard from '../Dashboard/Dashboard';
-import { openDashboard } from '../../Redux/Slices/Dashboard';
+import Sidebar from '../Sidebar/Sidebar'
+import SidebarItem from '../Sidebar/SidebarItem'
+import Dashboard from '../Dashboard/Dashboard'
+import { openDashboard } from '../../Redux/Slices/Dashboard'
 
 const actions = [
     { icon: <FileCopy />, name: 'Copy' },
     { icon: <Save />, name: 'Save' },
     { icon: <Print />, name: 'Print' },
     { icon: <Share />, name: 'Share' },
-];
+]
 
 const Layout = () => {
-    const classes = useStyles();
+    const classes = useStyles()
 
     return (
         <BrowserRouter>
@@ -34,20 +34,20 @@ const Layout = () => {
                 </SpeedDial> */}
             </Box>
         </BrowserRouter>
-    );
-};
+    )
+}
 const Main = () => {
-    const classes = useStyles();
-    const dispatch = useDispatch();
-    const location = useLocation();
-    const pathName = location.pathname;
-    const { isOpen } = useSelector((state) => state.sidebar);
+    const classes = useStyles()
+    const dispatch = useDispatch()
+    const location = useLocation()
+    const pathName = location.pathname
+    const { isOpen } = useSelector(state => state.sidebar)
 
-    const [page, setPage] = useState({});
+    const [page, setPage] = useState({})
 
     useEffect(() => {
-        setPage(SidebarItem.find((item) => item.route === pathName));
-    }, [location.pathname]);
+        setPage(SidebarItem.find(item => item.route === pathName))
+    }, [location.pathname])
 
     return (
         <Box className={`${classes.container} ${isOpen || 'close'}`}>
@@ -60,7 +60,7 @@ const Main = () => {
             </IconButton>
             <Dashboard />
         </Box>
-    );
-};
+    )
+}
 
-export default Layout;
+export default Layout

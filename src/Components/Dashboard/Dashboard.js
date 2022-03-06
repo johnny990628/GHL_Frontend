@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Drawer } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Drawer } from '@mui/material'
 
-import useStyles from './Style';
-import LittleTable from '../LittleTable/LittleTable';
-import { closeDashboard } from '../../Redux/Slices/Dashboard';
+import useStyles from './Style'
+import LittleTable from '../LittleTable/LittleTable'
+import { closeDashboard } from '../../Redux/Slices/Dashboard'
 
 const Dashboard = () => {
-    const { isOpen } = useSelector((state) => state.dashboard);
-    const dispatch = useDispatch();
-    const classes = useStyles();
+    const { isOpen } = useSelector(state => state.dashboard)
+    const dispatch = useDispatch()
+    const classes = useStyles()
 
     return (
         <Drawer
@@ -23,7 +23,7 @@ const Dashboard = () => {
             <LittleTable title={'尚未檢查'} />
             <LittleTable title={'病患名單'} />
         </Drawer>
-    );
-};
+    )
+}
 
-export default Dashboard;
+export default Dashboard

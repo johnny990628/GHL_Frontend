@@ -1,9 +1,9 @@
-import React from 'react';
-import { Box, Fab } from '@mui/material';
-import { Add } from '@mui/icons-material';
-import useStyles from './Style';
-import CustomTable from '../../Components/CustomTable/CustomTable';
-import { randomTraderName } from '@mui/x-data-grid-generator';
+import React from 'react'
+import { Box, Fab } from '@mui/material'
+import { Add } from '@mui/icons-material'
+import useStyles from './Style'
+import CustomTable from '../../Components/CustomTable/CustomTable'
+import { randomTraderName } from '@mui/x-data-grid-generator'
 
 const columns = [
     { field: 'id', headerName: '檢查編號', width: 200, editable: true },
@@ -17,7 +17,7 @@ const columns = [
         editable: true,
     },
     { field: 'status', headerName: '狀態', type: 'boolean', width: 150, editable: true },
-];
+]
 
 const rows = [
     { id: 'A000000000', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', status: true },
@@ -31,15 +31,15 @@ const rows = [
     { id: 'A000000008', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', status: false },
     { id: 'A000000009', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', status: true },
     { id: 'A000000010', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', status: false },
-];
+]
 
 const Report = () => {
-    const classes = useStyles();
+    const classes = useStyles()
     return (
         <>
             <CustomTable rows={rows} columns={columns} />
         </>
-    );
-};
+    )
+}
 
-export default Report;
+export default Report

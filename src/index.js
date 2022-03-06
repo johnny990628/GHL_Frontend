@@ -1,13 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App.js';
-import { CssBaseline } from '@mui/material';
-import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
-import './Assets/Css/index.css';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './App.js'
+import { CssBaseline } from '@mui/material'
+import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
+import './Assets/Css/index.css'
 
-import store from './Redux/store';
-import { fetchPatients } from './Redux/Slices/Patient';
-import { Provider } from 'react-redux';
+import store from './Redux/store'
+import { fetchPatients } from './Redux/Slices/Patient'
+import { Provider } from 'react-redux'
 
 const pinkTheme = createTheme({
     palette: {
@@ -30,7 +30,7 @@ const pinkTheme = createTheme({
     typography: {
         fontFamily: `'cwTeXYen', sans-serif`,
     },
-});
+})
 
 const whiteTheme = createTheme({
     palette: {
@@ -52,7 +52,7 @@ const whiteTheme = createTheme({
     typography: {
         fontFamily: `'cwTeXYen', sans-serif`,
     },
-});
+})
 
 ReactDOM.render(
     <React.StrictMode>
@@ -66,4 +66,4 @@ ReactDOM.render(
         </Provider>
     </React.StrictMode>,
     document.getElementById('root')
-);
+)

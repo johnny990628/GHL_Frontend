@@ -1,7 +1,7 @@
-import { randomTraderName } from '@mui/x-data-grid-generator';
-import { apiGetPatients } from '../../Axios/Patient';
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-const initialState = { loading: false, data: [], error: '' };
+import { randomTraderName } from '@mui/x-data-grid-generator'
+import { apiGetPatients } from '../../Axios/Patient'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+const initialState = { loading: false, data: [], error: '' }
 // const initialState = [
 //     { id: 'A000000000', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
 //     { id: 'A000000001', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
@@ -17,33 +17,33 @@ const initialState = { loading: false, data: [], error: '' };
 // ];
 
 export const fetchPatients = createAsyncThunk('patients/fetchPatients', async () => {
-    const response = await apiGetPatients();
-    return response.data;
-});
+    const response = await apiGetPatients()
+    return response.data
+})
 
 const patientsSlice = createSlice({
     name: 'patients',
     initialState,
     reducers: {
         addPatient: (state, action) => {
-            state.data.push(action.payload);
+            state.data.push(action.payload)
         },
     },
     extraReducers: {
         [fetchPatients.pending]: (state, action) => {
-            state.loading = true;
+            state.loading = true
         },
         [fetchPatients.fulfilled]: (state, action) => {
-            state.loading = false;
-            state.data = [...state.data, ...action.payload];
+            state.loading = false
+            state.data = [...state.data, ...action.payload]
         },
         [fetchPatients.rejected]: (state, action) => {
-            state.loading = false;
-            state.error = action.payload;
+            state.loading = false
+            state.error = action.payload
         },
     },
-});
+})
 
-export const { addPatient } = patientsSlice.actions;
+export const { addPatient } = patientsSlice.actions
 
-export default patientsSlice.reducer;
+export default patientsSlice.reducer

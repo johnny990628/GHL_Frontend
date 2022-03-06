@@ -1,4 +1,4 @@
-import { Home, EventAvailable, ReceiptLong, Accessible, Settings, CreateNewFolder, Person } from '@mui/icons-material';
+import { Home, EventAvailable, ReceiptLong, Accessible, Settings, CreateNewFolder, Person } from '@mui/icons-material'
 
 const data = [
     {
@@ -37,6 +37,6 @@ const data = [
         route: '/setting',
         icon: <Settings />,
     },
-];
+]
 
-export default data;
+export default data

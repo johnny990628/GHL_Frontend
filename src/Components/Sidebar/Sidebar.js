@@ -1,31 +1,31 @@
-import React, { useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { List, ListItem, Box, Drawer, Tooltip, useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { Dehaze, DoubleArrow } from '@mui/icons-material';
-import useStyles from './Style';
+import React, { useEffect, useRef } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { List, ListItem, Box, Drawer, Tooltip, useMediaQuery } from '@mui/material'
+import { useTheme } from '@mui/material/styles'
+import { Dehaze, DoubleArrow } from '@mui/icons-material'
+import useStyles from './Style'
 
-import SidebarItem from './SidebarItem';
-import { openSidebar, closeSidebar } from '../../Redux/Slices/Sidebar';
+import SidebarItem from './SidebarItem'
+import { openSidebar, closeSidebar } from '../../Redux/Slices/Sidebar'
 
 const Sidebar = () => {
-    const classes = useStyles();
-    const location = useLocation();
-    const dispatch = useDispatch();
-    const { isOpen } = useSelector((state) => state.sidebar);
-    const theme = useTheme();
-    const tab = useMediaQuery(theme.breakpoints.down('lg'));
-    const firstRender = useRef(true);
-    const activeItem = SidebarItem.findIndex((item) => item.route === location.pathname);
+    const classes = useStyles()
+    const location = useLocation()
+    const dispatch = useDispatch()
+    const { isOpen } = useSelector(state => state.sidebar)
+    const theme = useTheme()
+    const tab = useMediaQuery(theme.breakpoints.down('lg'))
+    const firstRender = useRef(true)
+    const activeItem = SidebarItem.findIndex(item => item.route === location.pathname)
 
     useEffect(() => {
         if (firstRender.current) {
-            firstRender.current = false;
-            return;
+            firstRender.current = false
+            return
         }
-        tab ? dispatch(closeSidebar()) : dispatch(openSidebar());
-    }, [tab]);
+        tab ? dispatch(closeSidebar()) : dispatch(openSidebar())
+    }, [tab])
 
     return (
         <Drawer variant={'permanent'} classes={{ paper: `${classes.container} ${isOpen || 'close'}` }}>
@@ -59,7 +59,7 @@ const Sidebar = () => {
                 </Box>
             )}
         </Drawer>
-    );
-};
+    )
+}
 
-export default Sidebar;
+export default Sidebar

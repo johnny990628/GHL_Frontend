@@ -1,12 +1,12 @@
-import React from 'react';
-import Layout from './Components/Layout/Layout';
+import React from 'react'
+import Layout from './Components/Layout/Layout'
 
 const App = () => {
     return (
         <>
             <Layout />
         </>
-    );
-};
+    )
+}
 
-export default App;
+export default App
