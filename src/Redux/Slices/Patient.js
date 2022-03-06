@@ -1,5 +1,4 @@
-import { randomTraderName } from '@mui/x-data-grid-generator'
-import { apiGetPatients } from '../../Axios/patient'
+import { apiGetPatients } from '../../Axios/Patient'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 const initialState = { loading: false, data: [], error: '' }
 // const initialState = [

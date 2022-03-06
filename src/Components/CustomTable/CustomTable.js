@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button } from '@mui/material'
+import { Box, Button, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material'
 import { Delete } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
 import { openSnackbar } from '../../Redux/Slices/Snackbar'
-
+import { useTable } from 'react-table'
 import {
     DataGrid,
     GridToolbarContainer,
@@ -33,21 +33,49 @@ const CustomToolbar = ({ handleDelete }) => {
 }
 
 const CustomTable = ({ deleteAction, data, columns, loading }) => {
-    const [pageSize, setPageSize] = useState(5)
-    const [selectionModel, setSelectionModel] = useState([])
-    const dispatch = useDispatch()
+    // const [pageSize, setPageSize] = useState(5)
+    // const [selectionModel, setSelectionModel] = useState([])
+    // const dispatch = useDispatch()
 
     const classes = useStyles()
 
-    const handleDelete = () => {
-        dispatch(deleteAction(selectionModel))
-        dispatch(openSnackbar('刪除成功'))
-        // setData(rows => rows.filter(r => !selectionModel.includes(r.id)))
-    }
+    const tableInstance = useTable({ columns, data })
+    const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance
+
+    // const handleDelete = () => {
+    //     dispatch(deleteAction(selectionModel))
+    //     dispatch(openSnackbar('刪除成功'))
+    // }
     return (
-        <Box className={classes.container}>
-            <DataGrid
-                rows={data}
+        <TableContainer className={classes.container}>
+            <Table {...getTableProps()}>
+                <TableHead>
+                    {headerGroups.map(headerGroup => (
+                        <TableRow {...headerGroup.getHeaderGroupProps()}>
+                            {headerGroup.headers.map(column => (
+                                <TableCell {...column.getHeaderProps()} sx={{ fontSize: '1.2rem' }}>
+                                    {column.render('Header')}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    ))}
+                </TableHead>
+
+                <TableBody {...getTableBodyProps()}>
+                    {rows.map(row => {
+                        prepareRow(row)
+                        return (
+                            <TableRow {...row.getRowProps()}>
+                                {row.cells.map(cell => (
+                                    <TableCell {...cell.getCellProps()}>{cell.render('Cell')}</TableCell>
+                                ))}
+                            </TableRow>
+                        )
+                    })}
+                </TableBody>
+            </Table>
+            {/* <DataGrid
+                rows={rows}
                 columns={columns}
                 pageSize={pageSize}
                 onPageSizeChange={newPageSize => setPageSize(newPageSize)}
@@ -59,8 +87,8 @@ const CustomTable = ({ deleteAction, data, columns, loading }) => {
                 componentsProps={{ toolbar: { handleDelete } }}
                 className={classes.table}
                 loading={loading}
-            />
-        </Box>
+            /> */}
+        </TableContainer>
     )
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { Box, Grid, TextField, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Button } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import DatePicker from 'react-modern-calendar-datepicker'
@@ -11,39 +11,86 @@ import { useSelector, useDispatch } from 'react-redux'
 import { fetchPatients, addPatient, removePatient } from '../../Redux/Slices/Patient'
 import { openSnackbar } from '../../Redux/Slices/Snackbar'
 
-const columns = [
-    { field: 'id', headerName: '身分證字號', width: 150, editable: true },
-    { field: 'name', headerName: '姓名', width: 100, editable: true },
-    { field: 'gender', headerName: '性別', width: 80, editable: true },
-    { field: 'birth', headerName: '生日', type: 'date', width: 120, editable: true },
-    { field: 'phone', headerName: '電話', width: 150, editable: true },
-    { field: 'department', headerName: '部門單位', width: 100, editable: true },
-    {
-        field: 'updateTime',
-        type: 'dateTime',
-        headerName: '更新日期',
-        width: 200,
-        editable: true,
-    },
-    { field: 'address', headerName: '地址', width: 200, editable: true },
-]
+// { field: 'id', headerName: '身分證字號', width: 150, editable: false },
+// { field: 'name', headerName: '姓名', width: 100, editable: true },
+// { field: 'gender', headerName: '性別', width: 80, editable: true },
+// { field: 'birth', headerName: '生日', type: 'date', width: 120, editable: true },
+// { field: 'phone', headerName: '電話', width: 150, editable: true },
+// { field: 'department', headerName: '部門單位', width: 100, editable: true },
+// {
+//     field: 'updateTime',
+//     type: 'dateTime',
+//     headerName: '更新日期',
+//     width: 200,
+//     editable: true,
+// },
+// { field: 'address', headerName: '地址', width: 200, editable: true },
 
 const Patient = () => {
     const classes = useStyles()
-    const { data, loading } = useSelector(state => state.patients)
+    // const { data, loading } = useSelector(state => state.patients)
     const dispatch = useDispatch()
     // useEffect(() => {
     //     dispatch(fetchPatients());
     // }, []);
 
+    const columns = useMemo(
+        () => [
+            { accessor: 'id', Header: '身分證字號' },
+            { accessor: 'name', Header: '姓名' },
+            { accessor: 'gender', Header: '性別' },
+            { accessor: 'birth', Header: '生日' },
+            { accessor: 'phone', Header: '電話' },
+            { accessor: 'department', Header: '部門單位' },
+            { accessor: 'updateTime', Header: '更新日期' },
+            { accessor: 'address', Header: '地址' },
+        ],
+        []
+    )
+    const data = useMemo(
+        () => [
+            {
+                id: 1,
+                name: 'John',
+                gender: 'male',
+                birth: '2001/06/28',
+                phone: '0918189393',
+                department: 'unknow',
+                updateTime: '2022/3/7',
+                address: 'jwefjowefjo',
+            },
+            {
+                id: 2,
+                name: 'erwqe',
+                gender: 'male',
+                birth: '2001/06/28',
+                phone: 'eqwrwer',
+                department: 'unknow',
+                updateTime: '2022/3/7',
+                address: 'jwefjowefjo',
+            },
+            {
+                id: 3,
+                name: 'qwerwer',
+                gender: 'male',
+                birth: '2001/06/28',
+                phone: '0918189393',
+                department: 'unknow',
+                updateTime: '2022/3/7',
+                address: 'eqwrqwer',
+            },
+        ],
+        []
+    )
+
     return (
         <Grid container spacing={2} className={classes.container}>
-            <Grid item xs={12} xl={3} className={classes.table}>
+            <Grid item xs={12} xl={4} className={classes.table}>
                 <Box className={classes.tableHeader}>新增病人</Box>
                 <Form />
             </Grid>
-            <Grid item xs={12} xl={9} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                <CustomTable data={data} columns={columns} loading={loading} deleteAction={removePatient} />
+            <Grid item xs={12} xl={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <CustomTable data={data} columns={columns} deleteAction={removePatient} />
             </Grid>
         </Grid>
     )
