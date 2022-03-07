@@ -6,10 +6,10 @@ const useStyles = makeStyles(theme => ({
         margin: '.5rem 0',
         height: '100%',
     },
-    table: {
+    formWrapper: {
         backgroundColor: theme.palette.secondary.main,
         borderRadius: '1rem',
-        padding: '1rem',
+        // padding: '1rem',
         marginBottom: '1rem',
 
         display: 'flex',
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
         boxShadow: '6px 6px 10px rgba(0,0,0,0.2)',
     },
-    tableHeader: {
+    formHeader: {
         fontSize: '2.3rem',
     },
     formContainer: {
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
             width: '16rem',
         },
     },
-    tableBody: {
+    formBody: {
         display: 'flex',
         justifyContent: 'left',
         flexWrap: 'wrap',

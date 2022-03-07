@@ -42,42 +42,92 @@ const Patient = () => {
             { accessor: 'birth', Header: '生日' },
             { accessor: 'phone', Header: '電話' },
             { accessor: 'department', Header: '部門單位' },
-            { accessor: 'updateTime', Header: '更新日期' },
             { accessor: 'address', Header: '地址' },
+            { accessor: 'updateTime', Header: '更新日期' },
         ],
         []
     )
     const data = useMemo(
         () => [
             {
-                id: 1,
-                name: 'John',
-                gender: 'male',
+                id: 'A131005438',
+                name: '李柏勳',
+                gender: '男',
                 birth: '2001/06/28',
                 phone: '0918189393',
-                department: 'unknow',
-                updateTime: '2022/3/7',
-                address: 'jwefjowefjo',
+                department: 'cylab',
+                updateTime: new Date().toLocaleString(),
+                address: '台北市北投區公館路279巷6號3樓',
             },
             {
-                id: 2,
-                name: 'erwqe',
-                gender: 'male',
-                birth: '2001/06/28',
-                phone: 'eqwrwer',
-                department: 'unknow',
-                updateTime: '2022/3/7',
-                address: 'jwefjowefjo',
-            },
-            {
-                id: 3,
-                name: 'qwerwer',
-                gender: 'male',
+                id: 'P131005439',
+                name: '李柏勳',
+                gender: '男',
                 birth: '2001/06/28',
                 phone: '0918189393',
-                department: 'unknow',
-                updateTime: '2022/3/7',
-                address: 'eqwrqwer',
+                department: 'cylab',
+                updateTime: new Date().toLocaleString(),
+                address: '台北市北投區公館路279巷6號3樓',
+            },
+            {
+                id: 'O131005437',
+                name: '李柏勳',
+                gender: '男',
+                birth: '2001/06/28',
+                phone: '0918189393',
+                department: 'cylab',
+                updateTime: new Date().toLocaleString(),
+                address: '台北市北投區公館路279巷6號3樓',
+            },
+            {
+                id: 'Z131005437',
+                name: '李柏勳',
+                gender: '男',
+                birth: '2001/06/28',
+                phone: '0918189393',
+                department: 'cylab',
+                updateTime: new Date().toLocaleString(),
+                address: '台北市北投區公館路279巷6號3樓',
+            },
+            {
+                id: 'Y131005437',
+                name: '李柏勳',
+                gender: '男',
+                birth: '2001/06/28',
+                phone: '0918189393',
+                department: 'cylab',
+                updateTime: new Date().toLocaleString(),
+                address: '台北市北投區公館路279巷6號3樓',
+            },
+            {
+                id: 'G131005437',
+                name: '李柏勳',
+                gender: '男',
+                birth: '2001/06/28',
+                phone: '0918189393',
+                department: 'cylab',
+                updateTime: new Date().toLocaleString(),
+                address: '台北市北投區公館路279巷6號3樓',
+            },
+            {
+                id: 'F131005437',
+                name: '李柏勳',
+                gender: '男',
+                birth: '2001/06/28',
+                phone: '0918189393',
+                department: 'cylab',
+                updateTime: new Date().toLocaleString(),
+                address: '台北市北投區公館路279巷6號3樓',
+            },
+            {
+                id: 'E131005437',
+                name: '李柏勳',
+                gender: '男',
+                birth: '2001/06/28',
+                phone: '0918189393',
+                department: 'cylab',
+                updateTime: new Date().toLocaleString(),
+                address: '台北市北投區公館路279巷6號3樓',
             },
         ],
         []
@@ -85,8 +135,8 @@ const Patient = () => {
 
     return (
         <Grid container spacing={2} className={classes.container}>
-            <Grid item xs={12} xl={4} className={classes.table}>
-                <Box className={classes.tableHeader}>新增病人</Box>
+            <Grid item xs={12} xl={4} className={classes.formWrapper}>
+                <Box className={classes.formHeader}>新增病人</Box>
                 <Form />
             </Grid>
             <Grid item xs={12} xl={8} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -183,7 +233,7 @@ const Form = () => {
 
     return (
         <Box className={classes.formContainer}>
-            <Box className={classes.tableBody}>
+            <Box className={classes.formBody}>
                 <TextField
                     label="身分證字號"
                     variant="standard"
@@ -198,7 +248,7 @@ const Form = () => {
                     className={classes.textField}
                 />
             </Box>
-            <Box className={classes.tableBody}>
+            <Box className={classes.formBody}>
                 <TextField
                     label="姓名"
                     variant="standard"
@@ -254,7 +304,7 @@ const Form = () => {
                     className={classes.textField}
                 />
             </Box>
-            <Box className={classes.tableBody}>
+            <Box className={classes.formBody}>
                 <DatePicker
                     value={birth}
                     onChange={setBirth}

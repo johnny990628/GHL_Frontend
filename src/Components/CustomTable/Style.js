@@ -4,19 +4,31 @@ const useStyles = makeStyles(theme => ({
     container: {
         // margin: theme.spacing(0.4),
         width: '100%',
-        height: '96%',
+        height: '100%',
         boxShadow: '6px 6px 10px rgba(0,0,0,0.2)',
         backgroundColor: theme.palette.secondary.main,
         borderRadius: '1rem',
         padding: '1rem',
     },
-    table: {
+    tableHeader: {
+        fontSize: '1.1rem',
         backgroundColor: theme.palette.secondary.main,
-        fontSize: '1.1rem ',
-        padding: '1.3rem',
-        borderRadius: '1rem',
-
-        '& .MuiDataGrid-cell': { textOverflow: 'ellipsis' },
+        borderBottom: `1px solid ${theme.palette.primary.light}`,
+    },
+    tableHeaderTotal: {
+        marginRight: '2rem',
+        fontSize: '1.1rem',
+    },
+    tableFooter: {
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+    },
+    tableFooterItem: {
+        marginRight: '1rem',
+    },
+    scrollbar: {
+        backgroundColor: theme.palette.primary.light,
     },
 }))
 

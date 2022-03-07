@@ -6,6 +6,7 @@
     --sidebar-close-width: 5rem;
     --sidedrawer-width: 25rem;
 }
+
 body {
     position: relative;
     min-height: 100vh;
