@@ -10,6 +10,7 @@ import Sidebar from '../Sidebar/Sidebar'
 import SidebarItem from '../Sidebar/SidebarItem'
 import Dashboard from '../Dashboard/Dashboard'
 import { openDashboard } from '../../Redux/Slices/Dashboard'
+import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 const actions = [
     { icon: <FileCopy />, name: 'Copy' },
@@ -25,7 +26,9 @@ const Layout = () => {
         <BrowserRouter>
             <Box sx={{ height: '100vh', display: 'flex' }}>
                 <Sidebar />
-                <Main />
+                <CustomScrollbar>
+                    <Main />
+                </CustomScrollbar>
 
                 {/* <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'fixed', bottom: 40, right: 40 }} icon={<SpeedDialIcon />}>
                     {actions.map((action) => (

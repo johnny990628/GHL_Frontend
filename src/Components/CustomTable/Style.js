@@ -5,9 +5,10 @@ const useStyles = makeStyles(theme => ({
         // margin: theme.spacing(0.4),
         width: '100%',
         height: '100%',
-        boxShadow: '6px 6px 10px rgba(0,0,0,0.2)',
+        boxShadow: '6px 6px 10px rgba(0,0,0,0.1)',
         backgroundColor: theme.palette.secondary.main,
         borderRadius: '1rem',
+        border: `1px solid ${theme.palette.border.main}`,
         padding: '1rem',
     },
     tableHeader: {

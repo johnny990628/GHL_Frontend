@@ -27,7 +27,7 @@ import {
     GridToolbarDensitySelector,
     GridToolbarExport,
 } from '@mui/x-data-grid'
-import { Scrollbars } from 'react-custom-scrollbars'
+import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 import useStyles from './Style'
 
@@ -120,13 +120,7 @@ const CustomTable = ({ deleteAction, data, columns, loading }) => {
             <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
 
             <TableContainer {...getTableProps()} sx={{ height: '80%' }}>
-                <Scrollbars
-                    autoHide
-                    autoHideTimeout={500}
-                    autoHideDuration={500}
-                    renderThumbVertical={props => <Box {...props} className={classes.scrollbar} />}
-                    renderThumbHorizontal={props => <Box {...props} className={classes.scrollbar} />}
-                >
+                <CustomScrollbar>
                     <Table stickyHeader>
                         <TableHead>
                             {headerGroups.map(headerGroup => (
@@ -171,7 +165,7 @@ const CustomTable = ({ deleteAction, data, columns, loading }) => {
                             })}
                         </TableBody>
                     </Table>
-                </Scrollbars>
+                </CustomScrollbar>
             </TableContainer>
 
             <Box className={classes.tableFooter}>

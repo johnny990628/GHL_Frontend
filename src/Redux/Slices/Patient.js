@@ -1,19 +1,90 @@
 import { apiGetPatients } from '../../Axios/Patient'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-const initialState = { loading: false, data: [], error: '' }
-// const initialState = [
-//     { id: 'A000000000', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
-//     { id: 'A000000001', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
-//     { id: 'A000000002', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
-//     { id: 'A000000003', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
-//     { id: 'A000000004', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
-//     { id: 'A000000005', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
-//     { id: 'A000000006', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
-//     { id: 'A000000007', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
-//     { id: 'A000000008', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
-//     { id: 'A000000009', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
-//     { id: 'A000000010', name: randomTraderName(), birth: '2022/2/27', time: '2022/2/28', contact: '0987-587-987' },
-// ];
+
+const patients = [
+    {
+        id: 'A131005438',
+        name: '李柏勳',
+        gender: '男',
+        birth: '2001/06/28',
+        phone: '0918189393',
+        department: 'cylab',
+        updateTime: new Date().toLocaleString(),
+        address: '台北市北投區公館路279巷6號3樓',
+    },
+    {
+        id: 'P131005439',
+        name: '李柏勳',
+        gender: '男',
+        birth: '2001/06/28',
+        phone: '0918189393',
+        department: 'cylab',
+        updateTime: new Date().toLocaleString(),
+        address: '台北市北投區公館路279巷6號3樓',
+    },
+    {
+        id: 'O131005437',
+        name: '李柏勳',
+        gender: '男',
+        birth: '2001/06/28',
+        phone: '0918189393',
+        department: 'cylab',
+        updateTime: new Date().toLocaleString(),
+        address: '台北市北投區公館路279巷6號3樓',
+    },
+    {
+        id: 'Z131005437',
+        name: '李柏勳',
+        gender: '男',
+        birth: '2001/06/28',
+        phone: '0918189393',
+        department: 'cylab',
+        updateTime: new Date().toLocaleString(),
+        address: '台北市北投區公館路279巷6號3樓',
+    },
+    {
+        id: 'Y131005437',
+        name: '李柏勳',
+        gender: '男',
+        birth: '2001/06/28',
+        phone: '0918189393',
+        department: 'cylab',
+        updateTime: new Date().toLocaleString(),
+        address: '台北市北投區公館路279巷6號3樓',
+    },
+    {
+        id: 'G131005437',
+        name: '李柏勳',
+        gender: '男',
+        birth: '2001/06/28',
+        phone: '0918189393',
+        department: 'cylab',
+        updateTime: new Date().toLocaleString(),
+        address: '台北市北投區公館路279巷6號3樓',
+    },
+    {
+        id: 'F131005437',
+        name: '李柏勳',
+        gender: '男',
+        birth: '2001/06/28',
+        phone: '0918189393',
+        department: 'cylab',
+        updateTime: new Date().toLocaleString(),
+        address: '台北市北投區公館路279巷6號3樓',
+    },
+    {
+        id: 'E131005437',
+        name: '李柏勳',
+        gender: '男',
+        birth: '2001/06/28',
+        phone: '0918189393',
+        department: 'cylab',
+        updateTime: new Date().toLocaleString(),
+        address: '台北市北投區公館路279巷6號3樓',
+    },
+]
+
+const initialState = { loading: false, data: [...patients], error: '' }
 
 export const fetchPatients = createAsyncThunk('patients/fetchPatients', async () => {
     const response = await apiGetPatients()

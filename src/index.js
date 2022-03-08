@@ -36,18 +36,21 @@ const pinkTheme = createTheme({
 const whiteTheme = createTheme({
     palette: {
         primary: {
-            main: '#EAA7B8',
-            light: 'rgba(255,255,255)',
+            main: '#A34059',
+            light: 'rgba(223, 142, 162 , .2)',
         },
         secondary: {
-            main: 'rgba(255,255,255)',
+            main: 'rgba(255,253,254)',
         },
         background: {
-            default: 'rgba(255,255,255)',
+            default: 'rgba(255, 238, 247 )',
         },
         text: {
-            primary: 'rgba(0,0,0)',
-            secondary: 'rgba(255,255,255)',
+            primary: 'rgba(36, 31, 33)',
+            secondary: '#A34059',
+        },
+        border: {
+            main: 'rgba(193, 181, 184 , .5)',
         },
     },
     typography: {
@@ -59,7 +62,7 @@ ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
             <StyledEngineProvider injectFirst>
-                <ThemeProvider theme={pinkTheme}>
+                <ThemeProvider theme={whiteTheme}>
                     <CssBaseline />
                     <App />
                 </ThemeProvider>
