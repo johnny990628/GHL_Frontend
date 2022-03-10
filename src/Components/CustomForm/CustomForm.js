@@ -33,6 +33,8 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     const [age, setAge] = useState(0)
     const [qrcode, setQrcode] = useState('')
     const [errorField, setErrorField] = useState([])
+    const [checkID, setCheckID] = useState(true)
+    const [checkPhone, setCheckPhone] = useState(true)
 
     const classes = useStyles()
     const theme = useTheme()
@@ -63,6 +65,33 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
             .filter(key => key)
         setErrorField(errorFieldList)
         return errorFieldList.length !== 0
+    }
+
+    const isIDValid = value => {
+        //建立字母分數陣列(A~Z)
+        var city = new Array(1, 10, 19, 28, 37, 46, 55, 64, 39, 73, 82, 2, 11, 20, 48, 29, 38, 47, 56, 65, 74, 83, 21, 3, 12, 30)
+        value = value.toUpperCase()
+        //使用「正規表達式」檢驗格式
+        if (value.search(/^[A-Z](1|2)\d{8}$/i) === -1) {
+            setCheckID(false)
+        } else {
+            //將字串分割為陣列(IE必需這麼做才不會出錯)
+            value = value.split('')
+            //計算總分
+            var total = city[value[0].charCodeAt(0) - 65]
+            for (let i = 1; i <= 8; i++) {
+                total += eval(value[i] * (9 - i))
+            }
+            //補上檢查碼(最後一碼)
+            total += eval(value[9])
+            //檢查比對碼(餘數應為0);
+            setCheckID(total % 10 == 0)
+        }
+    }
+
+    const isPhoneVaild = value => {
+        //正則表達式驗證手機或市話號碼
+        setCheckPhone(value.search(/\d{2,4}-?\d{3,4}-?\d{3,4}#?(\d+)?/) !== -1)
     }
 
     const DatePickerCustomInput = ({ ref }) => {
@@ -109,12 +138,16 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                 <Box className={classes.formBody}>
                     <TextField
                         error={errorField.includes('id')}
+                        helperText={checkID || '不合法的格式'}
                         disabled={mode === 'edit'}
                         label="身分證字號"
                         variant="standard"
                         required
                         value={id}
-                        onChange={e => setId(e.target.value)}
+                        onChange={e => {
+                            setId(e.target.value)
+                            isIDValid(e.target.value)
+                        }}
                         InputProps={{
                             style: {
                                 fontSize: '1.3rem',
@@ -160,10 +193,14 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                     <TextField
                         error={errorField.includes('phone')}
                         label="電話"
+                        helperText={checkPhone || '不合法的格式'}
                         variant="standard"
                         required
                         value={phone}
-                        onChange={e => setPhone(e.target.value)}
+                        onChange={e => {
+                            setPhone(e.target.value)
+                            isPhoneVaild(e.target.value)
+                        }}
                         InputProps={{
                             style: {
                                 fontSize: '1.3rem',
