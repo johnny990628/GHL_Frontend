@@ -134,12 +134,14 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     return (
         <Box className={classes.formWrapper}>
             <Box className={classes.formHeader}>{title}</Box>
-            <FormGroup>
-                <FormControlLabel
-                    control={<Switch checked={autoProcessSwitch} onChange={e => setAutoProcessSwitch(e.target.checked)} />}
-                    label={<Box sx={{ fontSize: '1.4rem' }}>自動加入排程</Box>}
-                />
-            </FormGroup>
+            {mode === 'create' && (
+                <FormGroup>
+                    <FormControlLabel
+                        control={<Switch checked={autoProcessSwitch} onChange={e => setAutoProcessSwitch(e.target.checked)} />}
+                        label={<Box sx={{ fontSize: '1.4rem' }}>自動加入排程</Box>}
+                    />
+                </FormGroup>
+            )}
 
             {qrcode && <QRCode value={qrcode} />}
             <Box className={classes.formContainer}>
