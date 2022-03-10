@@ -11,6 +11,7 @@ import SidebarItem from '../Sidebar/SidebarItem'
 import Dashboard from '../Dashboard/Dashboard'
 import { openDashboard } from '../../Redux/Slices/Dashboard'
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
+import CustomSnackbar from '../CustomSnackbar/CustomSnackbar'
 
 const actions = [
     { icon: <FileCopy />, name: 'Copy' },
@@ -62,6 +63,7 @@ const Main = () => {
                 <Apps sx={{ margin: '20px 30px 20px 8px' }} />
             </IconButton>
             <Dashboard />
+            <CustomSnackbar />
         </Box>
     )
 }

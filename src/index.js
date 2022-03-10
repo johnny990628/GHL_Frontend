@@ -52,6 +52,9 @@ const whiteTheme = createTheme({
         border: {
             main: 'rgba(193, 181, 184 , .5)',
         },
+        contrast: {
+            main: '#407F7F',
+        },
     },
     typography: {
         fontFamily: `'cwTeXYen', sans-serif`,

@@ -15,9 +15,8 @@ import {
     FormControl,
     InputLabel,
 } from '@mui/material'
-import { Delete } from '@mui/icons-material'
+import { Delete, Search } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
-import { openSnackbar } from '../../Redux/Slices/Snackbar'
 import { useTable, useGlobalFilter, usePagination } from 'react-table'
 import {
     DataGrid,
@@ -30,6 +29,7 @@ import {
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 import useStyles from './Style'
+import EditDialog from './EditDialog'
 
 const CustomToolbar = ({ handleDelete }) => {
     return (
@@ -60,6 +60,7 @@ const CustomTable = ({ deleteAction, data, columns, loading }) => {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
                 {/* <Box className={classes.tableHeaderTotal}>{`總共${count}筆資料`}</Box> */}
+                <Search sx={{ mr: 1 }} />
                 <TextField
                     variant="standard"
                     value={value || ''}
@@ -148,15 +149,7 @@ const CustomTable = ({ deleteAction, data, columns, loading }) => {
                                 return (
                                     <TableRow {...row.getRowProps()}>
                                         {row.cells.map(cell => (
-                                            <TableCell
-                                                {...cell.getCellProps({
-                                                    style: {
-                                                        minWidth: 40,
-                                                        maxWidth: 140,
-                                                    },
-                                                })}
-                                                sx={{ fontSize: '1rem' }}
-                                            >
+                                            <TableCell {...cell.getCellProps()} sx={{ fontSize: '1rem' }}>
                                                 {cell.render('Cell')}
                                             </TableCell>
                                         ))}
@@ -220,6 +213,7 @@ const CustomTable = ({ deleteAction, data, columns, loading }) => {
                     </Button>
                 </ButtonGroup>
             </Box>
+            <EditDialog />
 
             {/* <DataGrid
                 rows={rows}

@@ -4,11 +4,12 @@ const useStyles = makeStyles(theme => ({
     container: {
         // margin: theme.spacing(0.4),
         width: '100%',
-        height: '100%',
-        boxShadow: '6px 6px 10px rgba(0,0,0,0.1)',
-        backgroundColor: theme.palette.secondary.main,
-        borderRadius: '1rem',
-        border: `1px solid ${theme.palette.border.main}`,
+        // height: '100%',
+        height: '80vh',
+        // boxShadow: '6px 6px 10px rgba(0,0,0,0.1)',
+        // backgroundColor: theme.palette.secondary.main,
+        // borderRadius: '0 0 1rem 1rem',
+        // border: `1px solid ${theme.palette.border.main}`,
         padding: '1rem',
     },
     tableHeader: {

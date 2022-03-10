@@ -1,25 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material'
+
 import { useTheme } from '@mui/styles'
 import useStyles from './Style'
 
 import DatePicker from 'react-modern-calendar-datepicker'
 import 'react-modern-calendar-datepicker/lib/DatePicker.css'
+import QRCode from 'qrcode.react'
 
 import { useDispatch } from 'react-redux'
-import { fetchPatients, addPatient, removePatient } from '../../Redux/Slices/Patient'
-import CustomSnackbar from '../CustomSnackbar/CustomSnackbar'
+import { closeDialog } from '../../Redux/Slices/Dialog'
+
 import { openSnackbar } from '../../Redux/Slices/Snackbar'
 
-const CustomForm = () => {
-    const [id, setId] = useState('')
-    const [name, setName] = useState('')
-    const [address, setAddress] = useState('')
-    const [phone, setPhone] = useState('')
-    const [department, setDepartment] = useState('')
-    const [birth, setBirth] = useState(null)
-    const [gender, setGender] = useState('女')
+const CustomForm = ({ title, row, mode, handleSubmit }) => {
+    const [id, setId] = useState(row?.id || '')
+    const [name, setName] = useState(row?.name || '')
+    const [address, setAddress] = useState(row?.address || '')
+    const [phone, setPhone] = useState(row?.phone || '')
+    const [department, setDepartment] = useState(row?.department || '')
+
+    const [birth, setBirth] = useState(
+        row?.birth ? { year: row?.birth.split('/')[0], month: row?.birth.split('/')[1], day: row?.birth.split('/')[2] } : null
+    )
+    const [gender, setGender] = useState(row?.gender || '女')
     const [age, setAge] = useState(0)
+    const [qrcode, setQrcode] = useState('')
+
     const classes = useStyles()
     const theme = useTheme()
     const dispatch = useDispatch()
@@ -42,24 +49,6 @@ const CustomForm = () => {
         setBirth(null)
         setGender('女')
         setAge(0)
-    }
-
-    const handleSubmit = () => {
-        dispatch(
-            addPatient({
-                id,
-                name,
-                address,
-                phone,
-                department,
-                birth: `${birth.year}/${birth.month}/${birth.day}`,
-                gender,
-                age,
-                updateTime: new Date().toLocaleString(),
-            })
-        )
-        dispatch(openSnackbar('新增成功'))
-        handleDelete()
     }
 
     const DatePickerCustomInput = ({ ref }) => {
@@ -99,7 +88,8 @@ const CustomForm = () => {
 
     return (
         <Box className={classes.formWrapper}>
-            <Box className={classes.formHeader}>新增病人</Box>
+            <Box className={classes.formHeader}>{title}</Box>
+            {qrcode && <QRCode value={qrcode} />}
             <Box className={classes.formContainer}>
                 <Box className={classes.formBody}>
                     <TextField
@@ -180,22 +170,47 @@ const CustomForm = () => {
                     <DatePicker value={birth} onChange={setBirth} shouldHighlightWeekends renderInput={DatePickerCustomInput} />
                     <GenderPicker />
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button variant="contained" className={classes.button} onClick={handleSubmit}>
-                        新增
-                    </Button>
-                    <Button
-                        variant="contained"
-                        className={classes.button}
-                        color="secondary"
-                        sx={{ color: theme.palette.primary.main }}
-                        onClick={handleDelete}
-                    >
-                        清除
-                    </Button>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                        <Button
+                            variant="contained"
+                            className={classes.button}
+                            onClick={() => {
+                                handleSubmit({ id, name, address, phone, department, birth, gender, age })
+                                mode === 'create' && handleDelete()
+                                mode === 'edit' && dispatch(closeDialog())
+                                mode === 'edit' && dispatch(openSnackbar('修改成功'))
+                            }}
+                        >
+                            {mode === 'create' ? '新增' : '修改'}
+                        </Button>
+                        <Button
+                            variant="contained"
+                            className={classes.button}
+                            color="secondary"
+                            sx={{ color: theme.palette.primary.main }}
+                            onClick={() => {
+                                mode === 'create' && handleDelete()
+                                mode === 'edit' && dispatch(closeDialog())
+                            }}
+                        >
+                            {mode === 'create' ? '清除' : '取消'}
+                        </Button>
+                    </Box>
+
+                    {mode === 'create' && (
+                        <Button variant="contained" className={classes.qrcodeButton}>
+                            QRCODE掃描
+                        </Button>
+                    )}
                 </Box>
-                <CustomSnackbar />
-                {/* <table border="1">
+            </Box>
+        </Box>
+    )
+}
+
+{
+    /* <table border="1">
                 <tr>
                     <td>姓名</td>
                     <td>
@@ -252,10 +267,6 @@ const CustomForm = () => {
                     </td>
                 </tr>
             </table>
-            <button style={{ marginTop: '1rem' }}>提交</button> */}
-            </Box>
-        </Box>
-    )
+            <button style={{ marginTop: '1rem' }}>提交</button> */
 }
-
 export default CustomForm

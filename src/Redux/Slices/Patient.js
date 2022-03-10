@@ -99,7 +99,10 @@ const patientsSlice = createSlice({
             state.data.push(action.payload)
         },
         removePatient: (state, action) => {
-            state.data = state.data.filter(data => !action.payload.includes(data.id))
+            state.data = state.data.filter(row => action.payload !== row.id)
+        },
+        updatePatient: (state, action) => {
+            state.data = state.data.map(row => (row.id === action.payload.id ? action.payload : row))
         },
     },
     extraReducers: {
@@ -117,6 +120,6 @@ const patientsSlice = createSlice({
     },
 })
 
-export const { addPatient, removePatient } = patientsSlice.actions
+export const { addPatient, removePatient, updatePatient } = patientsSlice.actions
 
 export default patientsSlice.reducer

@@ -7,6 +7,7 @@ import { Save, Cancel, Edit, Delete } from '@mui/icons-material'
 
 const User = () => {
     const classes = useStyles()
+    return <Box />
     // return <CustomTable rows={rows} columns={columns} />
 }
 
