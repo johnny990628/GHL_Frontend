@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
     },
     textField: {
-        margin: '.5rem 2.8rem',
+        margin: '1rem 2.8rem',
         width: '28rem',
         // [theme.breakpoints.down('xl')]: {
         //     width: '20rem',

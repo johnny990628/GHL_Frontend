@@ -9,7 +9,7 @@ import 'react-modern-calendar-datepicker/lib/DatePicker.css'
 import MyCustomLocale from './MyCustomLocale'
 import QRCode from 'qrcode.react'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { closeDialog } from '../../Redux/Slices/Dialog'
 
 import { openSnackbar } from '../../Redux/Slices/Snackbar'
@@ -36,10 +36,12 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     const [validID, setValidID] = useState(true)
     const [validPhone, setValidPhone] = useState(true)
     const [autoProcessSwitch, setAutoProcessSwitch] = useState(true)
+    const [idUsed, setIdUsed] = useState(false)
 
     const classes = useStyles()
     const theme = useTheme()
     const dispatch = useDispatch()
+    const { data } = useSelector(state => state.patients)
 
     useEffect(() => {
         //計算年紀
@@ -95,6 +97,11 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
         setValidPhone(value.search(/\d{2,4}-?\d{3,4}-?\d{3,4}#?(\d+)?/) !== -1)
     }
 
+    const checkIDExist = value => {
+        if (value.length < 10) return
+        setIdUsed(data.find(d => d.id === value))
+    }
+
     const DatePickerCustomInput = ({ ref }) => {
         return (
             <TextField
@@ -148,7 +155,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                 <Box className={classes.formBody}>
                     <TextField
                         error={errorField.includes('id')}
-                        helperText={validID || '不合法的格式'}
+                        helperText={validID ? idUsed && '此號碼已存在' : '不合法的格式'}
                         disabled={mode === 'edit'}
                         label="身分證字號"
                         variant="standard"
@@ -157,6 +164,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                         onChange={e => {
                             setId(e.target.value)
                             verifyID(e.target.value)
+                            checkIDExist(e.target.value)
                         }}
                         InputProps={{
                             style: {

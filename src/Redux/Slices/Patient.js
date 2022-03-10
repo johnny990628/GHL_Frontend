@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const patients = [
     {
-        id: 'A554433094',
+        id: 'A131005438',
         name: '李柏勳',
         gender: '男',
         birth: '2001/6/28',
