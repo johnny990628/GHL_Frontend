@@ -261,7 +261,13 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                             variant="contained"
                             className={classes.button}
                             color="secondary"
-                            sx={{ color: theme.palette.primary.main }}
+                            sx={{
+                                color: theme.palette.primary.main,
+
+                                '&:hover': {
+                                    backgroundColor: theme.palette.background.default,
+                                },
+                            }}
                             onClick={() => {
                                 mode === 'create' && handleDelete()
                                 mode === 'edit' && dispatch(closeDialog())

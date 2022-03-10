@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     },
     button: {
         width: '25%',
-        fontSize: '1.2rem',
+        fontSize: '1.4rem',
         margin: '1rem',
     },
     qrcodeButton: {
