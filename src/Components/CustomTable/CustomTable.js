@@ -15,9 +15,9 @@ import {
     FormControl,
     InputLabel,
 } from '@mui/material'
-import { Delete, Search } from '@mui/icons-material'
+import { Delete, Search, ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
-import { useTable, useGlobalFilter, usePagination } from 'react-table'
+import { useTable, useGlobalFilter, usePagination, useSortBy } from 'react-table'
 import {
     DataGrid,
     GridToolbarContainer,
@@ -110,7 +110,18 @@ const CustomTable = ({ deleteAction, data, columns, loading }) => {
         nextPage,
         previousPage,
         setPageSize,
-    } = useTable({ columns, data }, useGlobalFilter, usePagination)
+    } = useTable(
+        {
+            columns,
+            data,
+            initialState: {
+                sortBy: [{ id: 'updateTime', desc: true }],
+            },
+        },
+        useGlobalFilter,
+        useSortBy,
+        usePagination
+    )
 
     // const handleDelete = () => {
     //     dispatch(deleteAction(selectionModel))
@@ -128,15 +139,15 @@ const CustomTable = ({ deleteAction, data, columns, loading }) => {
                                 <TableRow {...headerGroup.getHeaderGroupProps()}>
                                     {headerGroup.headers.map(column => (
                                         <TableCell
-                                            {...column.getHeaderProps({
-                                                style: {
-                                                    minWidth: 100,
-                                                    maxWidth: 160,
-                                                },
-                                            })}
+                                            {...column.getHeaderProps(column.getSortByToggleProps())}
                                             className={classes.tableHeader}
                                         >
-                                            {column.render('Header')}
+                                            <Box sx={{ display: 'flex' }}>
+                                                {column.render('Header')}
+                                                <Box>
+                                                    {column.isSorted ? column.isSortedDesc ? <ArrowDropDown /> : <ArrowDropUp /> : ''}
+                                                </Box>
+                                            </Box>
                                         </TableCell>
                                     ))}
                                 </TableRow>

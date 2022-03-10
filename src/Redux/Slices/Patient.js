@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const patients = [
     {
-        id: 'A131005438',
+        id: 'A554433094',
         name: '李柏勳',
         gender: '男',
         birth: '2001/6/28',
@@ -22,6 +22,7 @@ const patients = [
         department: 'cylab',
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
+        processing: true,
     },
     {
         id: 'O131005437',
@@ -32,6 +33,7 @@ const patients = [
         department: 'cylab',
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
+        processing: false,
     },
     {
         id: 'Z131005437',
@@ -42,6 +44,7 @@ const patients = [
         department: 'cylab',
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
+        processing: true,
     },
     {
         id: 'Y131005437',
@@ -52,6 +55,7 @@ const patients = [
         department: 'cylab',
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
+        processing: false,
     },
     {
         id: 'G131005437',
@@ -62,6 +66,7 @@ const patients = [
         department: 'cylab',
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
+        processing: false,
     },
     {
         id: 'F131005437',
@@ -72,6 +77,7 @@ const patients = [
         department: 'cylab',
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
+        processing: true,
     },
     {
         id: 'E131005437',
@@ -82,6 +88,7 @@ const patients = [
         department: 'cylab',
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
+        processing: true,
     },
 ]
 

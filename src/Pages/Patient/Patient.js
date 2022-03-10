@@ -23,7 +23,9 @@ const Patient = () => {
     const columns = useMemo(
         () => [
             {
-                accessor: 'add',
+                accessor: row => {
+                    return row.processing ? 1 : 0
+                },
                 Header: '排程',
                 Cell: row => {
                     const { processing } = row.row.original
@@ -79,7 +81,7 @@ const Patient = () => {
         ],
         []
     )
-    const handleSubmit = ({ id, name, address, phone, department, birth, gender, age }) => {
+    const handleSubmit = ({ id, name, address, phone, department, birth, gender, age, processing }) => {
         const formData = {
             id,
             name,
@@ -90,7 +92,7 @@ const Patient = () => {
             gender,
             age,
             updateTime: new Date().toLocaleString(),
-            processing: true,
+            processing,
         }
         dispatch(addPatient(formData))
         dispatch(openSnackbar('新增成功'))
