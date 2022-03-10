@@ -22,6 +22,19 @@ const Patient = () => {
 
     const columns = useMemo(
         () => [
+            {
+                accessor: 'add',
+                Header: '加入排程',
+                Cell: row => {
+                    return (
+                        <Box>
+                            <IconButton>
+                                <CalendarToday />
+                            </IconButton>
+                        </Box>
+                    )
+                },
+            },
             { accessor: 'id', Header: '身分證字號' },
             { accessor: 'name', Header: '姓名' },
             { accessor: 'gender', Header: '性別' },
@@ -36,9 +49,6 @@ const Patient = () => {
                 Cell: row => {
                     return (
                         <Box>
-                            <IconButton>
-                                <CalendarToday />
-                            </IconButton>
                             <IconButton
                                 onClick={() => {
                                     dispatch(openDialog(row.row.original))

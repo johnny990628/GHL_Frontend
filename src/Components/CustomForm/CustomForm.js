@@ -6,6 +6,7 @@ import useStyles from './Style'
 
 import DatePicker from 'react-modern-calendar-datepicker'
 import 'react-modern-calendar-datepicker/lib/DatePicker.css'
+import MyCustomLocale from './MyCustomLocale'
 import QRCode from 'qrcode.react'
 
 import { useDispatch } from 'react-redux'
@@ -19,13 +20,19 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     const [address, setAddress] = useState(row?.address || '')
     const [phone, setPhone] = useState(row?.phone || '')
     const [department, setDepartment] = useState(row?.department || '')
-
     const [birth, setBirth] = useState(
-        row?.birth ? { year: row?.birth.split('/')[0], month: row?.birth.split('/')[1], day: row?.birth.split('/')[2] } : null
+        row?.birth
+            ? {
+                  year: parseInt(row?.birth.split('/')[0]),
+                  month: parseInt(row?.birth.split('/')[1]),
+                  day: parseInt(row?.birth.split('/')[2]),
+              }
+            : null
     )
     const [gender, setGender] = useState(row?.gender || '女')
     const [age, setAge] = useState(0)
     const [qrcode, setQrcode] = useState('')
+    const [errorField, setErrorField] = useState([])
 
     const classes = useStyles()
     const theme = useTheme()
@@ -50,10 +57,18 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
         setGender('女')
         setAge(0)
     }
+    const hasEmptyField = () => {
+        const errorFieldList = Object.entries({ id, name, address, phone, birth, gender })
+            .map(([key, value]) => !value && key)
+            .filter(key => key)
+        setErrorField(errorFieldList)
+        return errorFieldList.length !== 0
+    }
 
     const DatePickerCustomInput = ({ ref }) => {
         return (
             <TextField
+                error={errorField.includes('birth')}
                 ref={ref} // necessary
                 value={birth ? `${birth.year}/${birth.month}/${birth.day} - ${age}歲` : ''}
                 variant="standard"
@@ -93,6 +108,8 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
             <Box className={classes.formContainer}>
                 <Box className={classes.formBody}>
                     <TextField
+                        error={errorField.includes('id')}
+                        disabled={mode === 'edit'}
                         label="身分證字號"
                         variant="standard"
                         required
@@ -109,6 +126,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                 </Box>
                 <Box className={classes.formBody}>
                     <TextField
+                        error={errorField.includes('name')}
                         label="姓名"
                         variant="standard"
                         required
@@ -123,6 +141,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                         className={classes.textField}
                     />
                     <TextField
+                        error={errorField.includes('address')}
                         label="地址"
                         variant="standard"
                         required
@@ -139,6 +158,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                         className={classes.textField}
                     />
                     <TextField
+                        error={errorField.includes('phone')}
                         label="電話"
                         variant="standard"
                         required
@@ -167,7 +187,13 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                     />
                 </Box>
                 <Box className={classes.formBody}>
-                    <DatePicker value={birth} onChange={setBirth} shouldHighlightWeekends renderInput={DatePickerCustomInput} />
+                    <DatePicker
+                        value={birth}
+                        onChange={setBirth}
+                        shouldHighlightWeekends
+                        renderInput={DatePickerCustomInput}
+                        locale={MyCustomLocale}
+                    />
                     <GenderPicker />
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -176,6 +202,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                             variant="contained"
                             className={classes.button}
                             onClick={() => {
+                                if (hasEmptyField()) return
                                 handleSubmit({ id, name, address, phone, department, birth, gender, age })
                                 mode === 'create' && handleDelete()
                                 mode === 'edit' && dispatch(closeDialog())
