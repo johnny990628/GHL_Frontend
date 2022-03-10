@@ -4,7 +4,7 @@ const useStyles = makeStyles(theme => ({
     formWrapper: {
         // backgroundColor: theme.palette.secondary.main,
         // borderRadius: '1rem 1rem 0 0',
-        padding: '1rem',
+        // padding: '1rem',
         // marginBottom: '1rem',
 
         display: 'flex',
@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
         // border: `1px solid ${theme.palette.border.main}`,
     },
     formHeader: {
-        fontSize: '2.3rem',
+        fontSize: '3rem',
     },
     formContainer: {
         display: 'flex',
@@ -41,15 +41,18 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.primary.main,
     },
     button: {
-        width: '30%',
+        width: '25%',
         fontSize: '1.2rem',
         margin: '1rem',
     },
     qrcodeButton: {
-        width: '30%',
+        width: '25%',
         fontSize: '1.2rem',
         margin: '1rem',
         backgroundColor: theme.palette.contrast.main,
+        '&:hover': {
+            backgroundColor: theme.palette.contrast.dark,
+        },
     },
 }))
 

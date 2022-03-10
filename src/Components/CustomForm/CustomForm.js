@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material'
+import { Box, Button, FormControl, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup, Switch, TextField } from '@mui/material'
 
 import { useTheme } from '@mui/styles'
 import useStyles from './Style'
@@ -35,6 +35,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     const [errorField, setErrorField] = useState([])
     const [validID, setValidID] = useState(true)
     const [validPhone, setValidPhone] = useState(true)
+    const [autoProcessSwitch, setAutoProcessSwitch] = useState(true)
 
     const classes = useStyles()
     const theme = useTheme()
@@ -69,7 +70,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
 
     const verifyID = value => {
         //建立字母分數陣列(A~Z)
-        var city = new Array(1, 10, 19, 28, 37, 46, 55, 64, 39, 73, 82, 2, 11, 20, 48, 29, 38, 47, 56, 65, 74, 83, 21, 3, 12, 30)
+        var city = [1, 10, 19, 28, 37, 46, 55, 64, 39, 73, 82, 2, 11, 20, 48, 29, 38, 47, 56, 65, 74, 83, 21, 3, 12, 30]
         value = value.toUpperCase()
         //使用「正規表達式」檢驗格式
         if (value.search(/^[A-Z](1|2)\d{8}$/i) === -1) {
@@ -133,6 +134,13 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     return (
         <Box className={classes.formWrapper}>
             <Box className={classes.formHeader}>{title}</Box>
+            <FormGroup>
+                <FormControlLabel
+                    control={<Switch checked={autoProcessSwitch} onChange={e => setAutoProcessSwitch(e.target.checked)} />}
+                    label={<Box sx={{ fontSize: '1.4rem' }}>自動加入排程</Box>}
+                />
+            </FormGroup>
+
             {qrcode && <QRCode value={qrcode} />}
             <Box className={classes.formContainer}>
                 <Box className={classes.formBody}>
@@ -233,7 +241,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                     />
                     <GenderPicker />
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '2rem' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                         <Button
                             variant="contained"
@@ -241,7 +249,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                             onClick={() => {
                                 if (hasEmptyField() || !validID || !validPhone) return
 
-                                handleSubmit({ id, name, address, phone, department, birth, gender, age })
+                                handleSubmit({ id, name, address, phone, department, birth, gender, age, processing: autoProcessSwitch })
                                 mode === 'create' && handleDelete()
                                 mode === 'edit' && dispatch(closeDialog())
                                 mode === 'edit' && dispatch(openSnackbar('修改成功'))

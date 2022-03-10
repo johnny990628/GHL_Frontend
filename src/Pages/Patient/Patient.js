@@ -24,13 +24,21 @@ const Patient = () => {
         () => [
             {
                 accessor: 'add',
-                Header: '加入排程',
+                Header: '排程',
                 Cell: row => {
+                    const { processing } = row.row.original
                     return (
-                        <Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <IconButton>
                                 <CalendarToday />
                             </IconButton>
+                            <Box className={`${classes.status} ${processing && 'processing'}`}>
+                                {processing ? (
+                                    <Box className={classes.statusBox}>排程中</Box>
+                                ) : (
+                                    <Box className={classes.statusBox}>未排程</Box>
+                                )}
+                            </Box>
                         </Box>
                     )
                 },
@@ -82,6 +90,7 @@ const Patient = () => {
             gender,
             age,
             updateTime: new Date().toLocaleString(),
+            processing: true,
         }
         dispatch(addPatient(formData))
         dispatch(openSnackbar('新增成功'))

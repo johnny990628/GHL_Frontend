@@ -11,6 +11,7 @@ const patients = [
         department: 'cylab',
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
+        processing: true,
     },
     {
         id: 'P131005439',

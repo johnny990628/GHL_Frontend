@@ -17,6 +17,19 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.secondary.main,
         width: '100%',
     },
+    status: {
+        backgroundColor: theme.palette.status.yet,
+        padding: '7px',
+        borderRadius: '10rem',
+        '&.processing': {
+            backgroundColor: theme.palette.status.processing,
+        },
+    },
+    statusBox: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 }))
 
 export default useStyles

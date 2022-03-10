@@ -53,7 +53,12 @@ const whiteTheme = createTheme({
             main: 'rgba(193, 181, 184 , .5)',
         },
         contrast: {
-            main: '#407F7F',
+            main: 'rgba(64, 127, 127,.9)',
+            dark: 'rgba(64, 127, 127)',
+        },
+        status: {
+            processing: 'rgba(212, 106, 106,.2)',
+            yet: 'rgba(64, 127, 127,.2)',
         },
     },
     typography: {
