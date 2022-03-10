@@ -10,7 +10,7 @@ const EditDialog = () => {
     const { isOpen, row } = useSelector(state => state.dialog)
     const dispatch = useDispatch()
 
-    const handleSubmit = ({ id, name, address, phone, department, birth, gender, age }) => {
+    const handleSubmit = ({ id, name, address, phone, department, birth, gender, age, processing }) => {
         const formData = {
             id,
             name,
@@ -21,6 +21,7 @@ const EditDialog = () => {
             gender,
             age,
             updateTime: new Date().toLocaleString(),
+            processing,
         }
         dispatch(updatePatient(formData))
     }

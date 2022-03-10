@@ -35,7 +35,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     const [errorField, setErrorField] = useState([])
     const [validID, setValidID] = useState(true)
     const [validPhone, setValidPhone] = useState(true)
-    const [autoProcessSwitch, setAutoProcessSwitch] = useState(true)
+    const [autoProcessSwitch, setAutoProcessSwitch] = useState(row?.processing || true)
     const [idUsed, setIdUsed] = useState(false)
 
     const classes = useStyles()
@@ -172,6 +172,11 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                             },
                         }}
                         InputLabelProps={{ style: { fontSize: '1.3rem' } }}
+                        FormHelperTextProps={{
+                            classes: {
+                                root: classes.helperText,
+                            },
+                        }}
                         className={classes.textField}
                     />
                 </Box>
@@ -225,6 +230,11 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                             },
                         }}
                         InputLabelProps={{ style: { fontSize: '1.3rem' } }}
+                        FormHelperTextProps={{
+                            classes: {
+                                root: classes.helperText,
+                            },
+                        }}
                         className={classes.textField}
                     />
                     <TextField
@@ -258,7 +268,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                             className={classes.button}
                             onClick={() => {
                                 if (hasEmptyField() || !validID || !validPhone) return
-
+                                console.log(autoProcessSwitch)
                                 handleSubmit({ id, name, address, phone, department, birth, gender, age, processing: autoProcessSwitch })
                                 mode === 'create' && handleDelete()
                                 mode === 'edit' && dispatch(closeDialog())

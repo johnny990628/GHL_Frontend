@@ -54,6 +54,9 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: theme.palette.contrast.dark,
         },
     },
+    helperText: {
+        fontSize: '1rem',
+    },
 }))
 
 export default useStyles
