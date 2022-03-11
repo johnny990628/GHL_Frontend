@@ -14,9 +14,9 @@ const data = [
         icon: <Accessible />,
     },
     {
-        display_name: '排程管理',
-        name: 'schedule',
-        route: '/schedule',
+        display_name: '新增報告',
+        name: 'createReport',
+        route: '/CreateReport',
         icon: <EventAvailable />,
     },
     {

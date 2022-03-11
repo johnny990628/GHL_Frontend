@@ -132,7 +132,7 @@ const Patient = () => {
                 </AccordionDetails>
             </Accordion>
 
-            <CustomTable data={data} columns={columns} deleteAction={removePatient} />
+            <CustomTable data={data} columns={columns} />
         </Box>
     )
 }

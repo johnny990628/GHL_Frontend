@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '1rem',
         boxShadow: '6px 6px 10px rgba(0,0,0,0.2)',
         border: `1px solid ${theme.palette.border.main}`,
-        transition: 'all .3s ease-in',
+
         // height: '100%',
     },
     accordion: {
