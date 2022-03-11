@@ -112,6 +112,12 @@ const patientsSlice = createSlice({
         updatePatient: (state, action) => {
             state.data = state.data.map(row => (row.id === action.payload.id ? action.payload : row))
         },
+        addProcessing: (state, action) => {
+            state.data = state.data.map(row => (row.id === action.payload.id ? { ...action.payload, processing: true } : row))
+        },
+        removeProcessing: (state, action) => {
+            state.data = state.data.map(row => (row.id === action.payload.id ? { ...action.payload, processing: false } : row))
+        },
     },
     extraReducers: {
         [fetchPatients.pending]: (state, action) => {
@@ -128,6 +134,6 @@ const patientsSlice = createSlice({
     },
 })
 
-export const { addPatient, removePatient, updatePatient } = patientsSlice.actions
+export const { addPatient, removePatient, updatePatient, addProcessing, removeProcessing } = patientsSlice.actions
 
 export default patientsSlice.reducer

@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
     status: {
         backgroundColor: theme.palette.status.yet,
         padding: '8px',
+        marginRight: '1rem',
         borderRadius: '1rem',
         '&.processing': {
             backgroundColor: theme.palette.status.processing,
@@ -29,6 +30,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        whiteSpace: 'nowrap',
     },
 }))
 

@@ -117,6 +117,9 @@ const CustomTable = ({ deleteAction, data, columns, loading }) => {
             initialState: {
                 sortBy: [{ id: 'updateTime', desc: true }],
             },
+            autoResetSortBy: false,
+            autoResetPage: false,
+            autoResetFilters: false,
         },
         useGlobalFilter,
         useSortBy,

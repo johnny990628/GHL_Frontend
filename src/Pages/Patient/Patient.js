@@ -1,13 +1,13 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import { Box, Grid, Accordion, AccordionSummary, AccordionDetails, IconButton } from '@mui/material'
-import { CalendarToday, ArrowDropDown, Delete, Edit } from '@mui/icons-material'
+import { CalendarToday, ArrowDropDown, Delete, Edit, Cancel } from '@mui/icons-material'
 
 import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import CustomForm from '../../Components/CustomForm/CustomForm'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchPatients, addPatient, removePatient } from '../../Redux/Slices/Patient'
+import { fetchPatients, addPatient, removePatient, addProcessing, removeProcessing } from '../../Redux/Slices/Patient'
 import { openDialog } from '../../Redux/Slices/Dialog'
 import { openSnackbar } from '../../Redux/Slices/Snackbar'
 
@@ -29,11 +29,9 @@ const Patient = () => {
                 Header: '排程',
                 Cell: row => {
                     const { processing } = row.row.original
+
                     return (
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <IconButton>
-                                <CalendarToday />
-                            </IconButton>
                             <Box className={`${classes.status} ${processing && 'processing'}`}>
                                 {processing ? (
                                     <Box className={classes.statusBox}>排程中</Box>
@@ -41,6 +39,25 @@ const Patient = () => {
                                     <Box className={classes.statusBox}>未排程</Box>
                                 )}
                             </Box>
+                            {!processing ? (
+                                <IconButton
+                                    onClick={() => {
+                                        dispatch(addProcessing(row.row.original))
+                                        dispatch(openSnackbar('新增排程'))
+                                    }}
+                                >
+                                    <CalendarToday />
+                                </IconButton>
+                            ) : (
+                                <IconButton
+                                    onClick={() => {
+                                        dispatch(removeProcessing(row.row.original))
+                                        dispatch(openSnackbar('取消排程'))
+                                    }}
+                                >
+                                    <Cancel />
+                                </IconButton>
+                            )}
                         </Box>
                     )
                 },
