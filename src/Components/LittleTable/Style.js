@@ -21,6 +21,11 @@ const useStyles = makeStyles(theme => ({
     tableContainer: {
         overflowX: 'hidden !important',
     },
+    tableRow: {
+        '&:last-child td, &:last-child th': { border: 0 },
+        transition: 'transform .3s ease-out',
+        '&:hover': { cursor: 'pointer', background: theme.palette.status.processing, transform: 'scale(1.013)' },
+    },
 }))
 
 export default useStyles

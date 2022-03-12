@@ -34,14 +34,7 @@ const LittleTable = ({ title }) => {
                     </TableHead>
                     <TableBody>
                         {rows.map(row => (
-                            <TableRow
-                                key={row.id}
-                                sx={{
-                                    '&:last-child td, &:last-child th': { border: 0 },
-                                    transition: 'transform .3s ease-out',
-                                    '&:hover': { cursor: 'pointer', background: 'rgba(163, 64, 89,.2)', transform: 'scale(1.013)' },
-                                }}
-                            >
+                            <TableRow key={row.id} className={classes.tableRow}>
                                 <TableCell component="th" scope="row" sx={{ fontSize: '1.2rem' }}>
                                     {row.id}
                                 </TableCell>
