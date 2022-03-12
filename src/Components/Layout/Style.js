@@ -22,14 +22,14 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: theme.spacing(1),
-        fontSize: '2.5rem',
+        fontSize: '2rem',
         fontWeight: 'bold',
         color: theme.palette.primary.main,
     },
     header: {
         width: '100%',
         display: 'flex',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
     },
     dashboardButton: {
         position: 'fixed !important',
