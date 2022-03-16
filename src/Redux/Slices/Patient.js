@@ -1,4 +1,4 @@
-import { apiGetPatients } from '../../Axios/Patient'
+import { apiGetPatients } from '../../Axios/patient'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const patients = [
