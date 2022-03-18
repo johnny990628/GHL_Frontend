@@ -1,0 +1,11 @@
+{
+    "name": "pancreas",
+    "label": "胰臟",
+    "cols": [
+        {
+            "name": "other",
+            "label": "其他",
+            "type": "text"
+        }
+    ]
+}

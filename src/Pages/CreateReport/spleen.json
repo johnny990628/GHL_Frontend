@@ -1,0 +1,16 @@
+{
+    "name": "spleen",
+    "label": "脾臟",
+    "cols": [
+        {
+            "name": "ES",
+            "label": "胰臟腫大",
+            "type": "checkbox"
+        },
+        {
+            "name": "other",
+            "label": "其他",
+            "type": "text"
+        }
+    ]
+}

@@ -9,6 +9,13 @@ import CustomTable from '../../Components/CustomTable/CustomTable'
 import CustomDataGrid from '../../Components/CustomDataGrid/CustomDataGrid'
 import { AddCircle } from '@mui/icons-material'
 import CustomForm from '../../Components/CustomForm/CustomForm'
+import CustomReportForm from '../../Components/CustomReport/CustomReportForm'
+import Gallbladder from './gallbladder.json'
+import Kidney from './kidney.json'
+import Liver from './liver.json'
+import Pancreas from './pancreas.json'
+import Spleen from './spleen.json'
+import Suggestion from './suggestion.json'
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
@@ -100,8 +107,8 @@ const CreateReport = () => {
                             setSelection={setSelection}
                         />
                     )}
+                    {currentStep === 1 && <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} />}
                 </Box>
-
                 <IconButton
                     disabled={!patient}
                     className={classes.button}
