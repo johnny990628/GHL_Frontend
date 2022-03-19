@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         margin: '1rem',
-        height: '80%',
+        height: '88%',
     },
     tableContainer: {
         margin: '1rem',

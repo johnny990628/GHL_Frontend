@@ -5,10 +5,28 @@ import useStyles from './Style'
 import CustomReportColumn from './CustomReportInput'
 import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
 
+const FormSection = ({ list }) => {
+    const classes = useStyles()
+    const [isNormal, setIsNormal] = useState(true)
+    return (
+        <Box id={list.name} className={classes.formContainer}>
+            <Box className={classes.formLabel}>{list.label}</Box>
+            <FormControlLabel
+                control={<Checkbox checked={isNormal} onChange={() => setIsNormal(!isNormal)} />}
+                label={<Box className={classes.inputLabel}>正常</Box>}
+            />
+            <Box>
+                {list.cols.map(row => (
+                    <CustomReportColumn key={row.name} row={row} isNormal={isNormal} setIsNormal={setIsNormal} />
+                ))}
+            </Box>
+        </Box>
+    )
+}
+
 const CustomReportForm = ({ lists, patient }) => {
     const classes = useStyles()
     const [tabIndex, setTabIndex] = useState(0)
-
     return (
         <>
             <Box className={classes.container}>
@@ -30,18 +48,7 @@ const CustomReportForm = ({ lists, patient }) => {
 
                 <CustomScrollbar>
                     {lists.map(list => (
-                        <Box key={list.name} id={list.name} className={classes.formContainer}>
-                            <Box className={classes.formLabel}>{list.label}</Box>
-                            <FormControlLabel
-                                control={<Checkbox defaultChecked />}
-                                label={<Box className={classes.inputLabel}>正常</Box>}
-                            />
-                            <Box>
-                                {list.cols.map(row => (
-                                    <CustomReportColumn key={row.name} row={row} />
-                                ))}
-                            </Box>
-                        </Box>
+                        <FormSection key={list.name} list={list} />
                     ))}
                 </CustomScrollbar>
             </Box>
