@@ -4,8 +4,8 @@
     "cols": [
         {
             "name": "datetime",
-            "label": "請每隔__年__月定期追蹤一次",
-            "type": "checkbox"
+            "label": "請每隔_年_月定期追蹤一次",
+            "type": "select"
         },
         {
             "name": "examination",

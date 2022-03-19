@@ -14,6 +14,7 @@ const useStyles = makeStyles(theme => ({
 
     formContainer: {
         padding: '1rem',
+        marginBottom: '2rem',
         display: 'flex',
         alignItems: 'center',
     },

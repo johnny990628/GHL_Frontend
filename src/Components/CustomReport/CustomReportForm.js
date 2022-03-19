@@ -11,10 +11,13 @@ const FormSection = ({ list }) => {
     return (
         <Box id={list.name} className={classes.formContainer}>
             <Box className={classes.formLabel}>{list.label}</Box>
-            <FormControlLabel
-                control={<Checkbox checked={isNormal} onChange={() => setIsNormal(!isNormal)} />}
-                label={<Box className={classes.inputLabel}>正常</Box>}
-            />
+            {list.name !== 'suggestion' && (
+                <FormControlLabel
+                    control={<Checkbox checked={isNormal} onChange={() => setIsNormal(!isNormal)} />}
+                    label={<Box className={classes.inputLabel}>正常</Box>}
+                />
+            )}
+
             <Box>
                 {list.cols.map(row => (
                     <CustomReportColumn key={row.name} row={row} isNormal={isNormal} setIsNormal={setIsNormal} />
