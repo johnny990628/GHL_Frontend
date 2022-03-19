@@ -12,7 +12,10 @@ const CustomReportInput = ({ row, isNormal, setIsNormal }) => {
         if (checked) setIsNormal(false)
     }, [checked])
     useEffect(() => {
-        if (isNormal) setChecked(false)
+        if (isNormal) {
+            setChecked(false)
+            setRadio('')
+        }
     }, [isNormal])
     return (
         <Box>
@@ -27,7 +30,8 @@ const CustomReportInput = ({ row, isNormal, setIsNormal }) => {
                     <FormControlLabel
                         control={
                             <Checkbox
-                                checked={checked && radio}
+                                disabled={!radio}
+                                checked={checked}
                                 onClick={() => {
                                     setChecked(!checked)
                                     setRadio('')
