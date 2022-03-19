@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Box, Stepper, Step, StepLabel, IconButton, Button } from '@mui/material'
-import { ArrowBack, ArrowForward } from '@mui/icons-material'
+import { Box, Stepper, Step, StepLabel, IconButton, Chip } from '@mui/material'
+import { ArrowBack, ArrowForward, EmojiEmotionsOutlined } from '@mui/icons-material'
 import useStyles from './Style'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,7 +26,7 @@ const CreateReport = () => {
     const { data } = useSelector(state => state.patients)
 
     useEffect(() => {
-        setPatient(selection[0])
+        setPatient(data.find(d => d.id === selection[0]))
     }, [selection])
 
     // const columns = useMemo(
@@ -97,7 +97,7 @@ const CreateReport = () => {
                 <IconButton disabled={currentStep === 0} className={classes.button} onClick={() => setCurrentStep(p => p - 1)}>
                     <ArrowBack />
                 </IconButton>
-                {/* {currentStep === 0 && <CustomTable data={data.filter(row => row.processing)} columns={columns} />} */}
+
                 <Box className={classes.tableContainer}>
                     {currentStep === 0 && (
                         <CustomDataGrid
@@ -107,7 +107,19 @@ const CreateReport = () => {
                             setSelection={setSelection}
                         />
                     )}
-                    {currentStep === 1 && <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} />}
+                    {currentStep === 1 && (
+                        <>
+                            <Box className={classes.patientInfo}>
+                                <Chip
+                                    icon={<EmojiEmotionsOutlined />}
+                                    label={`${patient.id} / ${patient.name} / ${patient.gender}`}
+                                    variant="outlined"
+                                    className={classes.chip}
+                                />
+                            </Box>
+                            <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} patient={patient} />
+                        </>
+                    )}
                 </Box>
                 <IconButton
                     disabled={!patient}

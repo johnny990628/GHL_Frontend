@@ -37,6 +37,21 @@ const useStyles = makeStyles(theme => ({
     button: {
         fontSize: '1rem',
     },
+    patientInfo: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        // backgroundColor: theme.palette.primary.light_secondary,
+        color: theme.palette.primary.main,
+        // borderRadius: '1rem',
+        padding: '1rem',
+    },
+    chip: {
+        borderColor: theme.palette.primary.main,
+        color: theme.palette.primary.main,
+        fontSize: '1.3rem',
+        padding: '.6rem',
+    },
 }))
 
 export default useStyles

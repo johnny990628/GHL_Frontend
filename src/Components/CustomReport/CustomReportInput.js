@@ -15,6 +15,7 @@ const CustomReportInput = ({ row }) => {
                     <FormControlLabel control={<Checkbox defaultChecked />} label={<Box className={classes.inputLabel}>{label}</Box>} />
                     {options.map(option => (
                         <FormControlLabel
+                            key={option.label}
                             value={option.value}
                             control={<Radio />}
                             label={<Box className={classes.inputLabel}>{option.label}</Box>}

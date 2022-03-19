@@ -38,6 +38,7 @@ const whiteTheme = createTheme({
         primary: {
             main: '#A34059',
             light: 'rgba(223, 142, 162 , .2)',
+            light_secondary: 'rgba(223, 142, 162 , .5)',
         },
         secondary: {
             main: 'rgba(255,253,254)',
