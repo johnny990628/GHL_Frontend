@@ -66,6 +66,14 @@ const Sidebar = () => {
                     <DoubleArrow sx={{ transform: 'rotate(180deg)' }} />
                 </Box>
             )}
+            {isOpen && (
+                <img
+                    src={require('../../Assets/Image/logo2.jpg')}
+                    className={classes.logo}
+                    alt="logo"
+                    style={{ width: '3.8rem', height: '4rem', position: 'fixed', top: 2 }}
+                />
+            )}
         </Drawer>
     )
 }
