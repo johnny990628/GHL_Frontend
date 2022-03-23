@@ -120,9 +120,12 @@ const CreateReport = () => {
                             <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} patient={patient} />
                         </>
                     )}
+                    {
+                        currentStep === 2 && <Box><h1>完成</h1></Box>
+                    }
                 </Box>
                 <IconButton
-                    disabled={!patient}
+                    disabled={!patient||currentStep===2}
                     className={classes.button}
                     onClick={() => {
                         setCurrentStep(p => p + 1)
