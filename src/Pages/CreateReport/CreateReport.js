@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Box, Stepper, Step, StepLabel, IconButton, Button } from '@mui/material'
-import { ArrowBack, ArrowForward } from '@mui/icons-material'
+import { Box, Stepper, Step, StepLabel, IconButton, Chip } from '@mui/material'
+import { ArrowBack, ArrowForward, EmojiEmotionsOutlined } from '@mui/icons-material'
 import useStyles from './Style'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,6 +9,13 @@ import CustomTable from '../../Components/CustomTable/CustomTable'
 import CustomDataGrid from '../../Components/CustomDataGrid/CustomDataGrid'
 import { AddCircle } from '@mui/icons-material'
 import CustomForm from '../../Components/CustomForm/CustomForm'
+import CustomReportForm from '../../Components/CustomReport/CustomReportForm'
+import Gallbladder from './gallbladder.json'
+import Kidney from './kidney.json'
+import Liver from './liver.json'
+import Pancreas from './pancreas.json'
+import Spleen from './spleen.json'
+import Suggestion from './suggestion.json'
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
@@ -19,7 +26,7 @@ const CreateReport = () => {
     const { data } = useSelector(state => state.patients)
 
     useEffect(() => {
-        setPatient(selection[0])
+        setPatient(data.find(d => d.id === selection[0]))
     }, [selection])
 
     // const columns = useMemo(
@@ -90,7 +97,7 @@ const CreateReport = () => {
                 <IconButton disabled={currentStep === 0} className={classes.button} onClick={() => setCurrentStep(p => p - 1)}>
                     <ArrowBack />
                 </IconButton>
-                {/* {currentStep === 0 && <CustomTable data={data.filter(row => row.processing)} columns={columns} />} */}
+
                 <Box className={classes.tableContainer}>
                     {currentStep === 0 && (
                         <CustomDataGrid
@@ -100,8 +107,20 @@ const CreateReport = () => {
                             setSelection={setSelection}
                         />
                     )}
+                    {currentStep === 1 && (
+                        <>
+                            <Box className={classes.patientInfo}>
+                                <Chip
+                                    icon={<EmojiEmotionsOutlined />}
+                                    label={`${patient.id} / ${patient.name} / ${patient.gender}`}
+                                    variant="outlined"
+                                    className={classes.chip}
+                                />
+                            </Box>
+                            <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} patient={patient} />
+                        </>
+                    )}
                 </Box>
-
                 <IconButton
                     disabled={!patient}
                     className={classes.button}

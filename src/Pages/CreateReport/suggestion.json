@@ -1,0 +1,21 @@
+{
+    "name": "suggestion",
+    "label": "建議",
+    "cols": [
+        {
+            "name": "datetime",
+            "label": "請每隔_年_月定期追蹤一次",
+            "type": "select"
+        },
+        {
+            "name": "examination",
+            "label": "請至各大醫院近一步詳細檢查",
+            "type": "checkbox"
+        },
+        {
+            "name": "other",
+            "label": "其他",
+            "type": "text"
+        }
+    ]
+}

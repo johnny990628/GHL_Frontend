@@ -1,0 +1,29 @@
+{
+    "name": "kidney",
+    "label": "腎臟",
+    "cols": [
+        {
+            "name": "KS",
+            "label": "腎結石",
+            "type": "radio",
+            "options": [
+                { "label": "左腎", "value": "left" },
+                { "label": "右腎", "value": "right" }
+            ]
+        },
+        {
+            "name": "KC",
+            "label": "腎腫瘤",
+            "type": "radio",
+            "options": [
+                { "label": "左腎", "value": "left" },
+                { "label": "右腎", "value": "right" }
+            ]
+        },
+        {
+            "name": "other",
+            "label": "其他",
+            "type": "text"
+        }
+    ]
+}
