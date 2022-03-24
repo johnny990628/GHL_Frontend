@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2e7936a1.css",
+    "main.js": "/static/js/main.027b56d8.js",
+    "static/media/logo2.jpg": "/static/media/logo2.f09312c3eb4df4fa69eb.jpg",
+    "static/media/GHL.png": "/static/media/GHL.76b07f52f7e0a4c5e77e.png",
+    "index.html": "/index.html",
+    "main.2e7936a1.css.map": "/static/css/main.2e7936a1.css.map",
+    "main.027b56d8.js.map": "/static/js/main.027b56d8.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2e7936a1.css",
+    "static/js/main.027b56d8.js"
+  ]
+}
