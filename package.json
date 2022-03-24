@@ -33,7 +33,7 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "depoly": "gh-pages -d build",
+        "deploy": "gh-pages -d build",
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
