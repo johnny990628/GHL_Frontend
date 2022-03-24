@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { closeDialog } from '../../Redux/Slices/Dialog'
 
 import { openSnackbar } from '../../Redux/Slices/Snackbar'
+import QRScanner from '../QRScanner/QRScanner'
 
 const CustomForm = ({ title, row, mode, handleSubmit }) => {
     const [id, setId] = useState(row?.id || '')
@@ -138,6 +139,10 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
         )
     }
 
+    const onNewScanResult = (decodedText, decodedResult) => {
+        console.log(decodedText)
+    }
+
     return (
         <Box className={classes.formWrapper}>
             <Box className={classes.formHeader}>{title}</Box>
@@ -150,7 +155,6 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                 </FormGroup>
             )}
 
-            {qrcode && <QRCode value={qrcode} />}
             <Box className={classes.formContainer}>
                 <Box className={classes.formBody}>
                     <TextField
@@ -298,9 +302,12 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                     </Box>
 
                     {mode === 'create' && (
-                        <Button variant="contained" className={classes.qrcodeButton}>
-                            QRCODE掃描
-                        </Button>
+                        <>
+                            {/* <Button variant="contained" className={classes.qrcodeButton}>
+                                QRCODE掃描
+                            </Button> */}
+                            <QRScanner type={'QR'} onResult={res => alert(res)} />
+                        </>
                     )}
                 </Box>
             </Box>
