@@ -30,7 +30,7 @@ const Sidebar = () => {
     return (
         <Drawer variant={'permanent'} classes={{ paper: `${classes.container} ${isOpen || 'close'}` }}>
             {isOpen ? (
-                <img src={require('../../Assets/Image/GHL.png')} className={classes.logo} alt="logo" />
+                <img src={require('%PUBLIC_URL%//GHL.png')} className={classes.logo} alt="logo" />
             ) : (
                 <Box className={classes.openIcon} onClick={() => dispatch(openSidebar())}>
                     <Dehaze />
@@ -68,7 +68,7 @@ const Sidebar = () => {
             )}
             {isOpen && (
                 <img
-                    src={require('../../Assets/Image/logo2.jpg')}
+                    src={require('%PUBLIC_URL%/logo2.jpg')}
                     className={classes.logo}
                     alt="logo"
                     style={{ width: '3.8rem', height: '4rem', position: 'fixed', top: 2 }}
