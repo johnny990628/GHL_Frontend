@@ -32,6 +32,9 @@ const App = () => {
     return (
         <div>
             <div id="reader" width="600px"></div>
+            {scannedCodes.map(code => (
+                <div>{code}</div>
+            ))}
         </div>
     )
 }
