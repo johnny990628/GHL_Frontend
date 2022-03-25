@@ -1,39 +1,55 @@
-import React, { useState, useEffect } from 'react'
-import { Html5QrcodeScanner } from 'html5-qrcode'
+import React, { useEffect, useState } from 'react'
+import { Html5Qrcode } from 'html5-qrcode'
+import { Box, Button } from '@mui/material'
+import useStyles from './Style'
+const qrConfig = { fps: 10, qrbox: { width: 300, height: 300 } }
+let html5QrCode
 
-const App = () => {
-    const [scannedCodes, setScannedCodes] = useState([])
+const QRScanner = ({ onResult }) => {
+    const classes = useStyles()
+    const [isScanning, setIsScanning] = useState(false)
+    useEffect(() => {
+        html5QrCode = new Html5Qrcode('reader')
+    }, [])
 
-    function activateLasers() {
-        var decodedText = 'asdf'
-        var decodedResult = 'asdfasdfasdf'
-        console.log(scannedCodes)
-
-        setScannedCodes(scannedCodes.concat([{ decodedText, decodedResult }]))
+    const handleClickAdvanced = () => {
+        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+            onResult(decodedText)
+            handleStop()
+        }
+        html5QrCode.start({ facingMode: 'environment' }, qrConfig, qrCodeSuccessCallback)
+        setIsScanning(true)
     }
 
-    useEffect(() => {
-        function onScanSuccess(decodedText, decodedResult) {
-            // handle the scanned code as you like, for example:
-            console.log(`Code matched = ${decodedText}`, decodedResult)
-            setScannedCodes(scannedCodes.concat([{ decodedText, decodedResult }]))
+    const handleStop = () => {
+        try {
+            html5QrCode
+                .stop()
+                .then(res => {
+                    html5QrCode.clear()
+                })
+                .catch(err => {
+                    console.log(err.message)
+                })
+            setIsScanning(false)
+        } catch (err) {
+            console.log(err)
         }
-
-        function onScanFailure(error) {
-            // handle scan failure, usually better to ignore and keep scanning.
-            // for example:
-            console.warn(`Code scan error = ${error}`)
-        }
-
-        let html5QrcodeScanner = new Html5QrcodeScanner('reader', { fps: 10, qrbox: { width: 250, height: 250 } }, /* verbose= */ false)
-        html5QrcodeScanner.render(onScanSuccess, onScanFailure)
-    })
+    }
 
     return (
-        <div>
-            <div id="reader" width="600px"></div>
-        </div>
+        <Box sx={{ width: '25%' }}>
+            <div id="reader" width="100%" />
+            {isScanning ? (
+                <Button variant="contained" className={classes.qrcodeButton} onClick={() => handleStop()}>
+                    停止
+                </Button>
+            ) : (
+                <Button variant="contained" className={classes.qrcodeButton} onClick={() => handleClickAdvanced()}>
+                    掃描
+                </Button>
+            )}
+        </Box>
     )
 }
-
-export default App
+export default QRScanner

@@ -32,7 +32,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     )
     const [gender, setGender] = useState(row?.gender || '女')
     const [age, setAge] = useState(0)
-    const [qrcode, setQrcode] = useState('')
+    const [qrcode, setQrcode] = useState(null)
     const [errorField, setErrorField] = useState([])
     const [validID, setValidID] = useState(true)
     const [validPhone, setValidPhone] = useState(true)
@@ -52,6 +52,24 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
             setAge(parseInt((today - birthday) / 31557600000)) // 31557600000 是 24 * 3600 * 365.25 * 1000 = 一年
         }
     }, [birth])
+    useEffect(() => {
+        if (qrcode) {
+            const { id, name, address, phone, department, birth, gender, age } = qrcode
+            setId(id)
+            setName(name)
+            setAddress(address)
+            setPhone(phone)
+            setDepartment(department)
+            setBirth({
+                year: parseInt(birth?.split('/')[0]),
+                month: parseInt(birth?.split('/')[1]),
+                day: parseInt(birth?.split('/')[2]),
+            })
+            setGender(gender)
+            setAge(age)
+            dispatch(openSnackbar('掃描成功'))
+        }
+    }, [qrcode])
 
     const handleDelete = () => {
         setId('')
@@ -63,6 +81,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
         setGender('女')
         setAge(0)
     }
+
     const hasEmptyField = () => {
         const errorFieldList = Object.entries({ id, name, address, phone, birth, gender })
             .map(([key, value]) => !value && key)
@@ -137,10 +156,6 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                 </RadioGroup>
             </FormControl>
         )
-    }
-
-    const onNewScanResult = (decodedText, decodedResult) => {
-        console.log(decodedText)
     }
 
     return (
@@ -301,14 +316,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                         </Button>
                     </Box>
 
-                    {mode === 'create' && (
-                        <>
-                            {/* <Button variant="contained" className={classes.qrcodeButton}>
-                                QRCODE掃描
-                            </Button> */}
-                            <QRScanner type={'QR'} onResult={res => alert(res)} />
-                        </>
-                    )}
+                    {mode === 'create' && <QRScanner onResult={res => setQrcode(JSON.parse(res))} />}
                 </Box>
             </Box>
         </Box>
