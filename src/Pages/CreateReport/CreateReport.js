@@ -111,7 +111,7 @@ const CreateReport = () => {
                         <>
                             <Box className={classes.patientInfo}>
                                 <Chip
-                                    icon={<EmojiEmotionsOutlined />}
+                                    // icon={<EmojiEmotionsOutlined />}
                                     label={`${patient.id} / ${patient.name} / ${patient.gender}`}
                                     variant="outlined"
                                     className={classes.chip}

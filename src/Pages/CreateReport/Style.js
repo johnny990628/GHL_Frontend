@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     chip: {
         borderColor: theme.palette.primary.main,
         color: theme.palette.primary.main,
-        fontSize: '1.3rem',
+        fontSize: '1.1rem',
         padding: '.6rem',
     },
 }))

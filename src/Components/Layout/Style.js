@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'left',
-        padding: '2rem 8rem 2rem 4rem',
+        padding: '3rem 3rem 3rem 2rem',
         backgroundColor: theme.palette.background.default,
         transition: 'all .4s ease-in',
         '&.close': {
