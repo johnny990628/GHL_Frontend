@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/GHL_Frontend/static/css/main.2e7936a1.css",
+    "main.js": "/GHL_Frontend/static/js/main.92719c3c.js",
+    "index.html": "/GHL_Frontend/index.html",
+    "main.2e7936a1.css.map": "/GHL_Frontend/static/css/main.2e7936a1.css.map",
+    "main.92719c3c.js.map": "/GHL_Frontend/static/js/main.92719c3c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2e7936a1.css",
+    "static/js/main.92719c3c.js"
+  ]
+}
