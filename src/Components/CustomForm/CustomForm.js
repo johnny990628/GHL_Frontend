@@ -131,11 +131,13 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                 variant="standard"
                 label="生日"
                 required
+                showSoftInputOnFocus={false}
                 InputProps={{
                     style: {
                         fontSize: '1.3rem',
                         color: theme.palette.primary.main,
                     },
+                    readOnly: true,
                 }}
                 InputLabelProps={{ style: { fontSize: '1.3rem', color: theme.palette.primary.main } }}
                 className={classes.textField}
