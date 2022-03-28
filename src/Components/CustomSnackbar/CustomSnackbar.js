@@ -11,7 +11,7 @@ const CustomSnackbar = () => {
     const handleClose = () => dispatch(closeSnackbar())
 
     return (
-        <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={isOpen} autoHideDuration={3000} onClose={handleClose}>
+        <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={isOpen} autoHideDuration={3000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
                 {message}
             </Alert>
