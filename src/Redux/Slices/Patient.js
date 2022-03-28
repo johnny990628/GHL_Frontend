@@ -4,6 +4,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 const patients = [
     {
         id: 'A131005438',
+        blood: '012',
         name: '李柏勳',
         gender: '男',
         birth: '2001/6/28',
@@ -15,6 +16,7 @@ const patients = [
     },
     {
         id: 'P131005439',
+        blood: '013',
         name: '李柏勳',
         gender: '男',
         birth: '2001/6/28',
@@ -26,6 +28,7 @@ const patients = [
     },
     {
         id: 'O131005437',
+        blood: '014',
         name: '李柏勳',
         gender: '男',
         birth: '2001/6/28',
@@ -37,6 +40,7 @@ const patients = [
     },
     {
         id: 'Z131005437',
+        blood: '015',
         name: '李柏勳',
         gender: '男',
         birth: '2001/6/28',
@@ -48,6 +52,7 @@ const patients = [
     },
     {
         id: 'Y131005437',
+        blood: '016',
         name: '李柏勳',
         gender: '男',
         birth: '2001/6/28',
@@ -59,6 +64,7 @@ const patients = [
     },
     {
         id: 'G131005437',
+        blood: '017',
         name: '李柏勳',
         gender: '男',
         birth: '2001/6/28',
@@ -70,6 +76,7 @@ const patients = [
     },
     {
         id: 'F131005437',
+        blood: '018',
         name: '李柏勳',
         gender: '男',
         birth: '2001/6/28',
@@ -81,6 +88,7 @@ const patients = [
     },
     {
         id: 'E131005437',
+        blood: '019',
         name: '李柏勳',
         gender: '男',
         birth: '2001/6/28',

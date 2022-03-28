@@ -2,17 +2,10 @@ import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(theme => ({
     formWrapper: {
-        // backgroundColor: theme.palette.secondary.main,
-        // borderRadius: '1rem 1rem 0 0',
-        // padding: '1rem',
-        // marginBottom: '1rem',
-
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        // boxShadow: '6px 6px 10px rgba(0,0,0,0.2)',
-        // border: `1px solid ${theme.palette.border.main}`,
     },
     formHeader: {
         fontSize: '3rem',
@@ -24,9 +17,6 @@ const useStyles = makeStyles(theme => ({
     textField: {
         margin: '1rem 2.8rem',
         width: '28rem',
-        // [theme.breakpoints.down('xl')]: {
-        //     width: '20rem',
-        // },
         [theme.breakpoints.down('lg')]: {
             width: '80%',
         },

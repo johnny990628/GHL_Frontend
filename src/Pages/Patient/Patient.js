@@ -62,6 +62,7 @@ const Patient = () => {
                     )
                 },
             },
+            { accessor: 'blood', Header: '抽血編號' },
             { accessor: 'id', Header: '身分證字號' },
             { accessor: 'name', Header: '姓名' },
             { accessor: 'gender', Header: '性別' },
@@ -98,9 +99,10 @@ const Patient = () => {
         ],
         []
     )
-    const handleSubmit = ({ id, name, address, phone, department, birth, gender, age, processing }) => {
+    const handleSubmit = ({ id, blood, name, address, phone, department, birth, gender, age, processing }) => {
         const formData = {
             id,
+            blood,
             name,
             address,
             phone,
