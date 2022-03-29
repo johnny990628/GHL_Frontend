@@ -16,6 +16,9 @@ const useStyles = makeStyles(theme => ({
         fontSize: '1.1rem',
         backgroundColor: theme.palette.secondary.main,
         borderBottom: `1px solid ${theme.palette.primary.light}`,
+        [theme.breakpoints.down('lg')]: {
+            fontSize: '1rem',
+        },
     },
     tableHeaderTotal: {
         marginRight: '2rem',

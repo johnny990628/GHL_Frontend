@@ -26,6 +26,7 @@ import {
     GridToolbarDensitySelector,
     GridToolbarExport,
 } from '@mui/x-data-grid'
+import { useTheme } from '@mui/styles'
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 import useStyles from './Style'
@@ -92,6 +93,7 @@ const CustomTable = ({ data, columns, loading }) => {
     }
 
     const classes = useStyles()
+    const theme = useTheme()
 
     const {
         getTableProps,
@@ -163,7 +165,16 @@ const CustomTable = ({ data, columns, loading }) => {
                                 return (
                                     <TableRow {...row.getRowProps()}>
                                         {row.cells.map(cell => (
-                                            <TableCell {...cell.getCellProps()} sx={{ fontSize: '1rem' }}>
+                                            <TableCell
+                                                {...cell.getCellProps()}
+                                                sx={{
+                                                    fontSize: '1rem',
+
+                                                    [theme.breakpoints.down('lg')]: {
+                                                        fontSize: '.9rem',
+                                                    },
+                                                }}
+                                            >
                                                 {cell.render('Cell')}
                                             </TableCell>
                                         ))}
