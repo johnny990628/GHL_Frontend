@@ -6,6 +6,7 @@ import {
     Button,
     TextField,
     FormControl,
+    Alert,
 } from "@mui/material";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
@@ -14,18 +15,21 @@ import { format } from "date-fns";
 import QRCode from "qrcode.react";
 
 import { Format } from "./Format";
+import { verifyID } from "../../Utils/Verify";
 
 const Form = () => {
     const [userData, setUserData] = useState({});
     const [value, setValue] = useState(new Date("2000-01-01"));
     const [showQRcodeDiv, setShowQRcodeDiv] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(true);
+
     const style = {
         marginTop: "20px",
         textAlign: "center",
     };
     const FormDiv = () => {
         return (
-            <div>
+            <form>
                 {Format.Format.map((Format) => {
                     if (Format.formtype === "Text") {
                         return (
@@ -129,7 +133,7 @@ const Form = () => {
                         );
                     }
                 })}
-            </div>
+            </form>
         );
     };
 
@@ -209,9 +213,8 @@ const Form = () => {
                     fontSize: "20px",
                 }}
                 variant="contained"
-                onClick={() => {
-                    console.log(userData);
-                    setShowQRcodeDiv(true);
+                onClick={(event) => {
+                    verify();
                 }}
             >
                 產生條碼
@@ -219,9 +222,54 @@ const Form = () => {
         );
     };
 
+    const verify = () => {
+        var nullErrorMessage = "";
+        var verifyErrorMessage = "";
+
+        if (!userData.ID) {
+            nullErrorMessage += " 身分證";
+        } else if (!verifyID(userData.ID)) {
+            verifyErrorMessage += " 身分證";
+        }
+
+        if (!userData.Phone) {
+            nullErrorMessage += " 電話";
+        } else if (userData.Phone.length !=10&&userData.Phone.length !=9) {
+            verifyErrorMessage += "電話號碼格式錯誤";
+        }
+
+        if (!userData.Name) {
+            nullErrorMessage += " 姓名";
+        }
+
+        if (!userData.Phone) {
+            nullErrorMessage += " 電話";
+        }
+        if (!userData.Address) {
+            nullErrorMessage += " 地址";
+        }
+
+        if (!userData.Gender) {
+            nullErrorMessage += " 性別";
+        }
+
+        if (!userData.Birth) {
+            nullErrorMessage += " 生日";
+        }
+
+        if (nullErrorMessage) {
+            alert("未填欄位："+nullErrorMessage);
+        } else if (verifyErrorMessage) {
+            alert("格式錯誤"+verifyErrorMessage);
+        } else {
+            setShowQRcodeDiv(true);
+        }
+    };
+
     return (
         <div style={style}>
             {FormDiv()}
+
             {showQRcodeDiv ? null : ButtonDiv()}
             {showQRcodeDiv ? QRCodeDiv() : null}
         </div>
