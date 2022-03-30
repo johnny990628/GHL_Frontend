@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import {
     Box,
     Button,
@@ -15,8 +15,8 @@ import {
     FormControl,
     InputLabel,
 } from '@mui/material'
+import { useTheme } from '@mui/styles'
 import { Delete, Search, ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
-import { useDispatch } from 'react-redux'
 import { useTable, useGlobalFilter, usePagination, useSortBy } from 'react-table'
 import {
     DataGrid,
@@ -92,6 +92,7 @@ const CustomTable = ({ data, columns, loading }) => {
     }
 
     const classes = useStyles()
+    const theme = useTheme()
 
     const {
         getTableProps,
@@ -163,7 +164,15 @@ const CustomTable = ({ data, columns, loading }) => {
                                 return (
                                     <TableRow {...row.getRowProps()}>
                                         {row.cells.map(cell => (
-                                            <TableCell {...cell.getCellProps()} sx={{ fontSize: '1rem' }}>
+                                            <TableCell
+                                                {...cell.getCellProps()}
+                                                sx={{
+                                                    fontSize: '1rem',
+                                                    [theme.breakpoints.down('lg')]: {
+                                                        fontSize: '.9rem',
+                                                    },
+                                                }}
+                                            >
                                                 {cell.render('Cell')}
                                             </TableCell>
                                         ))}

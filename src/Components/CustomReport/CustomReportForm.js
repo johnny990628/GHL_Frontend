@@ -13,7 +13,7 @@ const FormSection = ({ list }) => {
             <Box className={classes.formLabel}>{list.label}</Box>
             {list.name !== 'suggestion' && (
                 <FormControlLabel
-                    control={<Checkbox checked={isNormal} onChange={() => setIsNormal(!isNormal)} />}
+                    control={<Checkbox disabled={isNormal} checked={isNormal} onChange={() => setIsNormal(!isNormal)} />}
                     label={<Box className={classes.inputLabel}>正常</Box>}
                 />
             )}

@@ -166,8 +166,8 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     }
 
     const inputModel = [
-        { name: 'id', label: '身分證字號', value: id, setValue: setId, required: true },
         { name: 'blood', label: '抽血編號', value: blood, setValue: setBlood, required: true },
+        { name: 'id', label: '身分證字號', value: id, setValue: setId, required: true },
         { name: 'name', label: '姓名', value: name, setValue: setName, required: true },
         { name: 'address', label: '地址', value: address, setValue: setAddress, required: true },
         { name: 'phone', label: '電話', value: phone, setValue: setPhone, required: true },

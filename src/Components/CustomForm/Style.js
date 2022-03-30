@@ -17,8 +17,9 @@ const useStyles = makeStyles(theme => ({
     textField: {
         margin: '1rem 2.8rem',
         width: '28rem',
-        [theme.breakpoints.down('lg')]: {
-            width: '80%',
+
+        [theme.breakpoints.down('md')]: {
+            width: '15rem',
         },
     },
     formBody: {
