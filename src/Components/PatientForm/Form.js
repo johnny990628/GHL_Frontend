@@ -113,13 +113,6 @@ const Form = () => {
                                         views={["year", "month", "day"]}
                                         value={value}
                                         onChange={(newValue) => {
-                                            // console.log(newValue.getFullYear());
-                                            // console.log(newValue.getMonth()+1);
-                                            // console.log(newValue.getDate());
-                                            // let Time = format(
-                                            //     newValue,
-                                            //     "yyyy-MM-dd"
-                                            // );
                                             setValue(newValue);
                                             setUserData({
                                                 ...userData,
