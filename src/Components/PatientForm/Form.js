@@ -6,12 +6,12 @@ import {
     Button,
     TextField,
     FormControl,
-    Alert,
 } from "@mui/material";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import DatePicker from "@mui/lab/DatePicker";
 import { format } from "date-fns";
+import { zhTW } from "date-fns/locale"; //給DatePicker用的中文月份
 import QRCode from "qrcode.react";
 
 import { Format } from "./Format";
@@ -21,7 +21,6 @@ const Form = () => {
     const [userData, setUserData] = useState({});
     const [value, setValue] = useState(new Date("2000-01-01"));
     const [showQRcodeDiv, setShowQRcodeDiv] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(true);
 
     const style = {
         marginTop: "20px",
@@ -105,20 +104,28 @@ const Form = () => {
                             <div style={{ marginTop: "20px" }}>
                                 <LocalizationProvider
                                     dateAdapter={AdapterDateFns}
+                                    locale={zhTW}
                                 >
-                                    <DesktopDatePicker
-                                        label={Format.label}
+                                    <DatePicker
                                         inputFormat="yyyy/MM/dd"
+                                        label={Format.label}
+                                        openTo="year"
+                                        views={["year", "month", "day"]}
                                         value={value}
                                         onChange={(newValue) => {
-                                            let Time = format(
-                                                newValue,
-                                                "yyyy-MM-dd"
-                                            );
+                                            // console.log(newValue.getFullYear());
+                                            // console.log(newValue.getMonth()+1);
+                                            // console.log(newValue.getDate());
+                                            // let Time = format(
+                                            //     newValue,
+                                            //     "yyyy-MM-dd"
+                                            // );
                                             setValue(newValue);
                                             setUserData({
                                                 ...userData,
-                                                [Format.name]: Time,
+                                                [Format.name]: `${newValue.getFullYear()}/${
+                                                    newValue.getMonth() + 1
+                                                }/${newValue.getDate()}`,
                                             });
                                         }}
                                         renderInput={(params) => (
