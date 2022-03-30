@@ -36,6 +36,7 @@ const useStyles = makeStyles(theme => ({
     },
     button: {
         fontSize: '1rem',
+        margin: '1rem',
     },
     patientInfo: {
         display: 'flex',

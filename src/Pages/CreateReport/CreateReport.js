@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Box, Stepper, Step, StepLabel, IconButton, Chip } from '@mui/material'
-import { ArrowBack, ArrowForward, EmojiEmotionsOutlined } from '@mui/icons-material'
+import { Box, Stepper, Step, StepLabel, IconButton, Chip, Button } from '@mui/material'
+import { ArrowBack, ArrowForward, CheckCircleOutline } from '@mui/icons-material'
+import { useTheme } from '@mui/styles'
 import useStyles from './Style'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -22,8 +23,9 @@ const CreateReport = () => {
     const [selection, setSelection] = useState([])
     const [patient, setPatient] = useState({})
     const steps = ['選擇病人', '新增報告', '完成']
-    const classes = useStyles()
     const { data } = useSelector(state => state.patients)
+    const classes = useStyles()
+    const theme = useTheme()
 
     useEffect(() => {
         setPatient(data.find(d => d.id === selection[0]))
@@ -120,9 +122,42 @@ const CreateReport = () => {
                             <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} patient={patient} />
                         </>
                     )}
+                    {currentStep === 2 && (
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                height: '100%',
+                            }}
+                        >
+                            <CheckCircleOutline sx={{ fontSize: '10rem', color: theme.palette.contrast.main }} />
+                            <Box sx={{ fontSize: '3rem' }}>報告已成功儲存</Box>
+                            <Box sx={{ fontSize: '2rem' }}>檢查者:{patient.name}</Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        background: theme.palette.contrast.main,
+                                        '&:hover': {
+                                            backgroundColor: theme.palette.contrast.dark,
+                                        },
+                                    }}
+                                    className={classes.button}
+                                >
+                                    預覽
+                                </Button>
+
+                                <Button variant="contained" className={classes.button} onClick={() => setCurrentStep(0)}>
+                                    返回
+                                </Button>
+                            </Box>
+                        </Box>
+                    )}
                 </Box>
                 <IconButton
-                    disabled={!patient}
+                    disabled={!patient || currentStep === 2}
                     className={classes.button}
                     onClick={() => {
                         setCurrentStep(p => p + 1)
