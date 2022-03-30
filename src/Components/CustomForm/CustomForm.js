@@ -10,6 +10,7 @@ import { closeDialog } from '../../Redux/Slices/Dialog'
 import { openSnackbar } from '../../Redux/Slices/Snackbar'
 import QRScanner from '../QRScanner/QRScanner'
 import CustomInput from './CustomInput'
+import { verifyID, verifyPhone } from '../../Utils/Verify'
 
 const CustomForm = ({ title, row, mode, handleSubmit }) => {
     const [id, setId] = useState('')
@@ -79,41 +80,8 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
         }
     }, [qrcode])
 
-    const verifyID = value => {
-        //建立字母分數陣列(A~Z)
-        var city = [1, 10, 19, 28, 37, 46, 55, 64, 39, 73, 82, 2, 11, 20, 48, 29, 38, 47, 56, 65, 74, 83, 21, 3, 12, 30]
-        value = value.toUpperCase()
-        //使用「正規表達式」檢驗格式
-        if (value.search(/^[A-Z](1|2)\d{8}$/i) === -1) {
-            setValidID(false)
-        } else {
-            //將字串分割為陣列(IE必需這麼做才不會出錯)
-            value = value.split('')
-            //計算總分
-            var total = city[value[0].charCodeAt(0) - 65]
-            for (let i = 1; i <= 8; i++) {
-                total += eval(value[i] * (9 - i))
-            }
-            //補上檢查碼(最後一碼)
-            total += eval(value[9])
-            //檢查比對碼(餘數應為0);
-            setValidID(total % 10 == 0)
-        }
-    }
-
-    const verifyPhone = value => {
-        //正則表達式驗證手機或市話號碼
-        setValidPhone(value.search(/\d{2,4}-?\d{3,4}-?\d{3,4}#?(\d+)?/) !== -1)
-    }
-
-    const checkBloodExist = value => {
-        setBloodUsed(data.find(d => d.blood === value))
-    }
-
-    const checkIDExist = value => {
-        if (value.length < 10) return
-        setIdUsed(data.find(d => d.id === value))
-    }
+    const checkBloodExist = value => data.some(d => d.blood === value)
+    const checkIDExist = value => data.some(d => d.id === value)
 
     const handleDelete = () => {
         setId('')
@@ -130,14 +98,14 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     const handleChange = (value, name) => {
         switch (name) {
             case 'id':
-                verifyID(value)
-                checkIDExist(value)
+                setValidID(verifyID(value))
+                setIdUsed(checkIDExist(value))
                 break
             case 'phone':
-                verifyPhone(value)
+                setValidPhone(verifyPhone(value))
                 break
             case 'blood':
-                checkBloodExist(value)
+                setBloodUsed(checkBloodExist(value))
                 break
             default:
                 break

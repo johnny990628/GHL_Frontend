@@ -26,6 +26,7 @@ import {
     GridToolbarDensitySelector,
     GridToolbarExport,
 } from '@mui/x-data-grid'
+import { useTheme } from '@mui/styles'
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 import useStyles from './Style'

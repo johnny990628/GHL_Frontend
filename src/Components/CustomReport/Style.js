@@ -4,12 +4,15 @@ const useStyles = makeStyles(theme => ({
     container: { display: 'flex', alignItems: 'center', height: '90%', width: '100%' },
     scrollspy: { marginRight: '1rem', padding: '.3rem' },
     scrollspyButton: {
-        fontSize: '1.6rem',
+        fontSize: '1.5rem',
         marginBottom: '1rem',
         color: theme.palette.primary.light_secondary,
         // '&:hover': {
         //     backgroundColor: theme.palette.primary.light,
         // },
+        [theme.breakpoints.down('lg')]: {
+            fontSize: '1.3rem',
+        },
     },
 
     formContainer: {
@@ -22,10 +25,16 @@ const useStyles = makeStyles(theme => ({
         fontSize: '2rem',
         color: theme.palette.primary.main,
         marginRight: '1rem',
+        [theme.breakpoints.down('lg')]: {
+            fontSize: '1.5rem',
+        },
     },
     inputLabel: {
         fontSize: '1.3rem',
         padding: '.3rem',
+        [theme.breakpoints.down('lg')]: {
+            fontSize: '1rem',
+        },
     },
 }))
 
