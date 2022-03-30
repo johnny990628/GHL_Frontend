@@ -226,41 +226,41 @@ const Form = () => {
         var nullErrorMessage = "";
         var verifyErrorMessage = "";
 
-        if (!userData.ID) {
+        if (!userData.id) {
             nullErrorMessage += " 身分證";
-        } else if (!verifyID(userData.ID)) {
+        } else if (!verifyID(userData.id)) {
             verifyErrorMessage += " 身分證";
         }
 
-        if (!userData.Phone) {
+        if (!userData.phone) {
             nullErrorMessage += " 電話";
-        } else if (userData.Phone.length !=10&&userData.Phone.length !=9) {
+        } else if (userData.phone.length != 10 && userData.phone.length != 9) {
             verifyErrorMessage += "電話號碼格式錯誤";
         }
 
-        if (!userData.Name) {
+        if (!userData.name) {
             nullErrorMessage += " 姓名";
         }
 
-        if (!userData.Phone) {
+        if (!userData.phone) {
             nullErrorMessage += " 電話";
         }
-        if (!userData.Address) {
+        if (!userData.address) {
             nullErrorMessage += " 地址";
         }
 
-        if (!userData.Gender) {
+        if (!userData.gender) {
             nullErrorMessage += " 性別";
         }
 
-        if (!userData.Birth) {
+        if (!userData.birth) {
             nullErrorMessage += " 生日";
         }
 
         if (nullErrorMessage) {
-            alert("未填欄位："+nullErrorMessage);
+            alert("未填欄位：" + nullErrorMessage);
         } else if (verifyErrorMessage) {
-            alert("格式錯誤"+verifyErrorMessage);
+            alert("格式錯誤" + verifyErrorMessage);
         } else {
             setShowQRcodeDiv(true);
         }
