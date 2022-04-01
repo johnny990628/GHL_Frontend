@@ -2,7 +2,7 @@ export const Format = {
     Format: [
         {
             formtype: "Text",
-            name: "ID",
+            name: "id",
             label: "身分證字號",
             type: "String",
             required: true,
@@ -10,7 +10,7 @@ export const Format = {
         },
         {
             formtype: "Text",
-            name: "Name",
+            name: "name",
             label: "姓名",
             type: "String",
             required: true,
@@ -18,7 +18,7 @@ export const Format = {
         },
         {
             formtype: "Text",
-            name: "Address",
+            name: "address",
             label: "住址",
             type: "String",
             required: true,
@@ -26,7 +26,7 @@ export const Format = {
         },
         {
             formtype: "Text",
-            name: "Phone",
+            name: "phone",
             label: "手機號碼",
             type: "Number",
             required: true,
@@ -34,7 +34,7 @@ export const Format = {
         },
         {
             formtype: "Select",
-            name: "Gender",
+            name: "gender",
             label: [
                 {
                     name: "Male",
@@ -49,7 +49,7 @@ export const Format = {
         },
         {
             formtype: "Time",
-            name: "Birth",
+            name: "birth",
             label: "生日",
             required: true,
         },

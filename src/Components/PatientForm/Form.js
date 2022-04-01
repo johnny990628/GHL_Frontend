@@ -9,23 +9,26 @@ import {
 } from "@mui/material";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import DatePicker from "@mui/lab/DatePicker";
 import { format } from "date-fns";
+import { zhTW } from "date-fns/locale"; //給DatePicker用的中文月份
 import QRCode from "qrcode.react";
 
 import { Format } from "./Format";
+import { verifyID } from "../../Utils/Verify";
 
 const Form = () => {
     const [userData, setUserData] = useState({});
     const [value, setValue] = useState(new Date("2000-01-01"));
     const [showQRcodeDiv, setShowQRcodeDiv] = useState(false);
+
     const style = {
         marginTop: "20px",
         textAlign: "center",
     };
     const FormDiv = () => {
         return (
-            <div>
+            <form>
                 {Format.Format.map((Format) => {
                     if (Format.formtype === "Text") {
                         return (
@@ -101,20 +104,21 @@ const Form = () => {
                             <div style={{ marginTop: "20px" }}>
                                 <LocalizationProvider
                                     dateAdapter={AdapterDateFns}
+                                    locale={zhTW}
                                 >
-                                    <DesktopDatePicker
-                                        label={Format.label}
+                                    <DatePicker
                                         inputFormat="yyyy/MM/dd"
+                                        label={Format.label}
+                                        openTo="year"
+                                        views={["year", "month", "day"]}
                                         value={value}
                                         onChange={(newValue) => {
-                                            let Time = format(
-                                                newValue,
-                                                "yyyy-MM-dd"
-                                            );
                                             setValue(newValue);
                                             setUserData({
                                                 ...userData,
-                                                [Format.name]: Time,
+                                                [Format.name]: `${newValue.getFullYear()}/${
+                                                    newValue.getMonth() + 1
+                                                }/${newValue.getDate()}`,
                                             });
                                         }}
                                         renderInput={(params) => (
@@ -129,7 +133,7 @@ const Form = () => {
                         );
                     }
                 })}
-            </div>
+            </form>
         );
     };
 
@@ -209,9 +213,8 @@ const Form = () => {
                     fontSize: "20px",
                 }}
                 variant="contained"
-                onClick={() => {
-                    console.log(userData);
-                    setShowQRcodeDiv(true);
+                onClick={(event) => {
+                    verify();
                 }}
             >
                 產生條碼
@@ -219,9 +222,54 @@ const Form = () => {
         );
     };
 
+    const verify = () => {
+        var nullErrorMessage = "";
+        var verifyErrorMessage = "";
+
+        if (!userData.id) {
+            nullErrorMessage += " 身分證";
+        } else if (!verifyID(userData.id)) {
+            verifyErrorMessage += " 身分證";
+        }
+
+        if (!userData.phone) {
+            nullErrorMessage += " 電話";
+        } else if (userData.phone.length != 10 && userData.phone.length != 9) {
+            verifyErrorMessage += "電話號碼格式錯誤";
+        }
+
+        if (!userData.name) {
+            nullErrorMessage += " 姓名";
+        }
+
+        if (!userData.phone) {
+            nullErrorMessage += " 電話";
+        }
+        if (!userData.address) {
+            nullErrorMessage += " 地址";
+        }
+
+        if (!userData.gender) {
+            nullErrorMessage += " 性別";
+        }
+
+        if (!userData.birth) {
+            nullErrorMessage += " 生日";
+        }
+
+        if (nullErrorMessage) {
+            alert("未填欄位：" + nullErrorMessage);
+        } else if (verifyErrorMessage) {
+            alert("格式錯誤" + verifyErrorMessage);
+        } else {
+            setShowQRcodeDiv(true);
+        }
+    };
+
     return (
         <div style={style}>
             {FormDiv()}
+
             {showQRcodeDiv ? null : ButtonDiv()}
             {showQRcodeDiv ? QRCodeDiv() : null}
         </div>
