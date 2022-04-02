@@ -14,7 +14,8 @@ import Liver from './liver.json'
 import Pancreas from './pancreas.json'
 import Spleen from './spleen.json'
 import Suggestion from './suggestion.json'
-import { addReport } from '../../Redux/Slices/Patient'
+import { addReport, removeProcessing } from '../../Redux/Slices/Patient'
+import { v4 } from 'uuid'
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
@@ -33,9 +34,14 @@ const CreateReport = () => {
 
     useEffect(() => {
         if (currentStep === 2) {
-            dispatch(addReport({ patient, report }))
+            handleReportSubmit()
         }
     }, [currentStep])
+
+    const handleReportSubmit = () => {
+        dispatch(addReport({ patient, report: { id: v4(), data: report, updateTime: new Date().toLocaleString() } }))
+        dispatch(removeProcessing({ patient }))
+    }
 
     const columns = [
         {
@@ -67,7 +73,11 @@ const CreateReport = () => {
                 ))}
             </Stepper>
             <Box className={classes.container}>
-                <IconButton disabled={currentStep === 0} className={classes.button} onClick={() => setCurrentStep(p => p - 1)}>
+                <IconButton
+                    sx={{ display: (currentStep === 0 || currentStep === 2) && 'none' }}
+                    className={classes.button}
+                    onClick={() => setCurrentStep(p => p - 1)}
+                >
                     <ArrowBack />
                 </IconButton>
 
@@ -128,7 +138,8 @@ const CreateReport = () => {
                     )}
                 </Box>
                 <IconButton
-                    disabled={!patient || currentStep === 2}
+                    sx={{ display: currentStep === 2 && 'none', backgroundColor: theme.pa }}
+                    disabled={!patient}
                     className={classes.button}
                     onClick={() => {
                         setCurrentStep(p => p + 1)

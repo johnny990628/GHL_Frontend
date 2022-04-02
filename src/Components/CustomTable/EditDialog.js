@@ -23,7 +23,7 @@ const EditDialog = () => {
             updateTime: new Date().toLocaleString(),
             processing,
         }
-        dispatch(updatePatient(formData))
+        dispatch(updatePatient({ patient: formData }))
     }
 
     return (

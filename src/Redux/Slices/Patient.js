@@ -120,23 +120,28 @@ const patientsSlice = createSlice({
     initialState,
     reducers: {
         addPatient: (state, action) => {
-            state.data.push(action.payload)
+            const { patient } = action.payload
+            state.data = [...state.data, patient]
         },
         removePatient: (state, action) => {
-            state.data = state.data.filter(row => action.payload !== row.id)
+            const { id } = action.payload
+            state.data = state.data.filter(row => row.id !== id)
         },
         updatePatient: (state, action) => {
-            state.data = state.data.map(row => (row.id === action.payload.id ? action.payload : row))
+            const { patient } = action.payload
+            state.data = state.data.map(row => (row.id === patient.id ? patient : row))
         },
         addProcessing: (state, action) => {
-            state.data = state.data.map(row => (row.id === action.payload.id ? { ...action.payload, processing: true } : row))
+            const { patient } = action.payload
+            state.data = state.data.map(row => (row.id === patient.id ? { ...row, processing: true } : row))
         },
         removeProcessing: (state, action) => {
-            state.data = state.data.map(row => (row.id === action.payload.id ? { ...action.payload, processing: false } : row))
+            const { patient } = action.payload
+            state.data = state.data.map(row => (row.id === patient.id ? { ...row, processing: false } : row))
         },
         addReport: (state, action) => {
             const { patient, report } = action.payload
-            state.data = state.data.map(row => (row.id === patient.id ? { ...patient, reports: [...patient.reports, report] } : row))
+            state.data = state.data.map(row => (row.id === patient.id ? { ...row, reports: [...row.reports, report] } : row))
         },
     },
     extraReducers: {

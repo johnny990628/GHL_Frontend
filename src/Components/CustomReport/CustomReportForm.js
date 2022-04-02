@@ -7,6 +7,7 @@ import CustomReportInput from './CustomReportInput'
 import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
 import { useDispatch } from 'react-redux'
 import { clearCancer } from '../../Redux/Slices/Report'
+import ReportList from './ReportList'
 
 const FormSection = ({ list }) => {
     const classes = useStyles()
@@ -63,6 +64,7 @@ const CustomReportForm = ({ lists, patient }) => {
                         <FormSection key={list.name} list={list} />
                     ))}
                 </CustomScrollbar>
+                {patient.reports.length > 0 && <ReportList patient={patient} />}
             </Box>
         </>
     )

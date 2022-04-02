@@ -42,7 +42,7 @@ const Patient = () => {
                             {!processing ? (
                                 <IconButton
                                     onClick={() => {
-                                        dispatch(addProcessing(row.row.original))
+                                        dispatch(addProcessing({ patient: row.row.original }))
                                         dispatch(openSnackbar('新增排程'))
                                     }}
                                 >
@@ -51,7 +51,7 @@ const Patient = () => {
                             ) : (
                                 <IconButton
                                     onClick={() => {
-                                        dispatch(removeProcessing(row.row.original))
+                                        dispatch(removeProcessing({ patient: row.row.original }))
                                         dispatch(openSnackbar('取消排程'))
                                     }}
                                 >
@@ -86,7 +86,7 @@ const Patient = () => {
                             </IconButton>
                             <IconButton
                                 onClick={() => {
-                                    dispatch(removePatient(row.row.original.id))
+                                    dispatch(removePatient({ id: row.row.original.id }))
                                     dispatch(openSnackbar('刪除成功'))
                                 }}
                             >
@@ -114,7 +114,7 @@ const Patient = () => {
             processing,
             reports,
         }
-        dispatch(addPatient(formData))
+        dispatch(addPatient({ patient: formData }))
         dispatch(openSnackbar('新增成功'))
     }
 
