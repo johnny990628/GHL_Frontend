@@ -192,6 +192,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                                     gender,
                                     age,
                                     processing: autoProcessSwitch,
+                                    reports: [],
                                 })
                                 mode === 'create' && handleDelete()
                                 mode === 'edit' && dispatch(closeDialog())

@@ -13,6 +13,7 @@ const patients = [
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
         processing: true,
+        reports: [],
     },
     {
         id: 'P131005439',
@@ -25,6 +26,7 @@ const patients = [
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
         processing: true,
+        reports: [],
     },
     {
         id: 'O131005437',
@@ -37,6 +39,7 @@ const patients = [
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
         processing: false,
+        reports: [],
     },
     {
         id: 'Z131005437',
@@ -49,6 +52,7 @@ const patients = [
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
         processing: true,
+        reports: [],
     },
     {
         id: 'Y131005437',
@@ -61,6 +65,7 @@ const patients = [
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
         processing: false,
+        reports: [],
     },
     {
         id: 'G131005437',
@@ -73,6 +78,7 @@ const patients = [
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
         processing: false,
+        reports: [],
     },
     {
         id: 'F131005437',
@@ -85,6 +91,7 @@ const patients = [
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
         processing: true,
+        reports: [],
     },
     {
         id: 'E131005437',
@@ -97,6 +104,7 @@ const patients = [
         updateTime: new Date().toLocaleString(),
         address: '台北市北投區公館路279巷6號3樓',
         processing: true,
+        reports: [],
     },
 ]
 
@@ -126,6 +134,10 @@ const patientsSlice = createSlice({
         removeProcessing: (state, action) => {
             state.data = state.data.map(row => (row.id === action.payload.id ? { ...action.payload, processing: false } : row))
         },
+        addReport: (state, action) => {
+            const { patient, report } = action.payload
+            state.data = state.data.map(row => (row.id === patient.id ? { ...patient, reports: [...patient.reports, report] } : row))
+        },
     },
     extraReducers: {
         [fetchPatients.pending]: (state, action) => {
@@ -142,6 +154,6 @@ const patientsSlice = createSlice({
     },
 })
 
-export const { addPatient, removePatient, updatePatient, addProcessing, removeProcessing } = patientsSlice.actions
+export const { addPatient, removePatient, updatePatient, addProcessing, removeProcessing, addReport } = patientsSlice.actions
 
 export default patientsSlice.reducer

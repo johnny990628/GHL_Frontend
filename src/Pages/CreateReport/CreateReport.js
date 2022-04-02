@@ -6,10 +6,7 @@ import useStyles from './Style'
 
 import { useDispatch, useSelector } from 'react-redux'
 
-import CustomTable from '../../Components/CustomTable/CustomTable'
 import CustomDataGrid from '../../Components/CustomDataGrid/CustomDataGrid'
-import { AddCircle } from '@mui/icons-material'
-import CustomForm from '../../Components/CustomForm/CustomForm'
 import CustomReportForm from '../../Components/CustomReport/CustomReportForm'
 import Gallbladder from './gallbladder.json'
 import Kidney from './kidney.json'
@@ -17,6 +14,7 @@ import Liver from './liver.json'
 import Pancreas from './pancreas.json'
 import Spleen from './spleen.json'
 import Suggestion from './suggestion.json'
+import { addReport } from '../../Redux/Slices/Patient'
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
@@ -24,6 +22,8 @@ const CreateReport = () => {
     const [patient, setPatient] = useState({})
     const steps = ['選擇病人', '新增報告', '完成']
     const { data } = useSelector(state => state.patients)
+    const { report } = useSelector(state => state)
+    const dispatch = useDispatch()
     const classes = useStyles()
     const theme = useTheme()
 
@@ -31,41 +31,12 @@ const CreateReport = () => {
         setPatient(data.find(d => d.id === selection[0]))
     }, [selection])
 
-    // const columns = useMemo(
-    //     () => [
-    //         {
-    //             accessor: 'process',
-    //             Header: ' ',
-    //             Cell: row => {
-    //                 return (
-    //                     <Box className={`${classes.status}`}>
-    //                         <Box className={classes.statusBox}>排程中</Box>
-    //                     </Box>
-    //                 )
-    //             },
-    //         },
-    //         { accessor: 'id', Header: '身分證字號' },
-    //         { accessor: 'name', Header: '姓名' },
-    //         { accessor: 'gender', Header: '性別' },
-    //         { accessor: 'birth', Header: '生日' },
-    //         { accessor: 'phone', Header: '電話' },
-    //         { accessor: 'updateTime', Header: '更新日期' },
-    //         {
-    //             accessor: 'chose',
-    //             Header: '新增',
-    //             Cell: row => {
-    //                 return (
-    //                     <Box>
-    //                         <IconButton onClick={() => setCurrentStep(s => (s += 1))}>
-    //                             <AddCircle />
-    //                         </IconButton>
-    //                     </Box>
-    //                 )
-    //             },
-    //         },
-    //     ],
-    //     []
-    // )
+    useEffect(() => {
+        if (currentStep === 2) {
+            dispatch(addReport({ patient, report }))
+        }
+    }, [currentStep])
+
     const columns = [
         {
             field: 'processing',

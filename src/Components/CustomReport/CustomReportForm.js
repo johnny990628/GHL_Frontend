@@ -1,26 +1,35 @@
 import React, { useState } from 'react'
-import { Box, FormControlLabel, Checkbox, Tabs, Tab, AppBar, Toolbar, Divider } from '@mui/material'
+import { Box, FormControlLabel, Checkbox, Tabs, Tab } from '@mui/material'
 import Scrollspy from 'react-scrollspy'
+
 import useStyles from './Style'
-import CustomReportColumn from './CustomReportInput'
+import CustomReportInput from './CustomReportInput'
 import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
+import { useDispatch } from 'react-redux'
+import { clearCancer } from '../../Redux/Slices/Report'
 
 const FormSection = ({ list }) => {
     const classes = useStyles()
     const [isNormal, setIsNormal] = useState(true)
+    const dispatch = useDispatch()
+    const handleNormalOnChange = () => {
+        setIsNormal(!isNormal)
+        dispatch(clearCancer({ organ: list.name }))
+    }
+
     return (
         <Box id={list.name} className={classes.formContainer}>
             <Box className={classes.formLabel}>{list.label}</Box>
             {list.name !== 'suggestion' && (
                 <FormControlLabel
-                    control={<Checkbox checked={isNormal} onChange={() => setIsNormal(!isNormal)} />}
+                    control={<Checkbox checked={isNormal} onChange={handleNormalOnChange} />}
                     label={<Box className={classes.inputLabel}>正常</Box>}
                 />
             )}
 
             <Box>
                 {list.cols.map(row => (
-                    <CustomReportColumn key={row.name} row={row} isNormal={isNormal} setIsNormal={setIsNormal} />
+                    <CustomReportInput key={row.name} row={row} isNormal={isNormal} setIsNormal={setIsNormal} organ={list.name} />
                 ))}
             </Box>
         </Box>

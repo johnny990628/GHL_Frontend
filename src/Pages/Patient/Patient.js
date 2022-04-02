@@ -99,7 +99,7 @@ const Patient = () => {
         ],
         []
     )
-    const handleSubmit = ({ id, blood, name, address, phone, department, birth, gender, age, processing }) => {
+    const handleSubmit = ({ id, blood, name, address, phone, department, birth, gender, age, processing, reports }) => {
         const formData = {
             id,
             blood,
@@ -112,6 +112,7 @@ const Patient = () => {
             age,
             updateTime: new Date().toLocaleString(),
             processing,
+            reports,
         }
         dispatch(addPatient(formData))
         dispatch(openSnackbar('新增成功'))
