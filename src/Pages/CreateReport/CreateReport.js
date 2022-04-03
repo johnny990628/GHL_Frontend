@@ -113,7 +113,8 @@ const CreateReport = () => {
                                 height: '100%',
                             }}
                         >
-                            <CheckCircleOutline sx={{ fontSize: '10rem', color: theme.palette.contrast.main }} />
+                            {/* <CheckCircleOutline sx={{ fontSize: '10rem', color: theme.palette.contrast.main }} /> */}
+                            <img src="./success.gif" alt="success" />
                             <Box sx={{ fontSize: '3rem' }}>報告已成功儲存</Box>
                             <Box sx={{ fontSize: '2rem' }}>檢查者:{patient.name}</Box>
                             <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>

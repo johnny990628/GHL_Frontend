@@ -1,5 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Box, TextField, FormControlLabel, Checkbox, Radio, Select, MenuItem, FormControl, InputLabel, Button } from '@mui/material'
+import {
+    Box,
+    TextField,
+    FormControlLabel,
+    Checkbox,
+    Radio,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    Button,
+    ToggleButton,
+} from '@mui/material'
+import { useTheme } from '@mui/styles'
 import useStyles from './Style'
 import { addCancer, removeCancer } from '../../Redux/Slices/Report'
 import { useDispatch } from 'react-redux'
@@ -7,6 +20,7 @@ import { useDebouncedCallback } from 'use-debounce'
 
 const CustomReportInput = ({ row, organ, isNormal, setIsNormal }) => {
     const classes = useStyles()
+    const theme = useTheme()
     const { label, name, type, options } = row
     const [checked, setChecked] = useState(false)
     const [radio, setRadio] = useState('')
@@ -79,7 +93,7 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal }) => {
 
     const SelectLabel = () => {
         return (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', color: theme.palette.text.secondary }}>
                 {label.split('_').map((l, index) => (
                     <Box key={l} sx={{ display: 'flex', alignItems: 'center' }}>
                         <Box className={classes.inputLabel}>{l}</Box>
@@ -105,14 +119,40 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal }) => {
     return (
         <Box>
             {type === 'checkbox' && (
-                <FormControlLabel
+                <ToggleButton
+                    color="primary"
+                    value="check"
+                    selected={checked}
+                    onChange={handleChange}
+                    className={classes.toggleButton}
+                    sx={{ color: checked && theme.palette.text.secondary }}
+                >
+                    <Box className={classes.inputLabel}>{label}</Box>
+                    {/* <FormControlLabel
                     control={<Checkbox checked={checked} onClick={handleChange} />}
                     label={<Box className={classes.inputLabel}>{label}</Box>}
-                />
+                /> */}
+                </ToggleButton>
             )}
             {type === 'radio' && (
                 <Box>
-                    <FormControlLabel
+                    <ToggleButton
+                        color="primary"
+                        value="check"
+                        selected={checked}
+                        onClick={() => {
+                            if (radio) {
+                                setChecked(!checked)
+                                setRadio('')
+                                dispatch(removeCancer({ organ, name }))
+                            }
+                        }}
+                        className={classes.toggleButton}
+                        sx={{ color: checked && theme.palette.text.secondary }}
+                    >
+                        <Box className={classes.inputLabel}>{label}</Box>
+                    </ToggleButton>
+                    {/* <FormControlLabel
                         control={
                             <Checkbox
                                 disabled={!radio}
@@ -124,7 +164,7 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal }) => {
                             />
                         }
                         label={<Box className={classes.inputLabel}>{label}</Box>}
-                    />
+                    /> */}
                     {options.map(option => (
                         <FormControlLabel
                             key={option.label}

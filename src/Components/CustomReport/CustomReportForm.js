@@ -14,9 +14,11 @@ const FormSection = ({ list }) => {
     const classes = useStyles()
     const [isNormal, setIsNormal] = useState(true)
     const dispatch = useDispatch()
-    const handleNormalOnChange = () => {
-        setIsNormal(!isNormal)
-        dispatch(clearCancer({ organ: list.name }))
+    const handleNormalOnClick = () => {
+        if (!isNormal) {
+            setIsNormal(!isNormal)
+            dispatch(clearCancer({ organ: list.name }))
+        }
     }
 
     return (
@@ -27,7 +29,7 @@ const FormSection = ({ list }) => {
                 color="primary"
                 value="check"
                 selected={isNormal}
-                onChange={handleNormalOnChange}
+                onClick={handleNormalOnClick}
                 className={classes.toggleButton}
             >
                 <Box className={classes.formLabel}>{list.label}</Box>

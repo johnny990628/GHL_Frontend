@@ -31,6 +31,7 @@ const useStyles = makeStyles(theme => ({
     inputLabel: {
         fontSize: '1.3rem',
         padding: '.3rem',
+
         [theme.breakpoints.down('lg')]: {
             fontSize: '1rem',
         },
@@ -38,6 +39,7 @@ const useStyles = makeStyles(theme => ({
     toggleButton: {
         marginRight: '1rem',
         padding: '0 .8rem',
+        margin: '.3rem',
         border: 'none',
         borderRadius: '1rem',
     },
