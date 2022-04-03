@@ -39,7 +39,7 @@ const CreateReport = () => {
     }, [currentStep])
 
     const handleReportSubmit = () => {
-        dispatch(addReport({ patient, report: { id: v4(), data: report, updateTime: new Date().toLocaleString() } }))
+        dispatch(addReport({ patient, report: { id: v4(), data: report, updateTime: new Date().toLocaleDateString() } }))
         dispatch(removeProcessing({ patient }))
     }
 

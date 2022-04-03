@@ -14,7 +14,6 @@ const useStyles = makeStyles(theme => ({
             fontSize: '1.3rem',
         },
     },
-
     formContainer: {
         padding: '.5rem',
         marginBottom: '2rem',
@@ -22,9 +21,9 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
     },
     formLabel: {
-        fontSize: '2rem',
+        fontSize: '1.8rem',
         color: theme.palette.primary.main,
-        marginRight: '1rem',
+        whiteSpace: 'nowrap',
         [theme.breakpoints.down('lg')]: {
             fontSize: '1.5rem',
         },
@@ -35,6 +34,15 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down('lg')]: {
             fontSize: '1rem',
         },
+    },
+    toggleButton: {
+        marginRight: '1rem',
+        padding: '0 .8rem',
+        border: 'none',
+        borderRadius: '1rem',
+    },
+    reportListItem: {
+        padding: 0,
     },
 }))
 
