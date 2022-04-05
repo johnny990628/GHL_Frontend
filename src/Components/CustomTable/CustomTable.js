@@ -18,38 +18,12 @@ import {
 import { useTheme } from '@mui/styles'
 import { Search, ArrowDropUp, ArrowDropDown, Assignment } from '@mui/icons-material'
 import { useTable, useGlobalFilter, usePagination, useSortBy, useExpanded } from 'react-table'
-import {
-    DataGrid,
-    GridToolbarContainer,
-    GridToolbarColumnsButton,
-    GridToolbarFilterButton,
-    GridToolbarDensitySelector,
-    GridToolbarExport,
-} from '@mui/x-data-grid'
 
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 import useStyles from './Style'
-import EditDialog from './EditDialog'
 
-// const CustomToolbar = ({ handleDelete }) => {
-//     return (
-//         <GridToolbarContainer>
-//             <GridToolbarColumnsButton />
-//             <GridToolbarFilterButton />
-//             <GridToolbarDensitySelector />
-//             <GridToolbarExport
-//                 csvOptions={{ fileName: '診所檔案', utf8WithBom: true }}
-//                 printOptions={{ hideToolbar: true, hideFooter: true }}
-//             />
-//             <Button startIcon={<Delete />} variant="text" color="primary" onClick={handleDelete}>
-//                 Delete
-//             </Button>
-//         </GridToolbarContainer>
-//     )
-// }
-
-const CustomTable = ({ data, columns, loading }) => {
+const CustomTable = ({ data, columns, loading, renderSubRow }) => {
     // const [pageSize, setPageSize] = useState(5)
     // const [selectionModel, setSelectionModel] = useState([])
     // const dispatch = useDispatch()
@@ -112,6 +86,7 @@ const CustomTable = ({ data, columns, loading }) => {
         nextPage,
         previousPage,
         setPageSize,
+        visibleColumns,
     } = useTable(
         {
             columns,
@@ -125,7 +100,7 @@ const CustomTable = ({ data, columns, loading }) => {
         },
         useGlobalFilter,
         useSortBy,
-
+        useExpanded,
         usePagination
     )
 
@@ -164,21 +139,28 @@ const CustomTable = ({ data, columns, loading }) => {
                             {page.map(row => {
                                 prepareRow(row)
                                 return (
-                                    <TableRow {...row.getRowProps()}>
-                                        {row.cells.map(cell => (
-                                            <TableCell
-                                                {...cell.getCellProps()}
-                                                sx={{
-                                                    fontSize: '1rem',
-                                                    [theme.breakpoints.down('lg')]: {
-                                                        fontSize: '.9rem',
-                                                    },
-                                                }}
-                                            >
-                                                {cell.render('Cell')}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
+                                    <Fragment key={row.getRowProps().key}>
+                                        <TableRow {...row.getRowProps()}>
+                                            {row.cells.map(cell => (
+                                                <TableCell
+                                                    {...cell.getCellProps()}
+                                                    sx={{
+                                                        fontSize: '1rem',
+                                                        [theme.breakpoints.down('lg')]: {
+                                                            fontSize: '.9rem',
+                                                        },
+                                                    }}
+                                                >
+                                                    {cell.render('Cell')}
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                        {row.isExpanded ? (
+                                            <TableRow>
+                                                <TableCell colSpan={visibleColumns.length}>{renderSubRow({ row })}</TableCell>
+                                            </TableRow>
+                                        ) : null}
+                                    </Fragment>
                                 )
                             })}
                         </TableBody>
@@ -238,23 +220,6 @@ const CustomTable = ({ data, columns, loading }) => {
                     </Button>
                 </ButtonGroup>
             </Box>
-
-            <EditDialog />
-
-            {/* <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={pageSize}
-                onPageSizeChange={newPageSize => setPageSize(newPageSize)}
-                rowsPerPageOptions={[5, 10, 20]}
-                onSelectionModelChange={setSelectionModel}
-                selectionModel={selectionModel}
-                checkboxSelection
-                components={{ Toolbar: CustomToolbar }}
-                componentsProps={{ toolbar: { handleDelete } }}
-                className={classes.table}
-                loading={loading}
-            /> */}
         </Box>
     )
 }

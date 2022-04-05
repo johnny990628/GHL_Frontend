@@ -1,10 +1,11 @@
-import React, { useMemo, useState, useEffect } from 'react'
-import { Box, Grid, Accordion, AccordionSummary, AccordionDetails, IconButton } from '@mui/material'
+import React, { useMemo } from 'react'
+import { Box, Accordion, AccordionSummary, AccordionDetails, IconButton } from '@mui/material'
 import { CalendarToday, ArrowDropDown, Delete, Edit, Cancel } from '@mui/icons-material'
 
 import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import CustomForm from '../../Components/CustomForm/CustomForm'
+import EditDialog from '../../Components/CustomTable/EditDialog'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchPatients, addPatient, removePatient, addProcessing, removeProcessing } from '../../Redux/Slices/Patient'
@@ -79,7 +80,7 @@ const Patient = () => {
                         <Box>
                             <IconButton
                                 onClick={() => {
-                                    dispatch(openDialog(row.row.original))
+                                    dispatch(openDialog({ row: row.row.original, type: 'patient' }))
                                 }}
                             >
                                 <Edit />
@@ -119,14 +120,6 @@ const Patient = () => {
     }
 
     return (
-        // <Grid container spacing={2} className={classes.container}>
-        //     <Grid item xs={12}>
-        //         <CustomForm />
-        //     </Grid>
-        //     <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-        //         <CustomTable data={data} columns={columns} deleteAction={removePatient} />
-        //     </Grid>
-        // </Grid>
         <Box className={classes.container}>
             <Accordion elevation={0} className={classes.accordion}>
                 <AccordionSummary expandIcon={<ArrowDropDown />} sx={{ flexDirection: 'column-reverse' }} />
@@ -136,6 +129,7 @@ const Patient = () => {
             </Accordion>
 
             <CustomTable data={data} columns={columns} />
+            <EditDialog />
         </Box>
     )
 }

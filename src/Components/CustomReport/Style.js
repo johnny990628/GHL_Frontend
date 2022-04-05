@@ -46,6 +46,21 @@ const useStyles = makeStyles(theme => ({
     reportListItem: {
         padding: 0,
     },
+    patientInfo: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        // backgroundColor: theme.palette.primary.light_secondary,
+        color: theme.palette.primary.main,
+        // borderRadius: '1rem',
+        padding: '1rem',
+    },
+    chip: {
+        borderColor: theme.palette.primary.main,
+        color: theme.palette.primary.main,
+        fontSize: '1.1rem',
+        padding: '.6rem',
+    },
 }))
 
 export default useStyles

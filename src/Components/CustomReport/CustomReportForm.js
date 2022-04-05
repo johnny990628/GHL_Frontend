@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, FormControlLabel, Checkbox, Tabs, Tab, ToggleButton, useMediaQuery, Grid } from '@mui/material'
+import { Box, Tabs, Tab, ToggleButton, useMediaQuery, Grid, Chip } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import Scrollspy from 'react-scrollspy'
 
@@ -48,13 +48,21 @@ const FormSection = ({ list }) => {
     )
 }
 
-const CustomReportForm = ({ lists, patient }) => {
+const CustomReportForm = ({ lists, patient, type }) => {
     const classes = useStyles()
     const theme = useTheme()
     const isComputer = useMediaQuery(theme.breakpoints.up('lg'))
     const [tabIndex, setTabIndex] = useState(0)
     return (
         <>
+            <Box className={classes.patientInfo}>
+                <Chip
+                    // icon={<EmojiEmotionsOutlined />}
+                    label={`${patient.id} / ${patient.name} / ${patient.gender}`}
+                    variant="outlined"
+                    className={classes.chip}
+                />
+            </Box>
             <Box className={classes.container}>
                 {isComputer && (
                     <Scrollspy items={lists.map(list => list.name)} className={classes.scrollspy}>
@@ -73,18 +81,27 @@ const CustomReportForm = ({ lists, patient }) => {
                         </Tabs>
                     </Scrollspy>
                 )}
-                <Grid container sx={{ height: '100%' }} spacing={2}>
-                    <Grid item xs={9} lg={10}>
-                        <CustomScrollbar>
-                            {lists.map(list => (
-                                <FormSection key={list.name} list={list} />
-                            ))}
-                        </CustomScrollbar>
+                {type === 'create' && (
+                    <Grid container sx={{ height: '100%' }} spacing={2}>
+                        <Grid item xs={9} lg={10}>
+                            <CustomScrollbar>
+                                {lists.map(list => (
+                                    <FormSection key={list.name} list={list} />
+                                ))}
+                            </CustomScrollbar>
+                        </Grid>
+                        <Grid item xs={3} lg={2}>
+                            {patient.reports.length > 0 && <ReportList patient={patient} />}
+                        </Grid>
                     </Grid>
-                    <Grid item xs={3} lg={2}>
-                        {patient.reports.length > 0 && <ReportList patient={patient} />}
-                    </Grid>
-                </Grid>
+                )}
+                {type === 'edit' && (
+                    <CustomScrollbar>
+                        {lists.map(list => (
+                            <FormSection key={list.name} list={list} />
+                        ))}
+                    </CustomScrollbar>
+                )}
             </Box>
         </>
     )

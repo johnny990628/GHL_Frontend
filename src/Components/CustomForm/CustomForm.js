@@ -195,7 +195,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                                     reports: [],
                                 })
                                 mode === 'create' && handleDelete()
-                                mode === 'edit' && dispatch(closeDialog())
+                                mode === 'edit' && dispatch(closeDialog({ type: 'patient' }))
                                 mode === 'edit' && dispatch(openSnackbar('修改成功'))
                             }}
                         >
@@ -214,7 +214,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                             }}
                             onClick={() => {
                                 mode === 'create' && handleDelete()
-                                mode === 'edit' && dispatch(closeDialog())
+                                mode === 'edit' && dispatch(closeDialog({ type: 'patient' }))
                             }}
                         >
                             {mode === 'create' ? '清除' : '取消'}

@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { Box, Stepper, Step, StepLabel, IconButton, Chip, Button } from '@mui/material'
-import { ArrowBack, ArrowForward, CheckCircleOutline } from '@mui/icons-material'
+import React, { useEffect, useState } from 'react'
+import { Box, Stepper, Step, StepLabel, IconButton, Button } from '@mui/material'
+import { ArrowBack, ArrowForward } from '@mui/icons-material'
 import { useTheme } from '@mui/styles'
 import useStyles from './Style'
 
@@ -8,14 +8,15 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import CustomDataGrid from '../../Components/CustomDataGrid/CustomDataGrid'
 import CustomReportForm from '../../Components/CustomReport/CustomReportForm'
-import Gallbladder from './gallbladder.json'
-import Kidney from './kidney.json'
-import Liver from './liver.json'
-import Pancreas from './pancreas.json'
-import Spleen from './spleen.json'
-import Suggestion from './suggestion.json'
+import Gallbladder from '../../Assets/OrganJson/gallbladder.json'
+import Kidney from '../../Assets/OrganJson/kidney.json'
+import Liver from '../../Assets/OrganJson/liver.json'
+import Pancreas from '../../Assets/OrganJson/pancreas.json'
+import Spleen from '../../Assets/OrganJson/spleen.json'
+import Suggestion from '../../Assets/OrganJson/suggestion.json'
 import { addReport, removeProcessing } from '../../Redux/Slices/Patient'
 import { v4 } from 'uuid'
+import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
@@ -91,17 +92,11 @@ const CreateReport = () => {
                         />
                     )}
                     {currentStep === 1 && (
-                        <>
-                            <Box className={classes.patientInfo}>
-                                <Chip
-                                    // icon={<EmojiEmotionsOutlined />}
-                                    label={`${patient.id} / ${patient.name} / ${patient.gender}`}
-                                    variant="outlined"
-                                    className={classes.chip}
-                                />
-                            </Box>
-                            <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} patient={patient} />
-                        </>
+                        <CustomReportForm
+                            lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]}
+                            patient={patient}
+                            type="create"
+                        />
                     )}
                     {currentStep === 2 && (
                         <Box
@@ -149,6 +144,7 @@ const CreateReport = () => {
                     <ArrowForward />
                 </IconButton>
             </Box>
+            <ReportDialog />
         </Box>
     )
 }
