@@ -10,6 +10,7 @@ import Spleen from '../../Assets/OrganJson/spleen.json'
 import Suggestion from '../../Assets/OrganJson/suggestion.json'
 import { closeDialog } from '../../Redux/Slices/Dialog'
 import CustomReportForm from '../CustomReport/CustomReportForm'
+import ReportFormHtml from './ReportFormHtml'
 
 const ReportDialog = () => {
     const dispatch = useDispatch()
@@ -17,8 +18,11 @@ const ReportDialog = () => {
 
     return (
         <Dialog open={isOpen} onClose={() => dispatch(closeDialog({ type: 'report' }))} fullWidth maxWidth={'xl'}>
-            <DialogContent sx={{ height: '80vh' }}>
-                <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} patient={row.patient} type="edit" />
+            <DialogContent sx={{ height: '90vh' }}>
+                {/* <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} patient={row.patient} type="edit" /> */}
+                <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <ReportFormHtml />
+                </Box>
             </DialogContent>
         </Dialog>
     )
