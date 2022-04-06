@@ -15,13 +15,16 @@ import Pancreas from '../../Assets/OrganJson/pancreas.json'
 import Spleen from '../../Assets/OrganJson/spleen.json'
 import Suggestion from '../../Assets/OrganJson/suggestion.json'
 import { addReport, removeProcessing } from '../../Redux/Slices/Patient'
+import { resetReport } from '../../Redux/Slices/Report'
 import { v4 } from 'uuid'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
+import { openDialog } from '../../Redux/Slices/Dialog'
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
     const [selection, setSelection] = useState([])
     const [patient, setPatient] = useState({})
+    const [previewReport, setPreviewReport] = useState({})
     const steps = ['選擇病人', '新增報告', '完成']
     const { data } = useSelector(state => state.patients)
     const { report } = useSelector(state => state)
@@ -39,8 +42,14 @@ const CreateReport = () => {
         }
     }, [currentStep])
 
+    useEffect(() => {
+        dispatch(resetReport())
+    }, [previewReport])
+
     const handleReportSubmit = () => {
-        dispatch(addReport({ patient, report: { id: v4(), data: report, updateTime: new Date().toLocaleDateString() } }))
+        const reportData = { id: v4(), data: report, updateTime: new Date().toLocaleDateString() }
+        dispatch(addReport({ patient, report: reportData }))
+        setPreviewReport(reportData)
         dispatch(removeProcessing({ patient }))
     }
 
@@ -122,6 +131,9 @@ const CreateReport = () => {
                                         },
                                     }}
                                     className={classes.button}
+                                    onClick={() => {
+                                        dispatch(openDialog({ type: 'report', row: { patient, report: previewReport } }))
+                                    }}
                                 >
                                     預覽
                                 </Button>

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const dialogSlice = createSlice({
     name: 'dialog',
-    initialState: { patient: { isOpen: false, row: {} }, report: { isOpen: false, row: {} } },
+    initialState: { patient: { isOpen: false, row: {} }, report: { isOpen: false, row: { patient: {}, report: {} } } },
     reducers: {
         openDialog: (state, action) => {
             const { row, type } = action.payload

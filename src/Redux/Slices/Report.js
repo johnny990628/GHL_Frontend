@@ -27,9 +27,12 @@ const reportSlice = createSlice({
             const { organ } = action.payload
             state[organ] = []
         },
+        resetReport: (state, action) => {
+            return initialState
+        },
     },
 })
 
-export const { addCancer, removeCancer, clearCancer } = reportSlice.actions
+export const { addCancer, removeCancer, clearCancer, resetReport } = reportSlice.actions
 
 export default reportSlice.reducer
