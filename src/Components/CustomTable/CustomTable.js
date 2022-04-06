@@ -16,7 +16,7 @@ import {
     InputLabel,
 } from '@mui/material'
 import { useTheme } from '@mui/styles'
-import { Search, ArrowDropUp, ArrowDropDown, Assignment } from '@mui/icons-material'
+import { Search, ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 import { useTable, useGlobalFilter, usePagination, useSortBy, useExpanded } from 'react-table'
 
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'

@@ -1,18 +1,11 @@
 import React from 'react'
 import { Box, Divider, TableContainer, Table, TableHead, TableBody, TableRow, TableCell } from '@mui/material'
-
+import { Link } from 'react-router-dom'
 import useStyles from './Style'
 
-const LittleTable = ({ title }) => {
+const LittleTable = ({ title, rows, route }) => {
     const classes = useStyles()
-    const createData = (id, name, gender) => {
-        return { id, name, gender }
-    }
-    const rows = [
-        createData('A123456789', '王曉明', '男'),
-        createData('A121251789', '王曉明', '女'),
-        createData('A122134789', '王曉明', '其他'),
-    ]
+
     return (
         <Box classes={{ paper: classes.container }}>
             <Box className={classes.header}>
@@ -23,32 +16,34 @@ const LittleTable = ({ title }) => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ fontSize: '1.2rem' }}>身分證字號</TableCell>
-                            <TableCell align="center" sx={{ fontSize: '1.2rem' }}>
+                            <TableCell className={classes.tableCell}>身分證字號</TableCell>
+                            <TableCell align="center" className={classes.tableCell}>
                                 姓名
                             </TableCell>
-                            <TableCell align="center" sx={{ fontSize: '1.2rem' }}>
+                            <TableCell align="center" className={classes.tableCell}>
                                 性別
                             </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map(row => (
-                            <TableRow key={row.id} className={classes.tableRow}>
-                                <TableCell component="th" scope="row" sx={{ fontSize: '1.2rem' }}>
+                        {rows.slice(0, 4).map(row => (
+                            <TableRow key={row.id} className={[classes.tableRow, classes.link]} component={Link} to={route}>
+                                <TableCell component="th" scope="row" className={classes.tableCell}>
                                     {row.id}
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontSize: '1.2rem' }}>
+                                <TableCell align="center" className={classes.tableCell}>
                                     {row.name}
                                 </TableCell>
-                                <TableCell align="center" sx={{ fontSize: '1.2rem' }}>
+                                <TableCell align="center" className={classes.tableCell}>
                                     {row.gender}
                                 </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
-                <Box sx={{ padding: '1rem' }}>查看更多...</Box>
+                <Link to={route} className={classes.link}>
+                    <Box sx={{ padding: '1rem' }}>查看更多...</Box>
+                </Link>
             </TableContainer>
         </Box>
     )

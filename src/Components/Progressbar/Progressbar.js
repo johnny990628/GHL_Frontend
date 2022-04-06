@@ -11,12 +11,12 @@ const ProgressProvider = ({ valueStart, valueEnd, children }) => {
     return children(value)
 }
 
-const Progressbar = ({ value }) => {
+const Progressbar = ({ value, total }) => {
     return (
         <ProgressProvider valueStart={0} valueEnd={value}>
             {num => (
                 <CircularProgressbar
-                    value={num}
+                    value={(num / total) * 100}
                     text={`${num}人`}
                     styles={buildStyles({
                         rotation: 0.25,

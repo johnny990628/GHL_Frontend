@@ -26,6 +26,11 @@ const useStyles = makeStyles(theme => ({
         transition: 'transform .3s ease-out',
         '&:hover': { cursor: 'pointer', background: theme.palette.status.processing, transform: 'scale(1.013)' },
     },
+    tableCell: { fontSize: '1.2rem' },
+    link: {
+        textDecoration: 'none',
+        color: theme.palette.text.primary,
+    },
 }))
 
 export default useStyles

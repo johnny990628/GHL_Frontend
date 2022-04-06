@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import useStyles from './Style'
 
@@ -16,30 +16,30 @@ const FormSection = ({ list, row: { patient, report } }) => {
     return (
         <>
             <tr>
-                <td rowspan={list.cols.length * 1 + 1} className={classes.table} style={{ fontSize: '1.5rem' }}>
+                <td rowSpan={list.cols.length * 1 + 1} className={classes.table} style={{ fontSize: '1.5rem' }}>
                     {list.label}
                 </td>
-                <td rowspan={list.cols.length * 1 + 1} className={classes.table}>
-                    <input type="checkbox" checked={cancerArr.length === 0} readonly />
+                <td rowSpan={list.cols.length * 1 + 1} className={classes.table}>
+                    <input type="checkbox" defaultChecked={cancerArr.length === 0} readOnly />
                     正常
                 </td>
             </tr>
             {list.cols.map(col => {
                 const checked = cancerArr.some(c => c.name === col.name)
                 return (
-                    <>
+                    <Fragment key={col.name}>
                         {col.type === 'radio' && (
                             <tr>
                                 <td className={classes.table}>
-                                    <input type="checkbox" checked={checked} readonly />
+                                    <input type="checkbox" defaultChecked={checked} readOnly />
                                     {col.label}
                                     {col.options.map(option => (
                                         <>
                                             <input
                                                 type="radio"
                                                 value={option.value}
-                                                checked={cancerArr.some(c => c.name === col.name && c.value === option.value)}
-                                                readonly
+                                                defaultChecked={cancerArr.some(c => c.name === col.name && c.value === option.value)}
+                                                readOnly
                                             />
                                             {option.label}
                                         </>
@@ -50,23 +50,23 @@ const FormSection = ({ list, row: { patient, report } }) => {
                         {col.type === 'checkbox' && (
                             <tr>
                                 <td className={classes.table}>
-                                    <input type="checkbox" checked={checked} readonly />
+                                    <input type="checkbox" defaultChecked={checked} readOnly />
                                     {col.label}
                                 </td>
                             </tr>
                         )}
                         {col.type === 'text' && (
                             <tr>
-                                <td colspan="3" className={classes.table}>
-                                    <input type="checkbox" checked={checked} readonly />
+                                <td colSpan="3" className={classes.table}>
+                                    <input type="checkbox" defaultChecked={checked} readOnly />
                                     {col.label}:{cancerArr.find(c => c.name === col.name)?.value}
                                 </td>
                             </tr>
                         )}
                         {col.type === 'select' && (
                             <tr>
-                                <td colspan="3" className={classes.table}>
-                                    <input type="checkbox" checked={checked} readonly />
+                                <td colSpan="3" className={classes.table}>
+                                    <input type="checkbox" defaultChecked={checked} readOnly />
                                     {col.label
                                         .split('_')
                                         .reduce(
@@ -76,7 +76,7 @@ const FormSection = ({ list, row: { patient, report } }) => {
                                 </td>
                             </tr>
                         )}
-                    </>
+                    </Fragment>
                 )
             })}
         </>
@@ -92,12 +92,12 @@ const ReportFormHtml = ({ row }) => {
                     <td className={classes.table}>
                         <b>項目</b>
                     </td>
-                    <td colspan="3" className={classes.table}>
+                    <td colSpan="3" className={classes.table}>
                         <b>檢查結果及說明</b>
                     </td>
                 </tr>
                 {[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion].map(list => (
-                    <FormSection list={list} row={row} />
+                    <FormSection key={list.name} list={list} row={row} />
                 ))}
             </tbody>
         </table>

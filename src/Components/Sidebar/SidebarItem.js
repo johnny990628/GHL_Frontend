@@ -16,7 +16,7 @@ const data = [
     {
         display_name: '新增報告',
         name: 'createReport',
-        route: '/CreateReport',
+        route: '/createReport',
         icon: <EventAvailable />,
     },
     {
