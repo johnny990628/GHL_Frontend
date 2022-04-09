@@ -105,10 +105,9 @@ const Patient = () => {
             address,
             phone,
             department,
-            birth: `${birth.year}/${birth.month}/${birth.day}`,
+            birth,
             gender,
             age,
-            updateTime: new Date().toLocaleString(),
             processing,
             reports,
         }

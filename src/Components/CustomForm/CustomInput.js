@@ -1,18 +1,43 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Box, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material'
 import { useTheme } from '@mui/styles'
-import DatePicker from 'react-modern-calendar-datepicker'
-import 'react-modern-calendar-datepicker/lib/DatePicker.css'
-import MyCustomLocale from './MyCustomLocale'
+
+import { LocalizationProvider, DatePicker } from '@mui/lab'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import { zhTW } from 'date-fns/locale'
+
 import useStyles from './Style'
 
 const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperText, error, mode, required, age }) => {
     const classes = useStyles()
     const theme = useTheme()
 
-    const DatePickerCustomInput = ({ ref }) => {
+    const DatePickerCustomInput = ({ value, setValue }) => {
         return (
-            <TextField
+            <LocalizationProvider dateAdapter={AdapterDateFns} locale={zhTW}>
+                <DatePicker
+                    disableFuture
+                    autoOk={false}
+                    inputFormat="yyyy/MM/dd"
+                    label="生日"
+                    required
+                    views={['year', 'day']}
+                    openTo="year"
+                    value={value}
+                    onChange={newValue => {
+                        setValue(new Date(newValue).toISOString())
+                    }}
+                    InputProps={{
+                        style: {
+                            fontSize: '1.3rem',
+                            color: theme.palette.primary.main,
+                        },
+                        readOnly: true,
+                    }}
+                    InputLabelProps={{ style: { fontSize: '1.3rem', color: theme.palette.primary.main } }}
+                    renderInput={params => <TextField variant="standard" className={classes.textField} {...params} />}
+                />
+                {/* <TextField
                 error={error}
                 ref={ref} // necessary
                 value={value ? `${value.year}/${value.month}/${value.day} - ${age}歲` : ''}
@@ -28,7 +53,8 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
                 }}
                 InputLabelProps={{ style: { fontSize: '1.3rem', color: theme.palette.primary.main } }}
                 className={classes.textField}
-            />
+            /> */}
+            </LocalizationProvider>
         )
     }
 
@@ -48,7 +74,7 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
     }
 
     return name === 'birth' ? (
-        <DatePicker value={value} onChange={setValue} shouldHighlightWeekends renderInput={DatePickerCustomInput} locale={MyCustomLocale} />
+        <DatePickerCustomInput value={value} setValue={setValue} />
     ) : name === 'gender' ? (
         <GenderPicker />
     ) : (

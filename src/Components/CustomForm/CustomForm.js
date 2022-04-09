@@ -19,7 +19,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     const [address, setAddress] = useState('')
     const [phone, setPhone] = useState('')
     const [department, setDepartment] = useState('')
-    const [birth, setBirth] = useState(null)
+    const [birth, setBirth] = useState(new Date())
     const [gender, setGender] = useState('女')
     const [age, setAge] = useState(0)
     const [qrcode, setQrcode] = useState(null)
@@ -43,12 +43,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
             setAddress(row?.address)
             setPhone(row?.phone)
             setDepartment(row?.department)
-            const birthDay = new Date(row.birth).toLocaleDateString().split('/')
-            setBirth({
-                year: birthDay[0],
-                month: birthDay[1],
-                day: birthDay[2],
-            })
+            setBirth(new Date(row.birth))
             setGender(row?.gender)
             setAge(row?.age)
         }
@@ -58,8 +53,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
         //計算年紀
         if (birth) {
             const today = new Date()
-            const birthday = new Date(`${birth.year}/${birth.month}/${birth.day}`)
-            setAge(parseInt((today - birthday) / 31557600000)) // 31557600000 是 24 * 3600 * 365.25 * 1000 = 一年
+            setAge(parseInt((today - birth) / 31557600000)) // 31557600000 是 24 * 3600 * 365.25 * 1000 = 一年
         }
     }, [birth])
     useEffect(() => {
@@ -70,11 +64,8 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
             setAddress(address)
             setPhone(phone)
             setDepartment(department)
-            setBirth({
-                year: parseInt(birth?.split('/')[0]),
-                month: parseInt(birth?.split('/')[1]),
-                day: parseInt(birth?.split('/')[2]),
-            })
+            setBirth(new Date(birth))
+            setGender(row?.gender)
             setGender(gender)
             setAge(age)
             dispatch(openSnackbar('掃描成功'))
@@ -229,64 +220,4 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     )
 }
 
-{
-    /* <table border="1">
-                <tr>
-                    <td>姓名</td>
-                    <td>
-                        <input type="text" id="patient_name" />
-                    </td>
-                    <td>性別</td>
-
-                    <td>
-                        <select id="patient_sex">
-                            <option value=""></option>
-                            <option value="man">男性</option>
-                            <option value="female">女性</option>
-                            <option value="other">其他</option>
-                        </select>
-                    </td>
-
-                    <td>出生年月日</td>
-                    <td>
-                        <input type="date" id="patient_birthday" name="patient_birthday" />
-                    </td>
-
-                    <td>年齡</td>
-                    <td>xxxxx</td>
-                </tr>
-                <tr>
-                    <td>地址</td>
-                    <td colspan="7">
-                        <input type="text" id="patient_address" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>電話</td>
-                    <td>(白天)</td>
-                    <td>
-                        <input type="text" id="patient_telephone1" />
-                    </td>
-                    <td>(晚間)</td>
-                    <td>
-                        <input type="text" id="patient_telephone2" />
-                    </td>
-                    <td>(手機)</td>
-                    <td colspan="2">
-                        <input type="text" id="patient_phone" />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">部門單位</td>
-                    <td colspan="2">
-                        <input type="text" id="department" />
-                    </td>
-                    <td colspan="2">身分證字號</td>
-                    <td colspan="2">
-                        <input type="text" id="patient_id" />
-                    </td>
-                </tr>
-            </table>
-            <button style={{ marginTop: '1rem' }}>提交</button> */
-}
 export default CustomForm
