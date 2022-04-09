@@ -19,7 +19,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
     const [address, setAddress] = useState('')
     const [phone, setPhone] = useState('')
     const [department, setDepartment] = useState('')
-    const [birth, setBirth] = useState(new Date())
+    const [birth, setBirth] = useState(null)
     const [gender, setGender] = useState('女')
     const [age, setAge] = useState(0)
     const [qrcode, setQrcode] = useState(null)

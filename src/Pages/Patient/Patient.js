@@ -68,7 +68,11 @@ const Patient = () => {
             // { accessor: 'phone', Header: '電話' },
             // { accessor: 'department', Header: '部門單位' },
             // { accessor: 'address', Header: '地址' },
-            { accessor: 'createdAt', Header: '建立日期', Cell: row => new Date(row.row.original.createdAt).toLocaleString() },
+            {
+                accessor: 'createdAt',
+                Header: '建立日期',
+                Cell: row => new Date(row.row.original.createdAt).toLocaleString(),
+            },
             {
                 accessor: 'action',
                 Header: '操作',

@@ -17,7 +17,6 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
             <LocalizationProvider dateAdapter={AdapterDateFns} locale={zhTW}>
                 <DatePicker
                     disableFuture
-                    autoOk={false}
                     inputFormat="yyyy/MM/dd"
                     label="生日"
                     required
@@ -25,7 +24,7 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
                     openTo="year"
                     value={value}
                     onChange={newValue => {
-                        setValue(new Date(newValue).toISOString())
+                        setValue(new Date(newValue))
                     }}
                     InputProps={{
                         style: {
@@ -37,23 +36,6 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
                     InputLabelProps={{ style: { fontSize: '1.3rem', color: theme.palette.primary.main } }}
                     renderInput={params => <TextField variant="standard" className={classes.textField} {...params} />}
                 />
-                {/* <TextField
-                error={error}
-                ref={ref} // necessary
-                value={value ? `${value.year}/${value.month}/${value.day} - ${age}歲` : ''}
-                variant="standard"
-                label="生日"
-                required
-                InputProps={{
-                    style: {
-                        fontSize: '1.3rem',
-                        color: theme.palette.primary.main,
-                    },
-                    readOnly: true,
-                }}
-                InputLabelProps={{ style: { fontSize: '1.3rem', color: theme.palette.primary.main } }}
-                className={classes.textField}
-            /> */}
             </LocalizationProvider>
         )
     }

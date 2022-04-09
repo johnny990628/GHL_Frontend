@@ -67,7 +67,7 @@ const whiteTheme = createTheme({
     },
 })
 
-store.dispatch(fetchPatients())
+// store.dispatch(fetchPatients()) //Fetch Initial Data
 
 ReactDOM.render(
     <React.StrictMode>
