@@ -29,7 +29,10 @@ const Report = () => {
                                 <ListItemIcon>
                                     <Assignment />
                                 </ListItemIcon>
-                                <ListItemText primary={`第${index + 1}次報告`} secondary={report.updateTime} />
+                                <ListItemText
+                                    primary={`第${index + 1}次報告`}
+                                    secondary={new Date(report.createdAt).toLocaleDateString()}
+                                />
                             </ListItemButton>
                         </ListItem>
                     ))}
@@ -51,7 +54,7 @@ const Report = () => {
             { accessor: 'id', Header: '身分證字號' },
             { accessor: 'name', Header: '姓名' },
             { accessor: 'gender', Header: '性別' },
-            { accessor: 'birth', Header: '生日' },
+            { accessor: 'birth', Header: '生日', Cell: row => new Date(row.row.original.birth).toLocaleDateString() },
             { accessor: 'phone', Header: '電話' },
             { accessor: 'department', Header: '部門單位' },
             // { accessor: 'address', Header: '地址' },

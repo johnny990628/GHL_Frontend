@@ -8,7 +8,7 @@ import CustomForm from '../../Components/CustomForm/CustomForm'
 import EditDialog from '../../Components/CustomTable/EditDialog'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchPatients, addPatient, removePatient, addProcessing, removeProcessing } from '../../Redux/Slices/Patient'
+import { addProcessing, removeProcessing, deletePatient, createPatient } from '../../Redux/Slices/Patient'
 import { openDialog } from '../../Redux/Slices/Dialog'
 import { openSnackbar } from '../../Redux/Slices/Snackbar'
 
@@ -17,9 +17,6 @@ const Patient = () => {
     // const { data, loading } = useSelector(state => state.patients)
     const { data } = useSelector(state => state.patients)
     const dispatch = useDispatch()
-    // useEffect(() => {
-    //     dispatch(fetchPatients());
-    // }, []);
 
     const columns = useMemo(
         () => [
@@ -71,7 +68,7 @@ const Patient = () => {
             // { accessor: 'phone', Header: '電話' },
             // { accessor: 'department', Header: '部門單位' },
             // { accessor: 'address', Header: '地址' },
-            { accessor: 'updateTime', Header: '更新日期' },
+            { accessor: 'createdAt', Header: '建立日期', Cell: row => new Date(row.row.original.createdAt).toLocaleString() },
             {
                 accessor: 'action',
                 Header: '操作',
@@ -87,7 +84,7 @@ const Patient = () => {
                             </IconButton>
                             <IconButton
                                 onClick={() => {
-                                    dispatch(removePatient({ id: row.row.original.id }))
+                                    dispatch(deletePatient({ id: row.row.original.id }))
                                     dispatch(openSnackbar('刪除成功'))
                                 }}
                             >
@@ -115,7 +112,7 @@ const Patient = () => {
             processing,
             reports,
         }
-        dispatch(addPatient({ patient: formData }))
+        dispatch(createPatient({ patient: formData }))
         dispatch(openSnackbar('新增成功'))
     }
 

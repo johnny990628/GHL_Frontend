@@ -43,10 +43,11 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
             setAddress(row?.address)
             setPhone(row?.phone)
             setDepartment(row?.department)
+            const birthDay = new Date(row.birth).toLocaleDateString().split('/')
             setBirth({
-                year: parseInt(row?.birth?.split('/')[0]),
-                month: parseInt(row?.birth?.split('/')[1]),
-                day: parseInt(row?.birth?.split('/')[2]),
+                year: birthDay[0],
+                month: birthDay[1],
+                day: birthDay[2],
             })
             setGender(row?.gender)
             setAge(row?.age)

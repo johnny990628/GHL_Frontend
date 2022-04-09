@@ -21,7 +21,7 @@ const ReportList = ({ patient }) => {
                             <ListItemIcon>
                                 <Assignment />
                             </ListItemIcon>
-                            <ListItemText primary={`第${index + 1}次`} secondary={report.updateTime} />
+                            <ListItemText primary={`第${index + 1}次`} secondary={new Date(report.createdAt).toLocaleDateString()} />
                         </ListItemButton>
                     </ListItem>
                 ))}

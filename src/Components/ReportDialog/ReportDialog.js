@@ -24,7 +24,7 @@ const ReportDialog = () => {
                     <Close />
                 </IconButton>
             </DialogTitle>
-            <DialogContent sx={{ height: '86vh' }}>
+            <DialogContent sx={{ height: '90vh' }}>
                 {/* <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} patient={row.patient} type="edit" /> */}
                 <CustomScrollbar>
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>

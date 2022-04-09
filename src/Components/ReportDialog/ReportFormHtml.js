@@ -20,7 +20,7 @@ const FormSection = ({ list, row: { patient, report } }) => {
                     {list.label}
                 </td>
                 <td rowSpan={list.cols.length * 1 + 1} className={classes.table}>
-                    <input type="checkbox" defaultChecked={cancerArr.length === 0} readOnly />
+                    <input type="checkbox" checked={cancerArr.length === 0} readOnly />
                     正常
                 </td>
             </tr>
@@ -31,14 +31,14 @@ const FormSection = ({ list, row: { patient, report } }) => {
                         {col.type === 'radio' && (
                             <tr>
                                 <td className={classes.table}>
-                                    <input type="checkbox" defaultChecked={checked} readOnly />
+                                    <input type="checkbox" checked={checked} readOnly />
                                     {col.label}
                                     {col.options.map(option => (
                                         <>
                                             <input
                                                 type="radio"
                                                 value={option.value}
-                                                defaultChecked={cancerArr.some(c => c.name === col.name && c.value === option.value)}
+                                                checked={cancerArr.some(c => c.name === col.name && c.value === option.value)}
                                                 readOnly
                                             />
                                             {option.label}
@@ -50,7 +50,7 @@ const FormSection = ({ list, row: { patient, report } }) => {
                         {col.type === 'checkbox' && (
                             <tr>
                                 <td className={classes.table}>
-                                    <input type="checkbox" defaultChecked={checked} readOnly />
+                                    <input type="checkbox" checked={checked} readOnly />
                                     {col.label}
                                 </td>
                             </tr>
@@ -58,7 +58,7 @@ const FormSection = ({ list, row: { patient, report } }) => {
                         {col.type === 'text' && (
                             <tr>
                                 <td colSpan="3" className={classes.table}>
-                                    <input type="checkbox" defaultChecked={checked} readOnly />
+                                    <input type="checkbox" checked={checked} readOnly />
                                     {col.label}:{cancerArr.find(c => c.name === col.name)?.value}
                                 </td>
                             </tr>
@@ -66,7 +66,7 @@ const FormSection = ({ list, row: { patient, report } }) => {
                         {col.type === 'select' && (
                             <tr>
                                 <td colSpan="3" className={classes.table}>
-                                    <input type="checkbox" defaultChecked={checked} readOnly />
+                                    <input type="checkbox" checked={checked} readOnly />
                                     {col.label
                                         .split('_')
                                         .reduce(

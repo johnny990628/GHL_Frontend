@@ -14,7 +14,7 @@ import Liver from '../../Assets/OrganJson/liver.json'
 import Pancreas from '../../Assets/OrganJson/pancreas.json'
 import Spleen from '../../Assets/OrganJson/spleen.json'
 import Suggestion from '../../Assets/OrganJson/suggestion.json'
-import { addReport, removeProcessing } from '../../Redux/Slices/Patient'
+import { addReport } from '../../Redux/Slices/Patient'
 import { resetReport } from '../../Redux/Slices/Report'
 import { v4 } from 'uuid'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
@@ -47,10 +47,9 @@ const CreateReport = () => {
     }, [previewReport])
 
     const handleReportSubmit = () => {
-        const reportData = { id: v4(), data: report, updateTime: new Date().toLocaleDateString() }
+        const reportData = { id: v4(), data: report }
         dispatch(addReport({ patient, report: reportData }))
         setPreviewReport(reportData)
-        dispatch(removeProcessing({ patient }))
     }
 
     const columns = [
@@ -68,9 +67,23 @@ const CreateReport = () => {
         { field: 'id', headerName: '身分證字號', flex: 2 },
         { field: 'name', headerName: '姓名', flex: 1 },
         { field: 'gender', headerName: '性別', flex: 1 },
-        { field: 'birth', headerName: '生日', flex: 1 },
+        {
+            field: 'birth',
+            headerName: '生日',
+            flex: 1,
+            renderCell: params => {
+                return <Box>{new Date(params.row.birth).toLocaleDateString()}</Box>
+            },
+        },
         { field: 'phone', headerName: '電話', flex: 1 },
-        { field: 'updateTime', headerName: '更新時間', flex: 1 },
+        {
+            field: 'updateTime',
+            headerName: '排程時間',
+            flex: 1,
+            renderCell: params => {
+                return <Box>{new Date(params.row.updatedAt).toLocaleTimeString()}</Box>
+            },
+        },
     ]
 
     return (

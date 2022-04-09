@@ -8,7 +8,7 @@ import './Assets/Css/index.css'
 
 import store from './Redux/store'
 import { fetchPatients } from './Redux/Slices/Patient'
-import { Provider } from 'react-redux'
+import { Provider, useDispatch } from 'react-redux'
 
 const pinkTheme = createTheme({
     palette: {
@@ -66,6 +66,8 @@ const whiteTheme = createTheme({
         fontFamily: `'cwTeXYen', sans-serif`,
     },
 })
+
+store.dispatch(fetchPatients())
 
 ReactDOM.render(
     <React.StrictMode>

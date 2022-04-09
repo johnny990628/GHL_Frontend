@@ -60,6 +60,10 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.primary.main,
         fontSize: '1.1rem',
         padding: '.6rem',
+        [theme.breakpoints.down('lg')]: {
+            fontSize: '.8rem',
+            padding: '.3rem',
+        },
     },
 }))
 
