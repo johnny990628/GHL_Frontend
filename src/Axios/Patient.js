@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const patientRequest = axios.create({
-    baseURL: 'http://localhost:3080/ghl/api',
+    baseURL: process.env.REACT_APP_API_URL,
     headers: {
         'Content-type': 'application/json',
     },

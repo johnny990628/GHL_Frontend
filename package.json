@@ -1,7 +1,7 @@
 {
     "name": "ghl",
     "version": "0.1.0",
-    "homepage": "https://acadsys.ntunhs.edu.tw/GHL",
+    "homepage": "https://johnny990628.github.io/GHL_Frontend/",
     "private": true,
     "dependencies": {
         "@emotion/react": "^11.8.1",

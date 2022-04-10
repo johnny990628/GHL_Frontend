@@ -17,7 +17,7 @@ import PatientForm from '../../Pages/PatientForm/index'
 
 const Layout = () => {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.REACT_APP_ROUTE_BASENAME}>
             <Routes>
                 <Route
                     path="*"
