@@ -9,7 +9,7 @@ import Pancreas from '../../Assets/OrganJson/pancreas.json'
 import Spleen from '../../Assets/OrganJson/spleen.json'
 import Suggestion from '../../Assets/OrganJson/suggestion.json'
 
-const FormSection = ({ list, row: { patient, report } }) => {
+const FormSection = ({ list, report }) => {
     const classes = useStyles()
     const { data } = report
     const cancerArr = data[list.name]
@@ -83,7 +83,7 @@ const FormSection = ({ list, row: { patient, report } }) => {
     )
 }
 
-const ReportFormHtml = ({ row }) => {
+const ReportFormHtml = ({ report }) => {
     const classes = useStyles()
     return (
         <table className={classes.table} style={{ width: '60%' }}>
@@ -97,7 +97,7 @@ const ReportFormHtml = ({ row }) => {
                     </td>
                 </tr>
                 {[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion].map(list => (
-                    <FormSection key={list.name} list={list} row={row} />
+                    <FormSection key={list.name} list={list} report={report} />
                 ))}
             </tbody>
         </table>

@@ -4,7 +4,11 @@ const useStyles = makeStyles(theme => ({
     table: {
         border: '1px solid #000000',
         borderCollapse: 'collapse',
-        padding: '.25rem',
+        padding: '.2rem',
+    },
+    title: {
+        color: theme.palette.primary.main,
+        fontSize: '1rem',
     },
 }))
 

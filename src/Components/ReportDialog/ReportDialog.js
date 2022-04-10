@@ -1,7 +1,7 @@
-import React from 'react'
-import { Box, Chip, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Box, Dialog, DialogContent, DialogTitle, IconButton, ListItem, ListItemText } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { Close } from '@mui/icons-material'
+import { Close, FormatListBulleted } from '@mui/icons-material'
 
 import useStyles from './Style'
 
@@ -13,22 +13,32 @@ import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 const ReportDialog = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
-    const { isOpen, row } = useSelector(state => state.dialog.report)
-    const { patient } = row
+    const {
+        isOpen,
+        row: { patient, report },
+    } = useSelector(state => state.dialog.report)
+
     const handleClose = () => dispatch(closeDialog({ type: 'report' }))
+
     return (
         <Dialog open={isOpen} onClose={handleClose} fullWidth maxWidth={'lg'}>
-            <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Chip label={`${patient.id} / ${patient.name} / ${patient.gender}`} variant="outlined" sx={{ fontSize: '1.1rem' }} />
-                <IconButton onClick={handleClose}>
+            <DialogTitle sx={{ display: 'flex', alignItems: 'center', padding: '.5rem 2rem' }}>
+                <ListItemText
+                    primary={`${patient.id} / ${patient.name} / ${patient.gender}`}
+                    secondary={`第${patient.reports.findIndex(r => r.id === report.id) + 1}次報告-${new Date(
+                        report.createdAt
+                    ).toLocaleDateString()}`}
+                />
+                {/* <Box className={classes.title}>{`${patient.id} / ${patient.name} / ${patient.gender}`}</Box> */}
+                {/* <IconButton onClick={handleClose} sx={{ padding: '0 1.3rem', margin: '.2rem' }}>
                     <Close />
-                </IconButton>
+                </IconButton> */}
             </DialogTitle>
             <DialogContent sx={{ height: '90vh' }}>
                 {/* <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} patient={row.patient} type="edit" /> */}
                 <CustomScrollbar>
                     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <ReportFormHtml row={row} />
+                        <ReportFormHtml report={report} />
                     </Box>
                 </CustomScrollbar>
             </DialogContent>
