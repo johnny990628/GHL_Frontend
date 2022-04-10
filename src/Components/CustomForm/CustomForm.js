@@ -183,7 +183,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                                     birth,
                                     gender,
                                     age,
-                                    processing: autoProcessSwitch,
+                                    processing: mode === 'create' ? autoProcessSwitch : row.processing,
                                     reports: [],
                                 })
                                 mode === 'create' && handleDelete()
