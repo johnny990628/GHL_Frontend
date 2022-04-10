@@ -9,5 +9,5 @@ const patientRequest = axios.create({
 
 export const apiGetPatients = () => patientRequest.get('/patient')
 export const apiCreatePatient = patient => patientRequest.post('/patient', patient)
-export const apiUpdatePatient = patient => patientRequest.patch(`/patient/${patient.id}`, patient)
+export const apiUpdatePatient = (id, body) => patientRequest.patch(`/patient/${id}`, body)
 export const apiDeletePatient = id => patientRequest.delete(`/patient/${id}`)

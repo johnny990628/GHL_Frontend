@@ -20,10 +20,9 @@ const EditDialog = () => {
             address,
             phone,
             department,
-            birth: `${birth.year}/${birth.month}/${birth.day}`,
+            birth,
             gender,
             age,
-            updateTime: new Date().toLocaleString(),
             processing,
         }
         dispatch(updatePatient({ patient: formData }))

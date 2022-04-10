@@ -130,7 +130,7 @@ export const createPatient = createAsyncThunk('patients/createPatient', async ({
 
 export const updatePatient = createAsyncThunk('patients/updatePatient', async ({ patient }) => {
     try {
-        const response = await apiUpdatePatient(patient)
+        const response = await apiUpdatePatient(patient.id, patient)
         return response.data
     } catch (e) {
         return e
@@ -148,7 +148,7 @@ export const deletePatient = createAsyncThunk('patients/deletePatient', async ({
 
 export const addProcessing = createAsyncThunk('patients/addProcessing', async ({ patient }) => {
     try {
-        const response = await apiUpdatePatient({ ...patient, processing: true })
+        const response = await apiUpdatePatient(patient.id, { processing: true })
         return response.data
     } catch (e) {
         return e
@@ -157,7 +157,7 @@ export const addProcessing = createAsyncThunk('patients/addProcessing', async ({
 
 export const removeProcessing = createAsyncThunk('patients/removeProcessing', async ({ patient }) => {
     try {
-        const response = await apiUpdatePatient({ ...patient, processing: false })
+        const response = await apiUpdatePatient(patient.id, { processing: false })
         return response.data
     } catch (e) {
         return e
@@ -166,7 +166,7 @@ export const removeProcessing = createAsyncThunk('patients/removeProcessing', as
 
 export const addReport = createAsyncThunk('patients/addReport', async ({ patient, report }) => {
     try {
-        const response = await apiUpdatePatient({ ...patient, processing: false, reports: [...patient.reports, report] })
+        const response = await apiUpdatePatient(patient.id, { processing: false, report })
         return response.data
     } catch (e) {
         return e

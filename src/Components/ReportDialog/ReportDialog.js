@@ -25,7 +25,7 @@ const ReportDialog = () => {
             <DialogTitle sx={{ display: 'flex', alignItems: 'center', padding: '.5rem 2rem' }}>
                 <ListItemText
                     primary={`${patient.id} / ${patient.name} / ${patient.gender}`}
-                    secondary={new Date(report.createdAt).toLocaleString()}
+                    secondary={new Date(report.createdAt || new Date()).toLocaleString()}
                 />
                 {/* <Box className={classes.title}>{`${patient.id} / ${patient.name} / ${patient.gender}`}</Box> */}
                 <IconButton onClick={handleClose} sx={{ padding: '1rem' }}>
