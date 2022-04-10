@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Stepper, Step, StepLabel, IconButton, Button } from '@mui/material'
-import { ArrowBack, ArrowForward } from '@mui/icons-material'
+import { ArrowBack, ArrowForward, CheckCircleOutline } from '@mui/icons-material'
 import { useTheme } from '@mui/styles'
 import useStyles from './Style'
 
@@ -130,8 +130,8 @@ const CreateReport = () => {
                                 height: '100%',
                             }}
                         >
-                            {/* <CheckCircleOutline sx={{ fontSize: '10rem', color: theme.palette.contrast.main }} /> */}
-                            <img src="./success.gif" alt="success" />
+                            <CheckCircleOutline sx={{ fontSize: '10rem', color: theme.palette.contrast.main }} />
+
                             <Box sx={{ fontSize: '3rem' }}>報告已成功儲存</Box>
                             <Box sx={{ fontSize: '2rem' }}>檢查者:{patient.name}</Box>
                             <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>

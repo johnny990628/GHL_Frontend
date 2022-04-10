@@ -25,14 +25,12 @@ const ReportDialog = () => {
             <DialogTitle sx={{ display: 'flex', alignItems: 'center', padding: '.5rem 2rem' }}>
                 <ListItemText
                     primary={`${patient.id} / ${patient.name} / ${patient.gender}`}
-                    secondary={`第${patient.reports.findIndex(r => r.id === report.id) + 1}次報告-${new Date(
-                        report.createdAt
-                    ).toLocaleDateString()}`}
+                    secondary={new Date(report.createdAt).toLocaleString()}
                 />
                 {/* <Box className={classes.title}>{`${patient.id} / ${patient.name} / ${patient.gender}`}</Box> */}
-                {/* <IconButton onClick={handleClose} sx={{ padding: '0 1.3rem', margin: '.2rem' }}>
+                <IconButton onClick={handleClose} sx={{ padding: '1rem' }}>
                     <Close />
-                </IconButton> */}
+                </IconButton>
             </DialogTitle>
             <DialogContent sx={{ height: '90vh' }}>
                 {/* <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} patient={row.patient} type="edit" /> */}
