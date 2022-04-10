@@ -1,7 +1,7 @@
 {
     "name": "ghl",
     "version": "0.1.0",
-    "homepage": "./",
+    "homepage": "https://acadsys.ntunhs.edu.tw/GHL",
     "private": true,
     "dependencies": {
         "@emotion/react": "^11.8.1",
