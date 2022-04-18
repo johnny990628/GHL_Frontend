@@ -32,14 +32,11 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.primary.main,
     },
     button: {
-        width: '25%',
-        fontSize: '1.4rem',
+        width: '100%',
+        fontSize: '1.5rem',
         margin: '1rem',
     },
     qrcodeButton: {
-        width: '25%',
-        fontSize: '1.2rem',
-        margin: '1rem',
         backgroundColor: theme.palette.contrast.main,
         '&:hover': {
             backgroundColor: theme.palette.contrast.dark,

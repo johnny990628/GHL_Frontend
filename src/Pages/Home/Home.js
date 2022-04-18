@@ -10,6 +10,7 @@ import LittleTable from '../../Components/LittleTable/LittleTable'
 const Home = () => {
     const classes = useStyles()
     const { data } = useSelector(state => state.patients)
+    console.log(data)
     return (
         <Grid container spacing={2}>
             <Grid item md={12} xl={8} spacing={2}>

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 
 import useStyles from './Style'
 
@@ -8,11 +8,18 @@ import Liver from '../../Assets/OrganJson/liver.json'
 import Pancreas from '../../Assets/OrganJson/pancreas.json'
 import Spleen from '../../Assets/OrganJson/spleen.json'
 import Suggestion from '../../Assets/OrganJson/suggestion.json'
+import { useSelector } from 'react-redux'
 
-const FormSection = ({ list, report }) => {
+const FormSection = ({ list }) => {
     const classes = useStyles()
-    const { data } = report
-    const cancerArr = data[list.name]
+    const report = useSelector(state => state.report.edit)
+    const [cancerArr, setCancerArr] = useState([])
+    useEffect(() => {
+        if (report) {
+            setCancerArr(report[list.name])
+        }
+    }, [])
+
     return (
         <>
             <tr>
@@ -20,12 +27,12 @@ const FormSection = ({ list, report }) => {
                     {list.label}
                 </td>
                 <td rowSpan={list.cols.length * 1 + 1} className={classes.table}>
-                    <input type="checkbox" checked={cancerArr.length === 0} readOnly />
+                    <input type="checkbox" checked={cancerArr?.length === 0} readOnly />
                     正常
                 </td>
             </tr>
             {list.cols.map(col => {
-                const checked = cancerArr.some(c => c.name === col.name)
+                const checked = cancerArr?.some(c => c.name === col.name)
                 return (
                     <Fragment key={col.name}>
                         {col.type === 'radio' && (
@@ -38,7 +45,7 @@ const FormSection = ({ list, report }) => {
                                             <input
                                                 type="radio"
                                                 value={option.value}
-                                                checked={cancerArr.some(c => c.name === col.name && c.value === option.value)}
+                                                checked={cancerArr?.some(c => c.name === col.name && c.value === option.value)}
                                                 readOnly
                                             />
                                             {option.label}
@@ -59,7 +66,7 @@ const FormSection = ({ list, report }) => {
                             <tr>
                                 <td colSpan="3" className={classes.table}>
                                     <input type="checkbox" checked={checked} readOnly />
-                                    {col.label}:{cancerArr.find(c => c.name === col.name)?.value}
+                                    {col.label}:{cancerArr?.find(c => c.name === col.name)?.value}
                                 </td>
                             </tr>
                         )}
@@ -71,7 +78,7 @@ const FormSection = ({ list, report }) => {
                                         .split('_')
                                         .reduce(
                                             (prev, cur, curI) =>
-                                                prev + (cancerArr.find(c => c.name === col.name)?.value[curI === 1 ? 0 : 1] || '_') + cur
+                                                prev + (cancerArr?.find(c => c.name === col.name)?.value[curI === 1 ? 0 : 1] || '_') + cur
                                         )}
                                 </td>
                             </tr>
@@ -83,7 +90,7 @@ const FormSection = ({ list, report }) => {
     )
 }
 
-const ReportFormHtml = ({ report }) => {
+const ReportFormHtml = () => {
     const classes = useStyles()
     return (
         <table className={classes.table} style={{ width: '60%' }}>
@@ -97,7 +104,7 @@ const ReportFormHtml = ({ report }) => {
                     </td>
                 </tr>
                 {[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion].map(list => (
-                    <FormSection key={list.name} list={list} report={report} />
+                    <FormSection key={list.name} list={list} />
                 ))}
             </tbody>
         </table>

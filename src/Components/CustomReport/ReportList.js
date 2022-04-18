@@ -8,15 +8,19 @@ import { openDialog } from '../../Redux/Slices/Dialog'
 const ReportList = ({ patient }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
-    const handleClick = ({ report }) => {
-        dispatch(openDialog({ type: 'report', row: { patient, report } }))
+    const handleClick = ({ reports }) => {
+        dispatch(openDialog({ type: 'report', row: { patient, reports } }))
     }
     return (
         <>
             <Box className={classes.formLabel}>歷史報告</Box>
             <List>
                 {patient.reports.map((report, index) => (
-                    <ListItem key={report.id} classes={{ root: classes.reportListItem }} onClick={() => handleClick({ report })}>
+                    <ListItem
+                        key={report.id}
+                        classes={{ root: classes.reportListItem }}
+                        onClick={() => handleClick({ reports: { id: report._id, records: report.records } })}
+                    >
                         <ListItemButton>
                             <ListItemIcon>
                                 <Assignment />

@@ -165,9 +165,8 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                             age={age}
                         />
                     ))}
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '2rem' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '70%', alignItems: 'center' }}>
+                        {mode === 'create' && <QRScanner onResult={res => setQrcode(JSON.parse(res))} />}
                         <Button
                             variant="contained"
                             className={classes.button}
@@ -194,7 +193,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                             {mode === 'create' ? '新增' : '修改'}
                         </Button>
                         <Button
-                            variant="contained"
+                            variant="text"
                             className={classes.button}
                             color="secondary"
                             sx={{
@@ -212,8 +211,6 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                             {mode === 'create' ? '清除' : '取消'}
                         </Button>
                     </Box>
-
-                    {mode === 'create' && <QRScanner onResult={res => setQrcode(JSON.parse(res))} />}
                 </Box>
             </Box>
         </Box>

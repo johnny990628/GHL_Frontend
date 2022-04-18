@@ -15,10 +15,10 @@ import {
 import { useTheme } from '@mui/styles'
 import useStyles from './Style'
 import { addCancer, removeCancer } from '../../Redux/Slices/Report'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useDebouncedCallback } from 'use-debounce'
 
-const CustomReportInput = ({ row, organ, isNormal, setIsNormal }) => {
+const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mode }) => {
     const classes = useStyles()
     const theme = useTheme()
     const { label, name, type, options } = row
@@ -41,20 +41,46 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal }) => {
         }
     }, [isNormal])
 
+    useEffect(() => {
+        if (defaultValue) handleFillValue()
+    }, [])
+
+    const handleFillValue = () => {
+        const { name, type, value } = defaultValue
+
+        switch (type) {
+            case 'checkbox':
+                setChecked(value)
+                break
+            case 'radio':
+                setChecked(true)
+                setRadio(value)
+                break
+            case 'text':
+                setText(value)
+                break
+            case 'select':
+                setChecked(true)
+                setYam([...value])
+            default:
+                break
+        }
+    }
+
     //debounce the input while onchange
     const handleDispatch = useDebouncedCallback(value => {
         switch (type) {
             case 'checkbox':
-                dispatch(value ? removeCancer({ organ, name }) : addCancer({ organ, name, type, value: true }))
+                dispatch(value ? removeCancer({ organ, name, mode }) : addCancer({ organ, name, type, value: true, mode }))
                 break
             case 'radio':
-                dispatch(addCancer({ organ, name, type, value }))
+                dispatch(addCancer({ organ, name, type, value, mode }))
                 break
             case 'text':
-                dispatch(addCancer({ organ, name, type, value }))
+                dispatch(addCancer({ organ, name, type, value, mode }))
                 break
             case 'select':
-                dispatch(addCancer({ organ, name, type, value }))
+                dispatch(addCancer({ organ, name, type, value, mode }))
             default:
                 break
         }
@@ -144,7 +170,7 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal }) => {
                             if (radio) {
                                 setChecked(!checked)
                                 setRadio('')
-                                dispatch(removeCancer({ organ, name }))
+                                dispatch(removeCancer({ organ, name, mode }))
                             }
                         }}
                         className={classes.toggleButton}
@@ -183,7 +209,7 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal }) => {
                             checked={checked}
                             onClick={() => {
                                 setChecked(!checked)
-                                dispatch(removeCancer({ organ, name }))
+                                dispatch(removeCancer({ organ, name, mode }))
                             }}
                         />
                     }

@@ -24,10 +24,9 @@ const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
     const [selection, setSelection] = useState([])
     const [patient, setPatient] = useState({})
-    const [previewReport, setPreviewReport] = useState({})
     const steps = ['選擇病人', '新增報告', '完成']
     const { data } = useSelector(state => state.patients)
-    const { report } = useSelector(state => state)
+    const report = useSelector(state => state.report.create)
     const dispatch = useDispatch()
     const classes = useStyles()
     const theme = useTheme()
@@ -43,13 +42,11 @@ const CreateReport = () => {
     }, [currentStep])
 
     useEffect(() => {
-        dispatch(resetReport())
-    }, [previewReport])
+        return () => dispatch(resetReport({ mode: 'create' }))
+    }, [])
 
     const handleReportSubmit = () => {
-        const reportData = { id: v4(), data: report }
-        dispatch(addReport({ patient, report: reportData }))
-        setPreviewReport(reportData)
+        dispatch(addReport({ patient, report }))
     }
 
     const columns = [
@@ -117,7 +114,7 @@ const CreateReport = () => {
                         <CustomReportForm
                             lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]}
                             patient={patient}
-                            type="create"
+                            mode="create"
                         />
                     )}
                     {currentStep === 2 && (
@@ -145,7 +142,7 @@ const CreateReport = () => {
                                     }}
                                     className={classes.button}
                                     onClick={() => {
-                                        dispatch(openDialog({ type: 'report', row: { patient, report: previewReport } }))
+                                        dispatch(openDialog({ type: 'report', row: { patient, report: [report] } }))
                                     }}
                                 >
                                     預覽
@@ -159,7 +156,7 @@ const CreateReport = () => {
                     )}
                 </Box>
                 <IconButton
-                    sx={{ display: currentStep === 2 && 'none', backgroundColor: theme.pa }}
+                    sx={{ display: currentStep === 2 && 'none' }}
                     disabled={!patient}
                     className={classes.button}
                     onClick={() => {
@@ -169,7 +166,7 @@ const CreateReport = () => {
                     <ArrowForward />
                 </IconButton>
             </Box>
-            <ReportDialog />
+            <ReportDialog mode="create" />
         </Box>
     )
 }

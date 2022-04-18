@@ -8,14 +8,15 @@ import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import { openDialog } from '../../Redux/Slices/Dialog'
+import { id } from 'date-fns/locale'
 
 const Report = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const { data } = useSelector(state => state.patients)
 
-    const handleClick = ({ patient, report }) => {
-        dispatch(openDialog({ type: 'report', row: { patient, report } }))
+    const handleClick = ({ patient, reports }) => {
+        dispatch(openDialog({ type: 'report', row: { patient, reports } }))
     }
 
     const renderSubRow = useCallback(({ row }) => {
@@ -24,7 +25,11 @@ const Report = () => {
                 <Box sx={{ fontSize: '1.5rem' }}>報告紀錄</Box>
                 <List>
                     {row.original.reports.map((report, index) => (
-                        <ListItem key={report.id} disablePadding onClick={() => handleClick({ patient: row.original, report })}>
+                        <ListItem
+                            key={report.id}
+                            disablePadding
+                            onClick={() => handleClick({ patient: row.original, reports: { id: report._id, records: report.records } })}
+                        >
                             <ListItemButton>
                                 <ListItemIcon>
                                     <Assignment />
@@ -66,7 +71,7 @@ const Report = () => {
     return (
         <Box className={classes.container}>
             <CustomTable renderSubRow={renderSubRow} data={data.filter(d => d.reports.length > 0)} columns={columns} />
-            <ReportDialog />
+            <ReportDialog mode="edit" />
         </Box>
     )
 }

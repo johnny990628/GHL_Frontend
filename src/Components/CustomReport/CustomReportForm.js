@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Tabs, Tab, ToggleButton, useMediaQuery, Grid, Chip } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import Scrollspy from 'react-scrollspy'
@@ -6,20 +6,24 @@ import Scrollspy from 'react-scrollspy'
 import useStyles from './Style'
 import CustomReportInput from './CustomReportInput'
 import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { clearCancer } from '../../Redux/Slices/Report'
 import ReportList from './ReportList'
 
-const FormSection = ({ list }) => {
+const FormSection = ({ list, defaultRow, mode }) => {
     const classes = useStyles()
     const [isNormal, setIsNormal] = useState(true)
     const dispatch = useDispatch()
+
     const handleNormalOnClick = () => {
         if (!isNormal) {
             setIsNormal(!isNormal)
-            dispatch(clearCancer({ organ: list.name }))
+            dispatch(clearCancer({ organ: list.name, mode }))
         }
     }
+    useEffect(() => {
+        if (defaultRow) setIsNormal(defaultRow.length === 0)
+    }, [])
 
     return (
         <Box id={list.name} className={classes.formContainer}>
@@ -41,30 +45,43 @@ const FormSection = ({ list }) => {
 
             <Box>
                 {list.cols.map(row => (
-                    <CustomReportInput key={row.name} row={row} isNormal={isNormal} setIsNormal={setIsNormal} organ={list.name} />
+                    <CustomReportInput
+                        key={row.name}
+                        row={row}
+                        isNormal={isNormal}
+                        setIsNormal={setIsNormal}
+                        organ={list.name}
+                        defaultValue={defaultRow?.find(d => d.name === row.name)}
+                        mode={mode}
+                    />
                 ))}
             </Box>
         </Box>
     )
 }
 
-const CustomReportForm = ({ lists, patient, type }) => {
+const CustomReportForm = ({ lists, patient, mode }) => {
     const classes = useStyles()
     const theme = useTheme()
     const isComputer = useMediaQuery(theme.breakpoints.up('lg'))
     const [tabIndex, setTabIndex] = useState(0)
+    const report = useSelector(state => state.report.edit)
+
     return (
         <>
-            <Box className={classes.patientInfo}>
-                <Chip
-                    // icon={<EmojiEmotionsOutlined />}
-                    label={`${patient.id} / ${patient.name} / ${patient.gender}`}
-                    variant="outlined"
-                    className={classes.chip}
-                />
-            </Box>
+            {mode === 'create' && (
+                <Box className={classes.patientInfo}>
+                    <Chip
+                        // icon={<EmojiEmotionsOutlined />}
+                        label={`${patient.id} / ${patient.name} / ${patient.gender}`}
+                        variant="outlined"
+                        className={classes.chip}
+                    />
+                </Box>
+            )}
+
             <Box className={classes.container}>
-                {isComputer && (
+                {isComputer && mode === 'create' && (
                     <Scrollspy items={lists.map(list => list.name)} className={classes.scrollspy}>
                         <Tabs value={tabIndex} orientation="vertical">
                             {lists.map((list, index) => (
@@ -81,12 +98,12 @@ const CustomReportForm = ({ lists, patient, type }) => {
                         </Tabs>
                     </Scrollspy>
                 )}
-                {type === 'create' && (
+                {mode === 'create' && (
                     <Grid container sx={{ height: '100%' }} spacing={2}>
                         <Grid item xs={9} lg={10}>
                             <CustomScrollbar>
                                 {lists.map(list => (
-                                    <FormSection key={list.name} list={list} />
+                                    <FormSection key={list.name} list={list} mode={mode} />
                                 ))}
                             </CustomScrollbar>
                         </Grid>
@@ -95,10 +112,10 @@ const CustomReportForm = ({ lists, patient, type }) => {
                         </Grid>
                     </Grid>
                 )}
-                {type === 'edit' && (
+                {mode === 'edit' && (
                     <CustomScrollbar>
                         {lists.map(list => (
-                            <FormSection key={list.name} list={list} />
+                            <FormSection key={list.name} list={list} defaultRow={report[list.name]} mode={mode} />
                         ))}
                     </CustomScrollbar>
                 )}

@@ -38,18 +38,18 @@ const QRScanner = ({ onResult }) => {
     }
 
     return (
-        <Box sx={{ width: '25%' }}>
+        <>
             <div id="reader" width="100%" />
             {isScanning ? (
-                <Button variant="contained" className={classes.qrcodeButton} onClick={() => handleStop()}>
+                <Button variant="contained" className={[classes.button, classes.qrcodeButton]} onClick={() => handleStop()}>
                     停止
                 </Button>
             ) : (
-                <Button variant="contained" className={classes.qrcodeButton} onClick={() => handleClickAdvanced()}>
+                <Button variant="contained" className={[classes.button, classes.qrcodeButton]} onClick={() => handleClickAdvanced()}>
                     掃描
                 </Button>
             )}
-        </Box>
+        </>
     )
 }
 export default QRScanner

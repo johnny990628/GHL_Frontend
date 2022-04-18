@@ -1,4 +1,4 @@
-import { apiCreatePatient, apiDeletePatient, apiGetPatients, apiUpdatePatient } from '../../Axios/Patient'
+import { apiCreatePatient, apiDeletePatient, apiGetPatients, apiUpdatePatient, apiCreateReport, apiUpdateReport } from '../../Axios/Patient'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 const patients = [
@@ -113,6 +113,7 @@ const initialState = { loading: false, data: [...patients], error: '' }
 export const fetchPatients = createAsyncThunk('patients/fetchPatients', async () => {
     try {
         const response = await apiGetPatients()
+
         return response.data
     } catch (e) {
         return e
@@ -166,7 +167,16 @@ export const removeProcessing = createAsyncThunk('patients/removeProcessing', as
 
 export const addReport = createAsyncThunk('patients/addReport', async ({ patient, report }) => {
     try {
-        const response = await apiUpdatePatient(patient.id, { processing: false, report })
+        const response = await apiCreateReport(patient.id, { report })
+        return response.data
+    } catch (e) {
+        return e
+    }
+})
+
+export const updateReport = createAsyncThunk('patients/updateReport', async ({ patient, reportID, report }) => {
+    try {
+        const response = await apiUpdateReport(patient.id, reportID, { report })
         return response.data
     } catch (e) {
         return e
@@ -240,6 +250,11 @@ const patientsSlice = createSlice({
             state.data = state.data.map(row => (row.id === patient.id ? patient : row))
         },
         [addReport.fulfilled]: (state, action) => {
+            const patient = action.payload
+            state.loading = false
+            state.data = state.data.map(row => (row.id === patient.id ? patient : row))
+        },
+        [updateReport.fulfilled]: (state, action) => {
             const patient = action.payload
             state.loading = false
             state.data = state.data.map(row => (row.id === patient.id ? patient : row))
