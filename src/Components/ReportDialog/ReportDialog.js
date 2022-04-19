@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Box, Dialog, DialogContent, DialogTitle, DialogActions, IconButton, ListItem, ListItemText, Button } from '@mui/material'
+import {
+    Box,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogActions,
+    IconButton,
+    ListItem,
+    ListItemText,
+    Button,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+} from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { Close, ConnectingAirportsOutlined, FormatListBulleted } from '@mui/icons-material'
 
@@ -26,18 +40,28 @@ const ReportDialog = ({ mode }) => {
         isOpen,
         row: { patient, reports },
     } = useSelector(state => state.dialog.report)
-
+    // reverse records and non-destructive
+    const reverseRecords = [].concat(reports.records).reverse()
     const currentReport = useSelector(state => state.report.edit)
+
+    const [records, setRecords] = useState([])
+    const [version, setVersion] = useState('')
     const [reportID, setReportID] = useState('')
     const [isEditing, setIsEditing] = useState(false)
 
     useEffect(() => {
         // 當Dialog開啟時，將最新的報告紀錄寫入Report State，並記錄該報告的ID
         if (reports.records?.length > 0 && isOpen) {
-            dispatch(fillReport({ report: reports.records.slice(-1)[0] }))
+            dispatch(fillReport({ report: reverseRecords[0] }))
             setReportID(reports.id)
+            setRecords(reverseRecords)
+            setVersion(reverseRecords[0]._id)
         }
     }, [isOpen])
+
+    useEffect(() => {
+        dispatch(fillReport({ report: reverseRecords.find(r => r?._id === version) }))
+    }, [version])
 
     const handleEdit = () => {
         // 點擊編輯按鈕後判斷目前Dialog狀態，如果為編輯狀態則儲存
@@ -54,13 +78,23 @@ const ReportDialog = ({ mode }) => {
         dispatch(resetReport({ mode: 'edit' }))
         setIsEditing(false)
     }
+    const handleSelectOnChange = e => {
+        setVersion(e.target.value)
+    }
 
     return (
         <Dialog open={isOpen} onClose={handleClose} fullWidth maxWidth={'md'}>
             <DialogTitle sx={{ display: 'flex', alignItems: 'center', padding: '.5rem 2rem' }}>
-                <ListItemText primary={`${patient.id} / ${patient.name} / ${patient.gender}`} />
+                <ListItemText secondary={`${patient.id} / ${patient.name} / ${patient.gender}`} />
                 {/* <Box className={classes.title}>{`${patient.id} / ${patient.name} / ${patient.gender}`}</Box> */}
-
+                <FormControl variant="standard" sx={{ width: '5rem' }}>
+                    <InputLabel id="select-label">版本</InputLabel>
+                    <Select labelId="select-label" value={version} onChange={handleSelectOnChange}>
+                        {records?.map((record, index) => (
+                            <MenuItem key={record._id} value={record._id}>{`v${records.length - index}`}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
                 {mode === 'create' && (
                     <IconButton onClick={handleClose} sx={{ padding: '1rem' }}>
                         <Close />
@@ -71,13 +105,13 @@ const ReportDialog = ({ mode }) => {
                 {isEditing ? (
                     <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} patient={patient} mode="edit" />
                 ) : (
-                    <ReportFormHtml report={currentReport} />
+                    <ReportFormHtml />
                 )}
             </DialogContent>
             {mode === 'edit' && (
                 <DialogActions sx={{ padding: '1rem' }}>
                     <Button variant="contained" className={classes.actionButton} onClick={handleEdit}>
-                        修改
+                        {isEditing ? '儲存' : '修改'}
                     </Button>
                     <Button variant="text" className={classes.actionButton} onClick={handleClose}>
                         取消

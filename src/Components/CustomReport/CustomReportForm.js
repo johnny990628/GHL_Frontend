@@ -64,9 +64,14 @@ const CustomReportForm = ({ lists, patient, mode }) => {
     const classes = useStyles()
     const theme = useTheme()
     const isComputer = useMediaQuery(theme.breakpoints.up('lg'))
-    const [tabIndex, setTabIndex] = useState(0)
     const report = useSelector(state => state.report.edit)
+    const [tabIndex, setTabIndex] = useState(0)
+    const [currentReport, setCurrentReport] = useState({})
 
+    useEffect(() => {
+        console.log(report)
+        setCurrentReport(report)
+    }, [report])
     return (
         <>
             {mode === 'create' && (
@@ -115,7 +120,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                 {mode === 'edit' && (
                     <CustomScrollbar>
                         {lists.map(list => (
-                            <FormSection key={list.name} list={list} defaultRow={report[list.name]} mode={mode} />
+                            <FormSection key={list.name} list={list} defaultRow={currentReport[list.name]} mode={mode} />
                         ))}
                     </CustomScrollbar>
                 )}

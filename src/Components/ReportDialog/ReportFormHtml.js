@@ -18,7 +18,7 @@ const FormSection = ({ list }) => {
         if (report) {
             setCancerArr(report[list.name])
         }
-    }, [])
+    }, [report])
 
     return (
         <>
