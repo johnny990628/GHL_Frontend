@@ -4,6 +4,7 @@ import { Assignment } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
 import useStyles from './Style'
 import { openDialog } from '../../Redux/Slices/Dialog'
+import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 const ReportList = ({ patient }) => {
     const classes = useStyles()
@@ -12,7 +13,7 @@ const ReportList = ({ patient }) => {
         dispatch(openDialog({ type: 'report', row: { patient, reports } }))
     }
     return (
-        <>
+        <CustomScrollbar>
             <Box className={classes.formLabel}>歷史報告</Box>
             <List>
                 {patient.reports.map((report, index) => (
@@ -30,7 +31,7 @@ const ReportList = ({ patient }) => {
                     </ListItem>
                 ))}
             </List>
-        </>
+        </CustomScrollbar>
     )
 }
 

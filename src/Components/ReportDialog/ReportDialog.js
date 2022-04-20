@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import {
     Box,
     Dialog,
@@ -41,7 +41,8 @@ const ReportDialog = ({ mode }) => {
         row: { patient, reports },
     } = useSelector(state => state.dialog.report)
     // reverse records and non-destructive
-    const reverseRecords = [].concat(reports.records).reverse()
+    const reverseRecords = useMemo(() => [].concat(reports?.records).reverse(), [reports])
+
     const currentReport = useSelector(state => state.report.edit)
 
     const [records, setRecords] = useState([])
@@ -51,7 +52,7 @@ const ReportDialog = ({ mode }) => {
 
     useEffect(() => {
         // 當Dialog開啟時，將最新的報告紀錄寫入Report State，並記錄該報告的ID
-        if (reports.records?.length > 0 && isOpen) {
+        if (reverseRecords.length > 0 && isOpen) {
             dispatch(fillReport({ report: reverseRecords[0] }))
             setReportID(reports.id)
             setRecords(reverseRecords)
@@ -86,15 +87,17 @@ const ReportDialog = ({ mode }) => {
         <Dialog open={isOpen} onClose={handleClose} fullWidth maxWidth={'md'}>
             <DialogTitle sx={{ display: 'flex', alignItems: 'center', padding: '.5rem 2rem' }}>
                 <ListItemText secondary={`${patient.id} / ${patient.name} / ${patient.gender}`} />
-                {/* <Box className={classes.title}>{`${patient.id} / ${patient.name} / ${patient.gender}`}</Box> */}
-                <FormControl variant="standard" sx={{ width: '5rem' }}>
-                    <InputLabel id="select-label">版本</InputLabel>
-                    <Select labelId="select-label" value={version} onChange={handleSelectOnChange}>
-                        {records?.map((record, index) => (
-                            <MenuItem key={record._id} value={record._id}>{`v${records.length - index}`}</MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                {mode === 'edit' && (
+                    <FormControl variant="standard" sx={{ width: '5rem' }}>
+                        <InputLabel id="select-label">版本</InputLabel>
+                        <Select labelId="select-label" value={version} onChange={handleSelectOnChange}>
+                            {records?.map((record, index) => (
+                                <MenuItem key={record._id} value={record._id}>{`v${records.length - index}`}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                )}
+
                 {mode === 'create' && (
                     <IconButton onClick={handleClose} sx={{ padding: '1rem' }}>
                         <Close />

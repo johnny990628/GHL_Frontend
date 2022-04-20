@@ -9,6 +9,7 @@ import CustomTable from '../../Components/CustomTable/CustomTable'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import { openDialog } from '../../Redux/Slices/Dialog'
 import { id } from 'date-fns/locale'
+import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
 
 const Report = () => {
     const classes = useStyles()
@@ -23,7 +24,7 @@ const Report = () => {
         return (
             <Box>
                 <Box sx={{ fontSize: '1.5rem' }}>報告紀錄</Box>
-                <List>
+                <List sx={{ maxHeight: '20rem', overflowY: 'auto' }}>
                     {row.original.reports.map((report, index) => (
                         <ListItem
                             key={report.id}
@@ -36,7 +37,7 @@ const Report = () => {
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={`第${index + 1}次報告`}
-                                    secondary={new Date(report.createdAt).toLocaleDateString()}
+                                    secondary={`${new Date(report.updatedAt).toLocaleDateString()}_v${report.records.length}`}
                                 />
                             </ListItemButton>
                         </ListItem>

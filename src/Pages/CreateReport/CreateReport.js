@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Box, Stepper, Step, StepLabel, IconButton, Button } from '@mui/material'
 import { ArrowBack, ArrowForward, CheckCircleOutline } from '@mui/icons-material'
 import { useTheme } from '@mui/styles'
@@ -27,13 +27,14 @@ const CreateReport = () => {
     const steps = ['選擇病人', '新增報告', '完成']
     const { data } = useSelector(state => state.patients)
     const report = useSelector(state => state.report.create)
+
     const dispatch = useDispatch()
     const classes = useStyles()
     const theme = useTheme()
 
     useEffect(() => {
         setPatient(data.find(d => d.id === selection[0]))
-    }, [selection])
+    }, [selection, data])
 
     useEffect(() => {
         if (currentStep === 2) {
@@ -142,7 +143,20 @@ const CreateReport = () => {
                                     }}
                                     className={classes.button}
                                     onClick={() => {
-                                        dispatch(openDialog({ type: 'report', row: { patient, report: [report] } }))
+                                        const reports = patient.reports
+                                        const { records } = reports[reports.length - 1]
+                                        dispatch(
+                                            openDialog({
+                                                type: 'report',
+                                                row: {
+                                                    patient,
+                                                    reports: {
+                                                        id: records._id,
+                                                        records,
+                                                    },
+                                                },
+                                            })
+                                        )
                                     }}
                                 >
                                     預覽
