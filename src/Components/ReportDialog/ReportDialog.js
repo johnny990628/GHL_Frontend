@@ -111,16 +111,18 @@ const ReportDialog = ({ mode }) => {
                     <ReportFormHtml />
                 )}
             </DialogContent>
-            {mode === 'edit' && (
-                <DialogActions sx={{ padding: '1rem' }}>
-                    <Button variant="contained" className={classes.actionButton} onClick={handleEdit}>
-                        {isEditing ? '儲存' : '修改'}
-                    </Button>
-                    <Button variant="text" className={classes.actionButton} onClick={handleClose}>
-                        取消
-                    </Button>
-                </DialogActions>
-            )}
+            <DialogActions sx={{ padding: '1rem' }}>
+                {mode === 'edit' && (
+                    <>
+                        <Button variant="contained" className={classes.actionButton} onClick={handleEdit}>
+                            {isEditing ? '儲存' : '修改'}
+                        </Button>
+                        <Button variant="text" className={classes.actionButton} onClick={handleClose}>
+                            取消
+                        </Button>
+                    </>
+                )}
+            </DialogActions>
         </Dialog>
     )
 }

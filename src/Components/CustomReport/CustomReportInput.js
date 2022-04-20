@@ -23,17 +23,19 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
     const theme = useTheme()
     const { label, name, type, options } = row
     const [checked, setChecked] = useState(false)
-    const [radio, setRadio] = useState('')
+    const [radio, setRadio] = useState([])
     const [text, setText] = useState('')
     const [yam, setYam] = useState([])
 
     const dispatch = useDispatch()
 
+    // 如果有疾病被勾選，將器官正常設為false
     useEffect(() => {
         if (checked || text) setIsNormal(false)
         if (!checked) setYam([])
     }, [checked, text])
 
+    // 如果正常被勾選，清空所有欄位
     useEffect(() => {
         if (isNormal) {
             setChecked(false)
@@ -41,10 +43,17 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
         }
     }, [isNormal])
 
+    // 用於編輯頁面，將資料讀進state
     useEffect(() => {
         if (defaultValue) handleFillValue()
     }, [])
 
+    // 如果radio被取消，將checkbox設為false
+    useEffect(() => {
+        if (radio.length === 0) setChecked(false)
+    }, [radio])
+
+    // 用於編輯頁面，將資料填入
     const handleFillValue = () => {
         const { name, type, value } = defaultValue
 
@@ -74,7 +83,7 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
                 dispatch(value ? removeCancer({ organ, name, mode }) : addCancer({ organ, name, type, value: true, mode }))
                 break
             case 'radio':
-                dispatch(addCancer({ organ, name, type, value, mode }))
+                dispatch(value.length > 0 ? addCancer({ organ, name, type, value, mode }) : removeCancer({ organ, name, mode }))
                 break
             case 'text':
                 dispatch(addCancer({ organ, name, type, value, mode }))
@@ -86,6 +95,7 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
         }
     }, 500)
 
+    //處理資料變動
     const handleChange = (e, value) => {
         switch (type) {
             case 'checkbox':
@@ -94,8 +104,13 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
                 break
             case 'radio':
                 setChecked(true)
-                setRadio(value)
-                handleDispatch(value)
+                if (radio.includes(value)) {
+                    setRadio(prev => prev.filter(p => p !== value))
+                    handleDispatch(radio.filter(r => r !== value))
+                } else {
+                    setRadio(prev => [...prev, value])
+                    handleDispatch([...radio, value])
+                }
                 break
             case 'text':
                 setText(e.target.value)
@@ -195,7 +210,9 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
                         <FormControlLabel
                             key={option.label}
                             value={option.value}
-                            control={<Radio checked={checked && radio === option.value} onClick={e => handleChange(e, option.value)} />}
+                            control={
+                                <Radio checked={checked && radio.includes(option.value)} onClick={e => handleChange(e, option.value)} />
+                            }
                             label={<Box className={classes.inputLabel}>{option.label}</Box>}
                         />
                     ))}
