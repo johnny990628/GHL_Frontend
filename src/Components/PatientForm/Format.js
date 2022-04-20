@@ -37,11 +37,11 @@ export const Format = {
             name: "gender",
             label: [
                 {
-                    name: "Male",
+                    name: "男",
                     label: "男性",
                 },
                 {
-                    name: "Female",
+                    name: "女",
                     label: "女性",
                 },
             ],
