@@ -29,6 +29,11 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
 
     const dispatch = useDispatch()
 
+    // 如果radio被取消，將checkbox設為false
+    useEffect(() => {
+        if (radio.length === 0) setChecked(false)
+    }, [radio])
+
     // 如果有疾病被勾選，將器官正常設為false
     useEffect(() => {
         if (checked || text) setIsNormal(false)
@@ -37,7 +42,7 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
 
     // 如果正常被勾選，清空所有欄位
     useEffect(() => {
-        if (isNormal) {
+        if (isNormal && !defaultValue) {
             setChecked(false)
             setRadio('')
         }
@@ -47,11 +52,6 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
     useEffect(() => {
         if (defaultValue) handleFillValue()
     }, [])
-
-    // 如果radio被取消，將checkbox設為false
-    useEffect(() => {
-        if (radio.length === 0) setChecked(false)
-    }, [radio])
 
     // 用於編輯頁面，將資料填入
     const handleFillValue = () => {

@@ -10,10 +10,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { clearCancer } from '../../Redux/Slices/Report'
 import ReportList from './ReportList'
 
-const FormSection = ({ list, defaultRow, mode }) => {
+const FormSection = ({ list, mode }) => {
     const classes = useStyles()
     const [isNormal, setIsNormal] = useState(true)
+
     const dispatch = useDispatch()
+    const reportSection = useSelector(state => state.report.edit[list.name])
 
     const handleNormalOnClick = () => {
         if (!isNormal) {
@@ -21,8 +23,9 @@ const FormSection = ({ list, defaultRow, mode }) => {
             dispatch(clearCancer({ organ: list.name, mode }))
         }
     }
+
     useEffect(() => {
-        if (defaultRow) setIsNormal(defaultRow.length === 0)
+        if (reportSection) setIsNormal(reportSection.length === 0)
     }, [])
 
     return (
@@ -46,12 +49,12 @@ const FormSection = ({ list, defaultRow, mode }) => {
             <Box>
                 {list.cols.map(row => (
                     <CustomReportInput
-                        key={row.name}
+                        key={row.label}
                         row={row}
                         isNormal={isNormal}
                         setIsNormal={setIsNormal}
                         organ={list.name}
-                        defaultValue={defaultRow?.find(d => d.name === row.name)}
+                        defaultValue={reportSection && reportSection.find(d => d.name === row.name)}
                         mode={mode}
                     />
                 ))}
@@ -64,7 +67,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
     const classes = useStyles()
     const theme = useTheme()
     const isComputer = useMediaQuery(theme.breakpoints.up('lg'))
-    const report = useSelector(state => state.report.edit)
+
     const [tabIndex, setTabIndex] = useState(0)
 
     return (
@@ -115,7 +118,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                 {mode === 'edit' && (
                     <CustomScrollbar>
                         {lists.map(list => (
-                            <FormSection key={list.name} list={list} defaultRow={report[list.name]} mode={mode} />
+                            <FormSection key={list.name} list={list} mode={mode} />
                         ))}
                     </CustomScrollbar>
                 )}

@@ -24,7 +24,7 @@ const Report = () => {
         return (
             <Box>
                 <Box sx={{ fontSize: '1.5rem' }}>報告紀錄</Box>
-                <List sx={{ maxHeight: '20rem', overflowY: 'auto' }}>
+                <List sx={{ maxHeight: '200123.rem', overflowY: 'auto' }}>
                     {row.original.reports.map((report, index) => (
                         <ListItem
                             key={report.id}
