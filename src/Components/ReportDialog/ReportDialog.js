@@ -31,7 +31,7 @@ import ReportFormHtml from './ReportFormHtml'
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 import { fillReport, resetReport } from '../../Redux/Slices/Report'
 import { updateReport } from '../../Redux/Slices/Patient'
-import { openSnackbar } from '../../Redux/Slices/Snackbar'
+import { openAlert } from '../../Redux/Slices/Alert'
 
 const ReportDialog = ({ mode }) => {
     const classes = useStyles()
@@ -50,8 +50,8 @@ const ReportDialog = ({ mode }) => {
     const [reportID, setReportID] = useState('')
     const [isEditing, setIsEditing] = useState(false)
 
+    // 當Dialog開啟時，將最新的報告紀錄寫入Report State，並記錄該報告的ID
     useEffect(() => {
-        // 當Dialog開啟時，將最新的報告紀錄寫入Report State，並記錄該報告的ID
         if (reverseRecords.length > 0 && isOpen) {
             dispatch(fillReport({ report: reverseRecords[0] }))
             setReportID(reports.id)
@@ -68,8 +68,8 @@ const ReportDialog = ({ mode }) => {
         // 點擊編輯按鈕後判斷目前Dialog狀態，如果為編輯狀態則儲存
         if (isEditing) {
             dispatch(updateReport({ patient, reportID, report: currentReport }))
-            dispatch(openSnackbar('修改成功'))
-            setIsEditing(false)
+            dispatch(openAlert({ title: '修改成功', icon: 'success' }))
+            handleClose()
         } else {
             setIsEditing(true)
         }

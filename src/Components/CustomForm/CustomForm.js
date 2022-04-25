@@ -7,7 +7,7 @@ import useStyles from './Style'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeDialog } from '../../Redux/Slices/Dialog'
 
-import { openSnackbar } from '../../Redux/Slices/Snackbar'
+import { openAlert } from '../../Redux/Slices/Alert'
 import QRScanner from '../QRScanner/QRScanner'
 import CustomInput from './CustomInput'
 import { verifyID, verifyPhone } from '../../Utils/Verify'
@@ -68,7 +68,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
             setGender(row?.gender)
             setGender(gender)
             setAge(age)
-            dispatch(openSnackbar('掃描成功'))
+            dispatch(openAlert({ message: '掃描成功', icon: 'success' }))
         }
     }, [qrcode])
 
@@ -187,7 +187,14 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                                 })
                                 mode === 'create' && handleDelete()
                                 mode === 'edit' && dispatch(closeDialog({ type: 'patient' }))
-                                mode === 'edit' && dispatch(openSnackbar('修改成功'))
+                                mode === 'edit' &&
+                                    dispatch(
+                                        openAlert({
+                                            title: '修改成功',
+                                            text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                                            icon: 'success',
+                                        })
+                                    )
                             }}
                         >
                             {mode === 'create' ? '新增' : '修改'}

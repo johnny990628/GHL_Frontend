@@ -4,7 +4,7 @@ import reportReducer from './Slices/Report'
 import sidebarReducer from './Slices/Sidebar'
 import dashboardReducer from './Slices/Dashboard'
 import dialogReducer from './Slices/Dialog'
-import snackbarReducer from './Slices/Snackbar'
+import alertReducer from './Slices/Alert'
 
 export default configureStore({
     reducer: {
@@ -13,6 +13,6 @@ export default configureStore({
         sidebar: sidebarReducer,
         dashboard: dashboardReducer,
         dialog: dialogReducer,
-        snackbar: snackbarReducer,
+        alert: alertReducer,
     },
 })

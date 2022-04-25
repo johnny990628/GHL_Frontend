@@ -10,7 +10,7 @@ import EditDialog from '../../Components/CustomTable/EditDialog'
 import { useDispatch, useSelector } from 'react-redux'
 import { addProcessing, removeProcessing, deletePatient, createPatient } from '../../Redux/Slices/Patient'
 import { openDialog } from '../../Redux/Slices/Dialog'
-import { openSnackbar } from '../../Redux/Slices/Snackbar'
+import { openAlert } from '../../Redux/Slices/Alert'
 
 const Patient = () => {
     const classes = useStyles()
@@ -26,7 +26,7 @@ const Patient = () => {
                 },
                 Header: '排程',
                 Cell: row => {
-                    const { processing } = row.row.original
+                    const { processing, name, gender } = row.row.original
 
                     return (
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -41,7 +41,13 @@ const Patient = () => {
                                 <IconButton
                                     onClick={() => {
                                         dispatch(addProcessing({ patient: row.row.original }))
-                                        dispatch(openSnackbar('新增排程'))
+                                        dispatch(
+                                            openAlert({
+                                                title: '新增排程',
+                                                text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                                                icon: 'success',
+                                            })
+                                        )
                                     }}
                                 >
                                     <CalendarToday />
@@ -50,7 +56,13 @@ const Patient = () => {
                                 <IconButton
                                     onClick={() => {
                                         dispatch(removeProcessing({ patient: row.row.original }))
-                                        dispatch(openSnackbar('取消排程'))
+                                        dispatch(
+                                            openAlert({
+                                                title: '取消排程',
+                                                text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                                                icon: 'warning',
+                                            })
+                                        )
                                     }}
                                 >
                                     <Cancel />
@@ -88,8 +100,15 @@ const Patient = () => {
                             </IconButton>
                             <IconButton
                                 onClick={() => {
-                                    dispatch(deletePatient({ id: row.row.original.id }))
-                                    dispatch(openSnackbar('刪除成功'))
+                                    dispatch(
+                                        openAlert({
+                                            title: '刪除成功',
+                                            text: `${row.row.original.name} ${row.row.original.gender === '男' ? '先生' : '小姐'}`,
+                                            icon: 'success',
+                                            isConfirm: true,
+                                            event: deletePatient({ id: row.row.original.id }),
+                                        })
+                                    )
                                 }}
                             >
                                 <Delete />
@@ -116,7 +135,7 @@ const Patient = () => {
             reports,
         }
         dispatch(createPatient({ patient: formData }))
-        dispatch(openSnackbar('新增成功'))
+        dispatch(openAlert({ title: '新增成功', icon: 'success' }))
     }
 
     return (
