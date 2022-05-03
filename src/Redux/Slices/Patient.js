@@ -108,21 +108,20 @@ const patients = [
     },
 ]
 
-const initialState = { loading: false, data: [...patients], error: '' }
+const initialState = { loading: false, data: [], count: 0, page: 1, error: '' }
 
-export const fetchPatients = createAsyncThunk('patients/fetchPatients', async () => {
+export const fetchPatients = createAsyncThunk('patients/fetchPatients', async ({ limit, offset, search, sort, desc }) => {
     try {
-        const response = await apiGetPatients()
-
-        return response.data
+        const response = await apiGetPatients({ limit, offset, search, sort, desc })
+        return { ...response.data, page: Math.ceil(response.data.count / limit) }
     } catch (e) {
         return e
     }
 })
 
-export const createPatient = createAsyncThunk('patients/createPatient', async ({ patient }) => {
+export const createPatient = createAsyncThunk('patients/createPatient', async data => {
     try {
-        const response = await apiCreatePatient(patient)
+        const response = await apiCreatePatient(data)
         return response.data
     } catch (e) {
         return e
@@ -138,7 +137,7 @@ export const updatePatient = createAsyncThunk('patients/updatePatient', async ({
     }
 })
 
-export const deletePatient = createAsyncThunk('patients/deletePatient', async ({ id }) => {
+export const deletePatient = createAsyncThunk('patients/deletePatient', async id => {
     try {
         const response = await apiDeletePatient(id)
         return response.data
@@ -147,18 +146,18 @@ export const deletePatient = createAsyncThunk('patients/deletePatient', async ({
     }
 })
 
-export const addProcessing = createAsyncThunk('patients/addProcessing', async ({ patient }) => {
+export const addProcessing = createAsyncThunk('patients/addProcessing', async id => {
     try {
-        const response = await apiUpdatePatient(patient.id, { processing: true })
+        const response = await apiUpdatePatient(id, { processing: true })
         return response.data
     } catch (e) {
         return e
     }
 })
 
-export const removeProcessing = createAsyncThunk('patients/removeProcessing', async ({ patient }) => {
+export const removeProcessing = createAsyncThunk('patients/removeProcessing', async id => {
     try {
-        const response = await apiUpdatePatient(patient.id, { processing: false })
+        const response = await apiUpdatePatient(id, { processing: false })
         return response.data
     } catch (e) {
         return e
@@ -214,50 +213,84 @@ const patientsSlice = createSlice({
     },
     extraReducers: {
         [fetchPatients.pending]: (state, action) => {
-            state.loading = true
+            return {
+                ...state,
+                loading: true,
+            }
         },
         [fetchPatients.fulfilled]: (state, action) => {
-            state.loading = false
-            state.data = action.payload
+            const { results, count, page } = action.payload
+            return {
+                ...state,
+                loading: false,
+                data: results,
+                count,
+                page,
+            }
         },
         [fetchPatients.rejected]: (state, action) => {
-            state.loading = false
-            state.error = action.payload
+            return {
+                ...state,
+                loading: false,
+                error: action.payload,
+            }
         },
         [createPatient.fulfilled]: (state, action) => {
             const patient = action.payload
-            state.loading = false
-            state.data = [...state.data, patient]
+            return {
+                ...state,
+                loading: false,
+                count: state.count + 1,
+            }
         },
         [updatePatient.fulfilled]: (state, action) => {
             const patient = action.payload
-            state.loading = false
-            state.data = state.data.map(row => (row.id === patient.id ? patient : row))
+            return {
+                ...state,
+                loading: false,
+                data: state.data.map(row => (row.id === patient.id ? patient : row)),
+            }
         },
         [deletePatient.fulfilled]: (state, action) => {
             const { id } = action.payload
-            state.loading = false
-            state.data = state.data.filter(row => row.id !== id)
+            return {
+                ...state,
+                loading: false,
+                data: state.data.filter(row => row.id !== id),
+                count: state.count - 1,
+            }
         },
         [addProcessing.fulfilled]: (state, action) => {
             const patient = action.payload
-            state.loading = false
-            state.data = state.data.map(row => (row.id === patient.id ? patient : row))
+            return {
+                ...state,
+                loading: false,
+                data: state.data.map(row => (row.id === patient.id ? patient : row)),
+            }
         },
         [removeProcessing.fulfilled]: (state, action) => {
             const patient = action.payload
-            state.loading = false
-            state.data = state.data.map(row => (row.id === patient.id ? patient : row))
+            return {
+                ...state,
+                loading: false,
+                data: state.data.map(row => (row.id === patient.id ? patient : row)),
+            }
         },
         [addReport.fulfilled]: (state, action) => {
             const patient = action.payload
-            state.loading = false
-            state.data = state.data.map(row => (row.id === patient.id ? patient : row))
+            return {
+                ...state,
+                loading: false,
+                data: state.data.map(row => (row.id === patient.id ? patient : row)),
+            }
         },
         [updateReport.fulfilled]: (state, action) => {
             const patient = action.payload
-            state.loading = false
-            state.data = state.data.map(row => (row.id === patient.id ? patient : row))
+            return {
+                ...state,
+                loading: false,
+                data: state.data.map(row => (row.id === patient.id ? patient : row)),
+            }
         },
     },
 })

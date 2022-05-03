@@ -5,14 +5,16 @@ import { useTheme } from '@mui/styles'
 import useStyles from './Style'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { closeDialog } from '../../Redux/Slices/Dialog'
+import { useDebouncedCallback } from 'use-debounce'
 
+import { closeDialog } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
 import QRScanner from '../QRScanner/QRScanner'
 import CustomInput from './CustomInput'
 import { verifyID, verifyPhone } from '../../Utils/Verify'
+import { apiCheckPatientExists } from '../../Axios/Patient'
 
-const CustomForm = ({ title, row, mode, handleSubmit }) => {
+const CustomForm = ({ title, row, mode, sendData }) => {
     const [id, setId] = useState('')
     const [blood, setBlood] = useState('')
     const [name, setName] = useState('')
@@ -72,8 +74,8 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
         }
     }, [qrcode])
 
-    const checkBloodExist = value => data.some(d => d.blood === value)
-    const checkIDExist = value => data.some(d => d.id === value)
+    const checkBloodExist = blood => apiCheckPatientExists({ blood }).then(res => res.data)
+    const checkIDExist = id => apiCheckPatientExists({ id }).then(res => res.data)
 
     const handleDelete = () => {
         setId('')
@@ -87,22 +89,23 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
         setAge(0)
     }
 
-    const handleChange = (value, name) => {
+    const handleChange = useDebouncedCallback((value, name) => {
         switch (name) {
             case 'id':
-                setValidID(verifyID(value))
-                setIdUsed(checkIDExist(value))
+                const isValid = verifyID(value)
+                setValidID(isValid)
+                isValid && checkIDExist(value).then(exist => setIdUsed(exist))
                 break
             case 'phone':
                 setValidPhone(verifyPhone(value))
                 break
             case 'blood':
-                setBloodUsed(checkBloodExist(value))
+                checkBloodExist(value).then(exist => setBloodUsed(exist))
                 break
             default:
                 break
         }
-    }
+    }, 500)
 
     const handleHelperText = name => {
         switch (name) {
@@ -123,6 +126,29 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
             .filter(key => key)
         setErrorField(errorFieldList)
         return errorFieldList.length !== 0
+    }
+
+    const handleSubmit = async data => {
+        try {
+            if (hasEmptyField() || idUsed || !validID || !validPhone) return
+            await sendData(data)
+            if (mode === 'create') {
+                dispatch(openAlert({ title: '新增成功', icon: 'success' }))
+                handleDelete()
+            }
+            if (mode === 'edit') {
+                dispatch(closeDialog({ type: 'patient' }))
+                dispatch(
+                    openAlert({
+                        title: '修改成功',
+                        text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                        icon: 'success',
+                    })
+                )
+            }
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     const inputModel = [
@@ -170,8 +196,7 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                         <Button
                             variant="contained"
                             className={classes.button}
-                            onClick={() => {
-                                if (hasEmptyField() || idUsed || !validID || !validPhone) return
+                            onClick={() =>
                                 handleSubmit({
                                     id,
                                     blood,
@@ -183,19 +208,8 @@ const CustomForm = ({ title, row, mode, handleSubmit }) => {
                                     gender,
                                     age,
                                     processing: mode === 'create' ? autoProcessSwitch : row.processing,
-                                    reports: [],
                                 })
-                                mode === 'create' && handleDelete()
-                                mode === 'edit' && dispatch(closeDialog({ type: 'patient' }))
-                                mode === 'edit' &&
-                                    dispatch(
-                                        openAlert({
-                                            title: '修改成功',
-                                            text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
-                                            icon: 'success',
-                                        })
-                                    )
-                            }}
+                            }
                         >
                             {mode === 'create' ? '新增' : '修改'}
                         </Button>

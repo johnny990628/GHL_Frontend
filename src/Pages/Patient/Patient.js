@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useState, useMemo, useEffect } from 'react'
 import { Box, Accordion, AccordionSummary, AccordionDetails, IconButton } from '@mui/material'
 import { CalendarToday, ArrowDropDown, Delete, Edit, Cancel } from '@mui/icons-material'
 
@@ -8,15 +8,15 @@ import CustomForm from '../../Components/CustomForm/CustomForm'
 import EditDialog from '../../Components/CustomTable/EditDialog'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { addProcessing, removeProcessing, deletePatient, createPatient } from '../../Redux/Slices/Patient'
+import { addProcessing, removeProcessing, deletePatient, createPatient, fetchPatients } from '../../Redux/Slices/Patient'
 import { openDialog } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
 
 const Patient = () => {
     const classes = useStyles()
-    // const { data, loading } = useSelector(state => state.patients)
-    const { data } = useSelector(state => state.patients)
     const dispatch = useDispatch()
+
+    const { data, count, page } = useSelector(state => state.patients)
 
     const columns = useMemo(
         () => [
@@ -37,37 +37,22 @@ const Patient = () => {
                                     <Box className={classes.statusBox}>未排程</Box>
                                 )}
                             </Box>
-                            {!processing ? (
-                                <IconButton
-                                    onClick={() => {
-                                        dispatch(addProcessing({ patient: row.row.original }))
-                                        dispatch(
-                                            openAlert({
-                                                title: '新增排程',
-                                                text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
-                                                icon: 'success',
-                                            })
-                                        )
-                                    }}
-                                >
-                                    <CalendarToday />
-                                </IconButton>
-                            ) : (
-                                <IconButton
-                                    onClick={() => {
-                                        dispatch(removeProcessing({ patient: row.row.original }))
-                                        dispatch(
-                                            openAlert({
-                                                title: '取消排程',
-                                                text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
-                                                icon: 'warning',
-                                            })
-                                        )
-                                    }}
-                                >
-                                    <Cancel />
-                                </IconButton>
-                            )}
+
+                            <IconButton
+                                onClick={() => {
+                                    const { id, name, gender } = row.row.original
+                                    dispatch(processing ? addProcessing(id) : removeProcessing(id))
+                                    dispatch(
+                                        openAlert({
+                                            title: processing ? '新增排程' : '取消排程',
+                                            text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                                            icon: processing ? 'success' : 'warning',
+                                        })
+                                    )
+                                }}
+                            >
+                                {processing ? <Cancel /> : <CalendarToday />}
+                            </IconButton>
                         </Box>
                     )
                 },
@@ -106,7 +91,7 @@ const Patient = () => {
                                             text: `${row.row.original.name} ${row.row.original.gender === '男' ? '先生' : '小姐'}`,
                                             icon: 'success',
                                             isConfirm: true,
-                                            event: deletePatient({ id: row.row.original.id }),
+                                            event: () => dispatch(deletePatient(row.row.original.id)),
                                         })
                                     )
                                 }}
@@ -120,34 +105,21 @@ const Patient = () => {
         ],
         []
     )
-    const handleSubmit = ({ id, blood, name, address, phone, department, birth, gender, age, processing, reports }) => {
-        const formData = {
-            id,
-            blood,
-            name,
-            address,
-            phone,
-            department,
-            birth,
-            gender,
-            age,
-            processing,
-            reports,
-        }
-        dispatch(createPatient({ patient: formData }))
-        dispatch(openAlert({ title: '新增成功', icon: 'success' }))
-    }
+
+    const fetchData = useCallback(params => dispatch(fetchPatients(params)), [])
+
+    const sendData = useCallback(data => dispatch(createPatient(data), []))
 
     return (
         <Box className={classes.container}>
             <Accordion elevation={0} className={classes.accordion}>
                 <AccordionSummary expandIcon={<ArrowDropDown />} sx={{ flexDirection: 'column-reverse' }} />
                 <AccordionDetails>
-                    <CustomForm title="新增病人" handleSubmit={handleSubmit} mode="create" />
+                    <CustomForm title="新增病人" sendData={sendData} mode="create" />
                 </AccordionDetails>
             </Accordion>
 
-            <CustomTable data={data} columns={columns} />
+            <CustomTable columns={columns} fetchData={fetchData} data={data} totalPage={page} totalCount={count} />
             <EditDialog />
         </Box>
     )

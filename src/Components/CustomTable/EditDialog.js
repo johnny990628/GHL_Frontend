@@ -6,27 +6,14 @@ import { closeDialog } from '../../Redux/Slices/Dialog'
 import { updatePatient } from '../../Redux/Slices/Patient'
 
 import CustomForm from '../CustomForm/CustomForm'
+import { apiUpdatePatient } from '../../Axios/Patient'
 
 const EditDialog = () => {
     const { isOpen, row } = useSelector(state => state.dialog.patient)
 
     const dispatch = useDispatch()
 
-    const handleSubmit = ({ id, blood, name, address, phone, department, birth, gender, age, processing }) => {
-        const formData = {
-            id,
-            blood,
-            name,
-            address,
-            phone,
-            department,
-            birth,
-            gender,
-            age,
-            processing,
-        }
-        dispatch(updatePatient({ patient: formData }))
-    }
+    const handleSubmit = fields => apiUpdatePatient(fields.id, fields)
 
     return (
         <Dialog open={isOpen} onClose={() => dispatch(closeDialog({ type: 'patient' }))}>

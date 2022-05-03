@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import {
     Box,
     Button,
@@ -23,13 +23,9 @@ import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 import useStyles from './Style'
 
-const CustomTable = ({ data, columns, loading, renderSubRow }) => {
-    // const [pageSize, setPageSize] = useState(5)
-    // const [selectionModel, setSelectionModel] = useState([])
-    // const dispatch = useDispatch()
-
+const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalCount }) => {
     const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) => {
-        const count = preGlobalFilteredRows.length
+        // const count = preGlobalFilteredRows.length
         const [value, setValue] = useState(globalFilter)
 
         return (
@@ -48,7 +44,7 @@ const CustomTable = ({ data, columns, loading, renderSubRow }) => {
                     onKeyPress={e => {
                         e.key === 'Enter' && setGlobalFilter(value)
                     }}
-                    placeholder={`${count}筆資料...`}
+                    placeholder={`${totalCount}筆資料...`}
                     sx={{
                         marginRight: '1rem',
                     }}
@@ -77,7 +73,7 @@ const CustomTable = ({ data, columns, loading, renderSubRow }) => {
         prepareRow,
         preGlobalFilteredRows,
         setGlobalFilter,
-        state: { pageIndex, pageSize, globalFilter },
+        state: { pageIndex, pageSize, globalFilter, sortBy },
         canPreviousPage,
         canNextPage,
         pageOptions,
@@ -92,10 +88,13 @@ const CustomTable = ({ data, columns, loading, renderSubRow }) => {
             columns,
             data,
             initialState: {
-                sortBy: [{ id: 'updateTime', desc: true }],
+                sortBy: [{ id: 'createdAt', desc: true }],
+                pageIndex: 0,
             },
+            manualPagination: true,
+            pageCount: totalPage,
             autoResetSortBy: false,
-            autoResetPage: false,
+            autoResetPage: true,
             autoResetFilters: false,
         },
         useGlobalFilter,
@@ -103,6 +102,10 @@ const CustomTable = ({ data, columns, loading, renderSubRow }) => {
         useExpanded,
         usePagination
     )
+
+    useEffect(() => {
+        fetchData({ limit: pageSize, offset: pageIndex, sort: sortBy[0]?.id, desc: sortBy[0]?.desc ? -1 : 1 })
+    }, [pageIndex, pageSize, sortBy, totalCount])
 
     // const handleDelete = () => {
     //     dispatch(deleteAction(selectionModel))

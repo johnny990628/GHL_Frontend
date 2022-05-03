@@ -40,7 +40,7 @@ const CustomAlert = () => {
                               title: title,
                               text: text,
                           }).then(handleClose)
-                          dispatch(event)
+                          event()
                       } else {
                           handleClose()
                       }
