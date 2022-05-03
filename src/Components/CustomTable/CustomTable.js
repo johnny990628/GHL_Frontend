@@ -18,15 +18,17 @@ import {
 import { useTheme } from '@mui/styles'
 import { Search, ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 import { useTable, useGlobalFilter, usePagination, useSortBy, useExpanded } from 'react-table'
-
+import { useDebouncedCallback } from 'use-debounce'
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 import useStyles from './Style'
 
 const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalCount }) => {
+    const [search, setSearch] = useState('')
+
     const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) => {
         // const count = preGlobalFilteredRows.length
-        const [value, setValue] = useState(globalFilter)
+        const [value, setValue] = useState('')
 
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
@@ -34,17 +36,14 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
                 <Search sx={{ mr: 1 }} />
                 <TextField
                     variant="standard"
-                    value={value || ''}
+                    value={value}
                     onChange={e => {
                         setValue(e.target.value)
                     }}
-                    onBlur={e => {
-                        setGlobalFilter(value)
-                    }}
                     onKeyPress={e => {
-                        e.key === 'Enter' && setGlobalFilter(value)
+                        e.key === 'Enter' && setSearch(value)
                     }}
-                    placeholder={`${totalCount}筆資料...`}
+                    placeholder={`${search && `${search}...`}${totalCount}筆資料`}
                     sx={{
                         marginRight: '1rem',
                     }}
@@ -52,11 +51,22 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
                 <Button
                     variant="contained"
                     onClick={() => {
-                        setGlobalFilter(value)
+                        setSearch(value)
                     }}
-                    sx={{ fontSize: '1.1rem ', padding: '.1rem' }}
+                    sx={{ fontSize: '1.1rem ', padding: '.1rem', marginRight: '.5rem' }}
                 >
                     搜尋
+                </Button>
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        setValue('')
+                        setSearch('')
+                    }}
+                    sx={{ fontSize: '1.1rem ', padding: '.1rem' }}
+                    className={classes.clearButton}
+                >
+                    清除
                 </Button>
             </Box>
         )
@@ -104,8 +114,8 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
     )
 
     useEffect(() => {
-        fetchData({ limit: pageSize, offset: pageIndex, sort: sortBy[0]?.id, desc: sortBy[0]?.desc ? -1 : 1 })
-    }, [pageIndex, pageSize, sortBy, totalCount])
+        fetchData({ limit: pageSize, offset: pageIndex, search, sort: sortBy[0]?.id, desc: sortBy[0]?.desc ? -1 : 1 })
+    }, [pageIndex, pageSize, sortBy, search, totalCount])
 
     // const handleDelete = () => {
     //     dispatch(deleteAction(selectionModel))

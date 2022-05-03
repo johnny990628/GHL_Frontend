@@ -35,6 +35,9 @@ const useStyles = makeStyles(theme => ({
     scrollbar: {
         backgroundColor: theme.palette.primary.light,
     },
+    clearButton: {
+        backgroundColor: theme.palette.contrast.main,
+    },
 }))
 
 export default useStyles
