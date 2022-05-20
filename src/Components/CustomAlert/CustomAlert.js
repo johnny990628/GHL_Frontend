@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Snackbar, Alert } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import Swal from 'sweetalert2'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { closeAlert } from '../../Redux/Slices/Alert'
+import { apiCheckPatientExists } from '../../Axios/Patient'
 
 const CustomAlert = () => {
     const dispatch = useDispatch()
     const theme = useTheme()
-    const { isOpen, isConfirm, title, text, icon, event } = useSelector(state => state.alert)
+    const { isOpen, type, toastTitle, alertTitle, text, icon, event } = useSelector(state => state.alert)
 
     const Toast = Swal.mixin({
         toast: true,
@@ -25,44 +25,70 @@ const CustomAlert = () => {
 
     useEffect(() => {
         if (isOpen) {
-            isConfirm
-                ? Swal.fire({
-                      title: '確定執行此操作?',
-                      backdrop: false,
-                      showCancelButton: true,
-                      confirmButtonText: '確定',
-                      confirmButtonColor: theme.palette.primary.main,
-                      cancelButtonText: `取消`,
-                  }).then(result => {
-                      if (result.isConfirmed) {
-                          Toast.fire({
-                              icon: icon,
-                              title: title,
-                              text: text,
-                          }).then(handleClose)
-                          event()
-                      } else {
-                          handleClose()
-                      }
-                  })
-                : Toast.fire({
-                      icon: icon,
-                      title: title,
-                      text: text,
-                  }).then(handleClose)
+            switch (type) {
+                case 'confirm':
+                    Swal.fire({
+                        title: alertTitle,
+                        backdrop: false,
+                        showCancelButton: true,
+                        confirmButtonText: '確定',
+                        confirmButtonColor: theme.palette.primary.main,
+                        cancelButtonText: `取消`,
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            event().then(() =>
+                                Toast.fire({
+                                    icon: icon,
+                                    title: toastTitle,
+                                    text: text,
+                                }).then(handleClose)
+                            )
+                        } else {
+                            handleClose()
+                        }
+                    })
+                    break
+                case 'input':
+                    Swal.fire({
+                        title: alertTitle,
+                        input: 'text',
+                        backdrop: false,
+                        showCancelButton: true,
+                        confirmButtonText: '確定',
+                        confirmButtonColor: theme.palette.primary.main,
+                        cancelButtonText: `取消`,
+                        inputValidator: text => {
+                            return !text && '輸入點什麼吧'
+                        },
+                        preConfirm: async text => {
+                            const { data } = await apiCheckPatientExists({ blood: text })
+                            return !data ? event(text) : Swal.showValidationMessage('此編號已經存在')
+                        },
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            Toast.fire({
+                                icon,
+                                title: toastTitle,
+                                text,
+                            }).then(handleClose)
+                        } else {
+                            handleClose()
+                        }
+                    })
+                    break
+                default:
+                    Toast.fire({
+                        icon,
+                        title: toastTitle,
+                        text,
+                    }).then(handleClose)
+            }
         }
     }, [isOpen])
 
     const handleClose = () => dispatch(closeAlert())
 
-    return (
-        <div />
-        // <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={isOpen} autoHideDuration={3000} onClose={handleClose}>
-        //     {/* <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-        //         {message}
-        //     </Alert> */}
-        // </Snackbar>
-    )
+    return <div />
 }
 
 export default CustomAlert

@@ -22,7 +22,7 @@ const CustomForm = ({ title, row, mode, sendData }) => {
     const [phone, setPhone] = useState('')
     const [department, setDepartment] = useState('')
     const [birth, setBirth] = useState(null)
-    const [gender, setGender] = useState('女')
+    const [gender, setGender] = useState('男')
     const [age, setAge] = useState(0)
     const [qrcode, setQrcode] = useState(null)
     const [errorField, setErrorField] = useState([])
@@ -121,7 +121,7 @@ const CustomForm = ({ title, row, mode, sendData }) => {
     }
 
     const hasEmptyField = () => {
-        const errorFieldList = Object.entries({ id, blood, name, address, phone, birth, gender })
+        const errorFieldList = Object.entries({ id, name, address, phone, birth, gender })
             .map(([key, value]) => !value && key)
             .filter(key => key)
         setErrorField(errorFieldList)
@@ -133,14 +133,14 @@ const CustomForm = ({ title, row, mode, sendData }) => {
             if (hasEmptyField() || idUsed || !validID || !validPhone) return
             await sendData(data)
             if (mode === 'create') {
-                dispatch(openAlert({ title: '新增成功', icon: 'success' }))
+                dispatch(openAlert({ toastTitle: '新增成功', icon: 'success' }))
                 handleDelete()
             }
             if (mode === 'edit') {
                 dispatch(closeDialog({ type: 'patient' }))
                 dispatch(
                     openAlert({
-                        title: '修改成功',
+                        toastTitle: '修改成功',
                         text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
                         icon: 'success',
                     })
@@ -152,7 +152,6 @@ const CustomForm = ({ title, row, mode, sendData }) => {
     }
 
     const inputModel = [
-        { name: 'blood', label: '抽血編號', value: blood, setValue: setBlood, required: true },
         { name: 'id', label: '身分證字號', value: id, setValue: setId, required: true },
         { name: 'name', label: '姓名', value: name, setValue: setName, required: true },
         { name: 'address', label: '地址', value: address, setValue: setAddress, required: true },
@@ -191,6 +190,7 @@ const CustomForm = ({ title, row, mode, sendData }) => {
                             age={age}
                         />
                     ))}
+
                     <Box sx={{ display: 'flex', flexDirection: 'column', width: '70%', alignItems: 'center' }}>
                         {mode === 'create' && <QRScanner onResult={res => setQrcode(JSON.parse(res))} />}
                         <Button
@@ -199,15 +199,12 @@ const CustomForm = ({ title, row, mode, sendData }) => {
                             onClick={() =>
                                 handleSubmit({
                                     id,
-                                    blood,
                                     name,
                                     address,
                                     phone,
                                     department,
                                     birth,
                                     gender,
-                                    age,
-                                    processing: mode === 'create' ? autoProcessSwitch : row.processing,
                                 })
                             }
                         >

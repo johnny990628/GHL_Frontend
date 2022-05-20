@@ -11,6 +11,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addProcessing, removeProcessing, deletePatient, createPatient, fetchPatients } from '../../Redux/Slices/Patient'
 import { openDialog } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
+import { apiAddSchedule, apiRemoveSchedule } from '../../Axios/Schedule'
+import { apiCreateReport } from '../../Axios/Report'
+import { apiAddBlood, apiRemoveBlood } from '../../Axios/Blood'
+import axios from 'axios'
+import { apiCheckPatientExists } from '../../Axios/Patient'
 
 const Patient = () => {
     const classes = useStyles()
@@ -26,38 +31,39 @@ const Patient = () => {
                 },
                 Header: '排程',
                 Cell: row => {
-                    const { processing, name, gender } = row.row.original
+                    const { name, gender } = row.row.original
 
                     return (
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Box className={`${classes.status} ${processing && 'processing'}`}>
+                            {/* <Box className={`${classes.status} ${processing && 'processing'}`}>
                                 {processing ? (
                                     <Box className={classes.statusBox}>排程中</Box>
                                 ) : (
                                     <Box className={classes.statusBox}>未排程</Box>
                                 )}
-                            </Box>
+                            </Box> */}
 
                             <IconButton
                                 onClick={() => {
                                     const { id, name, gender } = row.row.original
-                                    dispatch(processing ? addProcessing(id) : removeProcessing(id))
                                     dispatch(
                                         openAlert({
-                                            title: processing ? '新增排程' : '取消排程',
+                                            alertTitle: '請輸入抽血編號',
+                                            toastTitle: '加入排程成功',
                                             text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
-                                            icon: processing ? 'success' : 'warning',
+                                            type: 'input',
+                                            event: text => dispatch(addProcessing({ patientID: id, procedureCode: '19009C', blood: text })),
                                         })
                                     )
                                 }}
                             >
-                                {processing ? <Cancel /> : <CalendarToday />}
+                                <CalendarToday />
                             </IconButton>
                         </Box>
                     )
                 },
             },
-            { accessor: 'blood', Header: '抽血編號' },
+            // { accessor: 'blood', Header: '抽血編號' },
             { accessor: 'id', Header: '身分證字號' },
             { accessor: 'name', Header: '姓名' },
             { accessor: 'gender', Header: '性別' },
@@ -74,6 +80,7 @@ const Patient = () => {
                 accessor: 'action',
                 Header: '操作',
                 Cell: row => {
+                    const { name, gender, blood, schedule, id } = row.row.original
                     return (
                         <Box>
                             <IconButton
@@ -87,11 +94,19 @@ const Patient = () => {
                                 onClick={() => {
                                     dispatch(
                                         openAlert({
-                                            title: '刪除成功',
-                                            text: `${row.row.original.name} ${row.row.original.gender === '男' ? '先生' : '小姐'}`,
+                                            alertTitle: '確定刪除該病患?將會刪除所有相關資料',
+                                            toastTitle: '刪除成功',
+                                            text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
                                             icon: 'success',
-                                            isConfirm: true,
-                                            event: () => dispatch(deletePatient(row.row.original.id)),
+                                            type: 'confirm',
+                                            event: () =>
+                                                dispatch(
+                                                    deletePatient({
+                                                        patientID: id,
+                                                        blood: blood ? blood.number : null,
+                                                        scheduleID: schedule.length > 0 ? schedule[0]._id : null,
+                                                    })
+                                                ),
                                         })
                                     )
                                 }}

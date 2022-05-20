@@ -30,7 +30,6 @@ import CustomReportForm from '../CustomReport/CustomReportForm'
 import ReportFormHtml from './ReportFormHtml'
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 import { fillReport, resetReport } from '../../Redux/Slices/Report'
-import { updateReport } from '../../Redux/Slices/Patient'
 import { openAlert } from '../../Redux/Slices/Alert'
 
 const ReportDialog = ({ mode }) => {
@@ -67,7 +66,7 @@ const ReportDialog = ({ mode }) => {
     const handleEdit = () => {
         // 點擊編輯按鈕後判斷目前Dialog狀態，如果為編輯狀態則儲存
         if (isEditing) {
-            dispatch(updateReport({ patient, reportID, report: currentReport }))
+            // dispatch(updateReport({ patient, reportID, report: currentReport }))
             dispatch(openAlert({ title: '修改成功', icon: 'success' }))
             handleClose()
         } else {

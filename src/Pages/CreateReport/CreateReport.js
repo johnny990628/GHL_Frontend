@@ -14,7 +14,7 @@ import Liver from '../../Assets/OrganJson/liver.json'
 import Pancreas from '../../Assets/OrganJson/pancreas.json'
 import Spleen from '../../Assets/OrganJson/spleen.json'
 import Suggestion from '../../Assets/OrganJson/suggestion.json'
-import { addReport } from '../../Redux/Slices/Patient'
+
 import { resetReport } from '../../Redux/Slices/Report'
 import { v4 } from 'uuid'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
@@ -47,7 +47,7 @@ const CreateReport = () => {
     }, [])
 
     const handleReportSubmit = () => {
-        dispatch(addReport({ patient, report }))
+        // dispatch(addReport({ patient, report }))
     }
 
     const columns = [

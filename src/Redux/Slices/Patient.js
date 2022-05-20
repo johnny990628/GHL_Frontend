@@ -1,5 +1,8 @@
-import { apiCreatePatient, apiDeletePatient, apiGetPatients, apiUpdatePatient, apiCreateReport, apiUpdateReport } from '../../Axios/Patient'
+import { apiCreatePatient, apiDeletePatient, apiGetPatients, apiUpdatePatient } from '../../Axios/Patient'
+import { apiAddSchedule, apiRemoveSchedule } from '../../Axios/Schedule'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { apiAddBlood, apiRemoveBlood } from '../../Axios/Blood'
+import { apiCreateReport } from '../../Axios/Report'
 
 const patients = [
     {
@@ -128,28 +131,31 @@ export const createPatient = createAsyncThunk('patients/createPatient', async da
     }
 })
 
-export const updatePatient = createAsyncThunk('patients/updatePatient', async ({ patient }) => {
+export const updatePatient = createAsyncThunk('patients/updatePatient', async data => {
     try {
-        const response = await apiUpdatePatient(patient.id, patient)
+        const response = await apiUpdatePatient(data.id, data)
         return response.data
     } catch (e) {
         return e
     }
 })
 
-export const deletePatient = createAsyncThunk('patients/deletePatient', async id => {
+export const deletePatient = createAsyncThunk('patients/deletePatient', async ({ patientID, blood, scheduleID }) => {
     try {
-        const response = await apiDeletePatient(id)
-        return response.data
+        const patientResponse = await apiDeletePatient(patientID)
+        blood && (await apiRemoveBlood(blood))
+        scheduleID && (await apiRemoveSchedule(scheduleID))
+        return patientResponse.data
     } catch (e) {
         return e
     }
 })
 
-export const addProcessing = createAsyncThunk('patients/addProcessing', async id => {
+export const addProcessing = createAsyncThunk('patients/addProcessing', async ({ patientID, procedureCode, blood }) => {
     try {
-        const response = await apiUpdatePatient(id, { processing: true })
-        return response.data
+        await apiAddBlood({ patientID, number: blood })
+        await apiAddSchedule({ patientID, procedureCode })
+        await apiCreateReport({ patientID, procedureCode, blood })
     } catch (e) {
         return e
     }
@@ -158,24 +164,6 @@ export const addProcessing = createAsyncThunk('patients/addProcessing', async id
 export const removeProcessing = createAsyncThunk('patients/removeProcessing', async id => {
     try {
         const response = await apiUpdatePatient(id, { processing: false })
-        return response.data
-    } catch (e) {
-        return e
-    }
-})
-
-export const addReport = createAsyncThunk('patients/addReport', async ({ patient, report }) => {
-    try {
-        const response = await apiCreateReport(patient.id, { report })
-        return response.data
-    } catch (e) {
-        return e
-    }
-})
-
-export const updateReport = createAsyncThunk('patients/updateReport', async ({ patient, reportID, report }) => {
-    try {
-        const response = await apiUpdateReport(patient.id, reportID, { report })
         return response.data
     } catch (e) {
         return e
@@ -261,11 +249,10 @@ const patientsSlice = createSlice({
             }
         },
         [addProcessing.fulfilled]: (state, action) => {
-            const patient = action.payload
             return {
                 ...state,
                 loading: false,
-                data: state.data.map(row => (row.id === patient.id ? patient : row)),
+                count: 0,
             }
         },
         [removeProcessing.fulfilled]: (state, action) => {
@@ -274,24 +261,25 @@ const patientsSlice = createSlice({
                 ...state,
                 loading: false,
                 data: state.data.map(row => (row.id === patient.id ? patient : row)),
+                count: 0,
             }
         },
-        [addReport.fulfilled]: (state, action) => {
-            const patient = action.payload
-            return {
-                ...state,
-                loading: false,
-                data: state.data.map(row => (row.id === patient.id ? patient : row)),
-            }
-        },
-        [updateReport.fulfilled]: (state, action) => {
-            const patient = action.payload
-            return {
-                ...state,
-                loading: false,
-                data: state.data.map(row => (row.id === patient.id ? patient : row)),
-            }
-        },
+        // [addReport.fulfilled]: (state, action) => {
+        //     const patient = action.payload
+        //     return {
+        //         ...state,
+        //         loading: false,
+        //         data: state.data.map(row => (row.id === patient.id ? patient : row)),
+        //     }
+        // },
+        // [updateReport.fulfilled]: (state, action) => {
+        //     const patient = action.payload
+        //     return {
+        //         ...state,
+        //         loading: false,
+        //         data: state.data.map(row => (row.id === patient.id ? patient : row)),
+        //     }
+        // },
     },
 })
 

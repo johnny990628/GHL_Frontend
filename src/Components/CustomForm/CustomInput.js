@@ -42,16 +42,18 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
 
     const GenderPicker = () => {
         return (
-            <FormControl className={classes.textField}>
-                <FormLabel id="genderPicker" sx={{ fontSize: '1.5rem' }}>
-                    性別
-                </FormLabel>
-                <RadioGroup row aria-labelledby="genderPicker" value={value} onChange={e => setValue(e.target.value)}>
-                    <FormControlLabel value="女" control={<Radio />} label={<Box className={classes.labelText}>女</Box>} />
-                    <FormControlLabel value="男" control={<Radio />} label={<Box className={classes.labelText}>男</Box>} />
-                    <FormControlLabel value="其他" control={<Radio />} label={<Box className={classes.labelText}>其他</Box>} />
-                </RadioGroup>
-            </FormControl>
+            <>
+                <FormControl className={classes.textField}>
+                    <FormLabel id="genderPicker" sx={{ fontSize: '1.5rem' }}>
+                        性別
+                    </FormLabel>
+                    <RadioGroup row aria-labelledby="genderPicker" value={value} onChange={e => setValue(e.target.value)}>
+                        <FormControlLabel value="男" control={<Radio />} label={<Box className={classes.labelText}>男</Box>} />
+                        <FormControlLabel value="女" control={<Radio />} label={<Box className={classes.labelText}>女</Box>} />
+                    </RadioGroup>
+                </FormControl>
+                <Box className={classes.textField} />
+            </>
         )
     }
 

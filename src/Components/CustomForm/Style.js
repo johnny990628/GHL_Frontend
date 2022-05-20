@@ -22,6 +22,7 @@ const useStyles = makeStyles(theme => ({
             width: '15rem',
         },
     },
+
     formBody: {
         display: 'flex',
         justifyContent: 'center',
