@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { apiUpdateReport } from '../../Axios/Report'
+import { apiDeleteScheduleAndBloodAndReport } from '../../Axios/Schedule'
 
 const initialState = {
     create: {
@@ -18,6 +20,16 @@ const initialState = {
         suggestion: [],
     },
 }
+
+export const createReport = createAsyncThunk('report/createReport', async ({ patientID, reportID, data }) => {
+    try {
+        const response = await apiUpdateReport({ reportID, data })
+        await apiDeleteScheduleAndBloodAndReport(patientID)
+        return response.data
+    } catch (e) {
+        return e
+    }
+})
 
 const reportSlice = createSlice({
     name: 'report',
@@ -54,6 +66,11 @@ const reportSlice = createSlice({
                 spleen: [],
                 suggestion: [],
             }
+        },
+    },
+    extraReducers: {
+        [createReport.fulfilled]: (state, action) => {
+            return initialState
         },
     },
 })

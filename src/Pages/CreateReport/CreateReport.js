@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Box, Stepper, Step, StepLabel, IconButton, Button } from '@mui/material'
-import { ArrowBack, ArrowForward, CheckCircleOutline } from '@mui/icons-material'
+import { ArrowBack, ArrowForward, CheckCircleOutline, Cancel } from '@mui/icons-material'
 import { useTheme } from '@mui/styles'
 import useStyles from './Style'
 
@@ -15,17 +15,18 @@ import Pancreas from '../../Assets/OrganJson/pancreas.json'
 import Spleen from '../../Assets/OrganJson/spleen.json'
 import Suggestion from '../../Assets/OrganJson/suggestion.json'
 
-import { resetReport } from '../../Redux/Slices/Report'
-import { v4 } from 'uuid'
+import { createReport, resetReport } from '../../Redux/Slices/Report'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import { openDialog } from '../../Redux/Slices/Dialog'
+import { apiDeleteScheduleAndBloodAndReport, apiGetSchdules } from '../../Axios/Schedule'
+import { openAlert } from '../../Redux/Slices/Alert'
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
     const [selection, setSelection] = useState([])
+    const [schedules, setSchedules] = useState([])
     const [patient, setPatient] = useState({})
     const steps = ['選擇病人', '新增報告', '完成']
-    const { data } = useSelector(state => state.patients)
     const report = useSelector(state => state.report.create)
 
     const dispatch = useDispatch()
@@ -33,10 +34,16 @@ const CreateReport = () => {
     const theme = useTheme()
 
     useEffect(() => {
-        setPatient(data.find(d => d.id === selection[0]))
-    }, [selection, data])
+        if (selection.length > 0) {
+            const { patient, reportID, reports } = schedules.find(s => s.patientID === selection[0])
+            setPatient({ ...patient, reportID, reports })
+        }
+    }, [selection])
 
     useEffect(() => {
+        if (currentStep === 0) {
+            getSchedulesThenSetState()
+        }
         if (currentStep === 2) {
             handleReportSubmit()
         }
@@ -47,18 +54,33 @@ const CreateReport = () => {
     }, [])
 
     const handleReportSubmit = () => {
-        // dispatch(addReport({ patient, report }))
+        dispatch(createReport({ patientID: patient.id, reportID: patient.reportID, data: { report, status: 'finished' } }))
     }
+
+    const getSchedulesThenSetState = () => apiGetSchdules({ procedureCode: '19009C' }).then(res => setSchedules(res.data.results))
 
     const columns = [
         {
             field: 'processing',
-            headerName: '排程',
+            headerName: '取消排程',
             renderCell: params => {
                 return (
-                    <Box className={classes.status}>
-                        <Box className={classes.statusBox}>排程中</Box>
-                    </Box>
+                    <IconButton
+                        onClick={() => {
+                            const { id, name, gender } = params.row
+                            dispatch(
+                                openAlert({
+                                    alertTitle: `確定要取消 ${name} ${gender === '男' ? '先生' : '小姐'}的排程?`,
+                                    toastTitle: '加入排程成功',
+                                    text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                                    type: 'confirm',
+                                    event: () => apiDeleteScheduleAndBloodAndReport(id).then(getSchedulesThenSetState),
+                                })
+                            )
+                        }}
+                    >
+                        <Cancel />
+                    </IconButton>
                 )
             },
         },
@@ -105,7 +127,7 @@ const CreateReport = () => {
                 <Box className={classes.tableContainer}>
                     {currentStep === 0 && (
                         <CustomDataGrid
-                            data={data.filter(row => row.processing)}
+                            data={schedules.map(s => s.patient)}
                             columns={columns}
                             selection={selection}
                             setSelection={setSelection}

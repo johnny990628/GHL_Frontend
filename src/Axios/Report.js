@@ -8,4 +8,4 @@ const reportRequest = axios.create({
 })
 
 export const apiCreateReport = body => reportRequest.post(`/report`, body)
-export const apiUpdateReport = (patientID, reportID, body) => reportRequest.patch(`/report/${patientID}/${reportID}`, body)
+export const apiUpdateReport = ({ reportID, data }) => reportRequest.patch(`/report/${reportID}`, data)

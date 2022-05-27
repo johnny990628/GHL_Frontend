@@ -17,18 +17,25 @@ const ReportList = ({ patient }) => {
             <Box className={classes.formLabel}>歷史報告</Box>
             <List>
                 {patient.reports.map((report, index) => (
-                    <ListItem
-                        key={report.id}
-                        classes={{ root: classes.reportListItem }}
-                        onClick={() => handleClick({ reports: { id: report._id, records: report.records } })}
-                    >
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <Assignment />
-                            </ListItemIcon>
-                            <ListItemText primary={`第${index + 1}次`} secondary={new Date(report.createdAt).toLocaleDateString()} />
-                        </ListItemButton>
-                    </ListItem>
+                    <>
+                        {report.status === 'finished' && (
+                            <ListItem
+                                key={report._id}
+                                classes={{ root: classes.reportListItem }}
+                                onClick={() => handleClick({ reports: { id: report._id, records: report.records } })}
+                            >
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        <Assignment />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={`第${index + 1}次報告`}
+                                        secondary={new Date(report.createdAt).toLocaleDateString()}
+                                    />
+                                </ListItemButton>
+                            </ListItem>
+                        )}
+                    </>
                 ))}
             </List>
         </CustomScrollbar>

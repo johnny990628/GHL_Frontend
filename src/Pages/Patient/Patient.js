@@ -11,11 +11,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addProcessing, removeProcessing, deletePatient, createPatient, fetchPatients } from '../../Redux/Slices/Patient'
 import { openDialog } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
-import { apiAddSchedule, apiRemoveSchedule } from '../../Axios/Schedule'
-import { apiCreateReport } from '../../Axios/Report'
-import { apiAddBlood, apiRemoveBlood } from '../../Axios/Blood'
-import axios from 'axios'
-import { apiCheckPatientExists } from '../../Axios/Patient'
 
 const Patient = () => {
     const classes = useStyles()
@@ -80,7 +75,7 @@ const Patient = () => {
                 accessor: 'action',
                 Header: '操作',
                 Cell: row => {
-                    const { name, gender, blood, schedule, id } = row.row.original
+                    const { name, gender, id } = row.row.original
                     return (
                         <Box>
                             <IconButton
@@ -99,14 +94,7 @@ const Patient = () => {
                                             text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
                                             icon: 'success',
                                             type: 'confirm',
-                                            event: () =>
-                                                dispatch(
-                                                    deletePatient({
-                                                        patientID: id,
-                                                        blood: blood ? blood.number : null,
-                                                        scheduleID: schedule.length > 0 ? schedule[0]._id : null,
-                                                    })
-                                                ),
+                                            event: () => dispatch(deletePatient({ patientID: id })),
                                         })
                                     )
                                 }}
