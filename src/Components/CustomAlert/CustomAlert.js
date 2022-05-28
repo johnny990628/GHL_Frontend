@@ -4,12 +4,11 @@ import Swal from 'sweetalert2'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { closeAlert } from '../../Redux/Slices/Alert'
-import { apiCheckPatientExists } from '../../Axios/Patient'
 
 const CustomAlert = () => {
     const dispatch = useDispatch()
     const theme = useTheme()
-    const { isOpen, type, toastTitle, alertTitle, text, icon, event } = useSelector(state => state.alert)
+    const { isOpen, type, toastTitle, alertTitle, text, icon, event, preConfirm } = useSelector(state => state.alert)
 
     const Toast = Swal.mixin({
         toast: true,
@@ -61,8 +60,8 @@ const CustomAlert = () => {
                             return !text && '輸入點什麼吧'
                         },
                         preConfirm: async text => {
-                            const { data } = await apiCheckPatientExists({ blood: text })
-                            return !data ? event(text) : Swal.showValidationMessage('此編號已經存在')
+                            const { exists, warning } = await preConfirm(text)
+                            return !exists ? event(text) : Swal.showValidationMessage(warning)
                         },
                     }).then(result => {
                         if (result.isConfirmed) {

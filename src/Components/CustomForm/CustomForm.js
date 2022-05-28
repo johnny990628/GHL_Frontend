@@ -13,6 +13,7 @@ import QRScanner from '../QRScanner/QRScanner'
 import CustomInput from './CustomInput'
 import { verifyID, verifyPhone } from '../../Utils/Verify'
 import { apiCheckPatientExists } from '../../Axios/Patient'
+import { apiCheckExists } from '../../Axios/Exists'
 
 const CustomForm = ({ title, row, mode, sendData }) => {
     const [id, setId] = useState('')
@@ -74,8 +75,7 @@ const CustomForm = ({ title, row, mode, sendData }) => {
         }
     }, [qrcode])
 
-    const checkBloodExist = blood => apiCheckPatientExists({ blood }).then(res => res.data)
-    const checkIDExist = id => apiCheckPatientExists({ id }).then(res => res.data)
+    const checkExists = data => apiCheckExists(data).then(res => res.data)
 
     const handleDelete = () => {
         setId('')
@@ -94,13 +94,13 @@ const CustomForm = ({ title, row, mode, sendData }) => {
             case 'id':
                 const isValid = verifyID(value)
                 setValidID(isValid)
-                isValid && checkIDExist(value).then(exist => setIdUsed(exist))
+                isValid && checkExists({ type: 'patient', value }).then(exist => setIdUsed(exist))
                 break
             case 'phone':
                 setValidPhone(verifyPhone(value))
                 break
             case 'blood':
-                checkBloodExist(value).then(exist => setBloodUsed(exist))
+                checkExists({ type: 'blood', value }).then(exist => setBloodUsed(exist))
                 break
             default:
                 break

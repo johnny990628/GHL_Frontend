@@ -37,32 +37,32 @@ const Report = () => {
         dispatch(fetchReport(reportID))
     }
 
-    const renderSubRow = useCallback(({ row }) => {
-        return (
-            <Box>
-                <Box sx={{ fontSize: '1.5rem' }}>報告紀錄</Box>
-                <List sx={{ maxHeight: '200123.rem', overflowY: 'auto' }}>
-                    {row.original.reports.map((report, index) => (
-                        <ListItem
-                            key={report.id}
-                            disablePadding
-                            onClick={() => handleClick({ patient: row.original, reports: { id: report._id, records: report.records } })}
-                        >
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Assignment />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={`第${index + 1}次報告`}
-                                    secondary={`${new Date(report.updatedAt).toLocaleDateString()}_v${report.records.length}`}
-                                />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
-            </Box>
-        )
-    }, [])
+    // const renderSubRow = useCallback(({ row }) => {
+    //     return (
+    //         <Box>
+    //             <Box sx={{ fontSize: '1.5rem' }}>報告紀錄</Box>
+    //             <List sx={{ maxHeight: '200123.rem', overflowY: 'auto' }}>
+    //                 {row.original.reports.map((report, index) => (
+    //                     <ListItem
+    //                         key={report.id}
+    //                         disablePadding
+    //                         onClick={() => handleClick({ patient: row.original, reports: { id: report._id, records: report.records } })}
+    //                     >
+    //                         <ListItemButton>
+    //                             <ListItemIcon>
+    //                                 <Assignment />
+    //                             </ListItemIcon>
+    //                             <ListItemText
+    //                                 primary={`第${index + 1}次報告`}
+    //                                 secondary={`${new Date(report.updatedAt).toLocaleDateString()}_v${report.records.length}`}
+    //                             />
+    //                         </ListItemButton>
+    //                     </ListItem>
+    //                 ))}
+    //             </List>
+    //         </Box>
+    //     )
+    // }, [])
 
     const columns = useMemo(
         () => [

@@ -7,7 +7,7 @@ const alertSlice = createSlice({
     initialState,
     reducers: {
         openAlert: (state, action) => {
-            const { toastTitle, alertTitle, text, icon = 'success', type, event } = action.payload
+            const { toastTitle, alertTitle, text, icon = 'success', type, event, preConfirm } = action.payload
             return {
                 isOpen: true,
                 alertTitle,
@@ -16,6 +16,7 @@ const alertSlice = createSlice({
                 icon,
                 type,
                 event,
+                preConfirm,
             }
         },
         closeAlert: state => {

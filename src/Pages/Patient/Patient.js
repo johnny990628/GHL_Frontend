@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addProcessing, removeProcessing, deletePatient, createPatient, fetchPatients } from '../../Redux/Slices/Patient'
 import { openDialog } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
+import { apiCheckExists } from '../../Axios/Exists'
 
 const Patient = () => {
     const classes = useStyles()
@@ -45,6 +46,14 @@ const Patient = () => {
                                         text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
                                         type: 'input',
                                         event: text => dispatch(addProcessing({ patientID: id, procedureCode: '19009C', blood: text })),
+                                        preConfirm: async text => {
+                                            const { data: blood } = await apiCheckExists({ type: 'blood', value: text })
+                                            const { data: schedule } = await apiCheckExists({ type: 'schedule', value: id })
+                                            let warning = ''
+                                            if (blood) warning += '此編號已被使用 '
+                                            if (schedule) warning += '此病人已在排程中'
+                                            return { exists: blood || schedule, warning }
+                                        },
                                     })
                                 )
                             }}
