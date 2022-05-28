@@ -31,6 +31,15 @@ export const createReport = createAsyncThunk('report/createReport', async ({ pat
     }
 })
 
+export const updateReport = createAsyncThunk('report/updateReport', async ({ reportID, data }) => {
+    try {
+        const response = await apiUpdateReport({ reportID, data })
+        return response.data
+    } catch (e) {
+        return e
+    }
+})
+
 const reportSlice = createSlice({
     name: 'report',
     initialState,
@@ -70,6 +79,9 @@ const reportSlice = createSlice({
     },
     extraReducers: {
         [createReport.fulfilled]: (state, action) => {
+            return initialState
+        },
+        [updateReport.fulfilled]: (state, action) => {
             return initialState
         },
     },

@@ -5,6 +5,7 @@ import { useTheme } from '@mui/styles'
 import useStyles from './Style'
 
 import { useDispatch, useSelector } from 'react-redux'
+import { v4 } from 'uuid'
 
 import CustomDataGrid from '../../Components/CustomDataGrid/CustomDataGrid'
 import CustomReportForm from '../../Components/CustomReport/CustomReportForm'
@@ -17,7 +18,7 @@ import Suggestion from '../../Assets/OrganJson/suggestion.json'
 
 import { createReport, resetReport } from '../../Redux/Slices/Report'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
-import { openDialog } from '../../Redux/Slices/Dialog'
+import { fetchReport, openDialog } from '../../Redux/Slices/Dialog'
 import { apiDeleteScheduleAndBloodAndReport, apiGetSchdules } from '../../Axios/Schedule'
 import { openAlert } from '../../Redux/Slices/Alert'
 
@@ -54,7 +55,13 @@ const CreateReport = () => {
     }, [])
 
     const handleReportSubmit = () => {
-        dispatch(createReport({ patientID: patient.id, reportID: patient.reportID, data: { report, status: 'finished' } }))
+        dispatch(
+            createReport({
+                patientID: patient.id,
+                reportID: patient.reportID,
+                data: { report: { ...report, id: v4() }, status: 'finished' },
+            })
+        )
     }
 
     const getSchedulesThenSetState = () => apiGetSchdules({ procedureCode: '19009C' }).then(res => setSchedules(res.data.results))
@@ -96,14 +103,14 @@ const CreateReport = () => {
             },
         },
         { field: 'phone', headerName: '電話', flex: 1 },
-        {
-            field: 'updateTime',
-            headerName: '排程時間',
-            flex: 1,
-            renderCell: params => {
-                return <Box>{new Date(params.row.updatedAt).toLocaleTimeString()}</Box>
-            },
-        },
+        // {
+        //     field: 'updateTime',
+        //     headerName: '排程時間',
+        //     flex: 1,
+        //     renderCell: params => {
+        //         return <Box>{new Date(params.row.createdAt).toLocaleTimeString()}</Box>
+        //     },
+        // },
     ]
 
     return (
@@ -164,22 +171,7 @@ const CreateReport = () => {
                                         },
                                     }}
                                     className={classes.button}
-                                    onClick={() => {
-                                        const reports = patient.reports
-                                        const { records } = reports[reports.length - 1]
-                                        dispatch(
-                                            openDialog({
-                                                type: 'report',
-                                                row: {
-                                                    patient,
-                                                    reports: {
-                                                        id: records._id,
-                                                        records,
-                                                    },
-                                                },
-                                            })
-                                        )
-                                    }}
+                                    onClick={() => dispatch(fetchReport(patient.reportID))}
                                 >
                                     預覽
                                 </Button>

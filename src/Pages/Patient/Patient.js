@@ -25,12 +25,9 @@ const Patient = () => {
                     return row.processing ? 1 : 0
                 },
                 Header: '排程',
-                Cell: row => {
-                    const { name, gender } = row.row.original
-
-                    return (
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            {/* <Box className={`${classes.status} ${processing && 'processing'}`}>
+                Cell: row => (
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        {/* <Box className={`${classes.status} ${processing && 'processing'}`}>
                                 {processing ? (
                                     <Box className={classes.statusBox}>排程中</Box>
                                 ) : (
@@ -38,25 +35,24 @@ const Patient = () => {
                                 )}
                             </Box> */}
 
-                            <IconButton
-                                onClick={() => {
-                                    const { id, name, gender } = row.row.original
-                                    dispatch(
-                                        openAlert({
-                                            alertTitle: '請輸入抽血編號',
-                                            toastTitle: '加入排程成功',
-                                            text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
-                                            type: 'input',
-                                            event: text => dispatch(addProcessing({ patientID: id, procedureCode: '19009C', blood: text })),
-                                        })
-                                    )
-                                }}
-                            >
-                                <CalendarToday />
-                            </IconButton>
-                        </Box>
-                    )
-                },
+                        <IconButton
+                            onClick={() => {
+                                const { id, name, gender } = row.row.original
+                                dispatch(
+                                    openAlert({
+                                        alertTitle: '請輸入抽血編號',
+                                        toastTitle: '加入排程成功',
+                                        text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                                        type: 'input',
+                                        event: text => dispatch(addProcessing({ patientID: id, procedureCode: '19009C', blood: text })),
+                                    })
+                                )
+                            }}
+                        >
+                            <CalendarToday />
+                        </IconButton>
+                    </Box>
+                ),
             },
             // { accessor: 'blood', Header: '抽血編號' },
             { accessor: 'id', Header: '身分證字號' },

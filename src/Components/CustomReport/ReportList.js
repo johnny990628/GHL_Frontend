@@ -3,14 +3,14 @@ import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from 
 import { Assignment } from '@mui/icons-material'
 import { useDispatch } from 'react-redux'
 import useStyles from './Style'
-import { openDialog } from '../../Redux/Slices/Dialog'
+import { fetchReport, openDialog } from '../../Redux/Slices/Dialog'
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 const ReportList = ({ patient }) => {
     const classes = useStyles()
     const dispatch = useDispatch()
-    const handleClick = ({ reports }) => {
-        dispatch(openDialog({ type: 'report', row: { patient, reports } }))
+    const handleClick = reportID => {
+        dispatch(fetchReport(reportID))
     }
     return (
         <CustomScrollbar>
@@ -19,11 +19,7 @@ const ReportList = ({ patient }) => {
                 {patient.reports.map((report, index) => (
                     <>
                         {report.status === 'finished' && (
-                            <ListItem
-                                key={report._id}
-                                classes={{ root: classes.reportListItem }}
-                                onClick={() => handleClick({ reports: { id: report._id, records: report.records } })}
-                            >
+                            <ListItem key={report._id} classes={{ root: classes.reportListItem }} onClick={() => handleClick(report._id)}>
                                 <ListItemButton>
                                     <ListItemIcon>
                                         <Assignment />

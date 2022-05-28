@@ -16,6 +16,7 @@ import {
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { Close, ConnectingAirportsOutlined, FormatListBulleted } from '@mui/icons-material'
+import { v4 } from 'uuid'
 
 import useStyles from './Style'
 
@@ -29,7 +30,7 @@ import { closeDialog } from '../../Redux/Slices/Dialog'
 import CustomReportForm from '../CustomReport/CustomReportForm'
 import ReportFormHtml from './ReportFormHtml'
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
-import { fillReport, resetReport } from '../../Redux/Slices/Report'
+import { updateReport, fillReport, resetReport } from '../../Redux/Slices/Report'
 import { openAlert } from '../../Redux/Slices/Alert'
 
 const ReportDialog = ({ mode }) => {
@@ -37,37 +38,37 @@ const ReportDialog = ({ mode }) => {
     const dispatch = useDispatch()
     const {
         isOpen,
-        row: { patient, reports },
+        row: { patient, records, reportID },
     } = useSelector(state => state.dialog.report)
     // reverse records and non-destructive
-    const reverseRecords = useMemo(() => [].concat(reports?.records).reverse(), [reports])
+    // const reverseRecords = useMemo(() => [].concat(records).reverse(), [records])
 
-    const currentReport = useSelector(state => state.report.edit)
-
-    const [records, setRecords] = useState([])
+    const report = useSelector(state => state.report.edit)
     const [version, setVersion] = useState('')
-    const [reportID, setReportID] = useState('')
     const [isEditing, setIsEditing] = useState(false)
 
     // 當Dialog開啟時，將最新的報告紀錄寫入Report State，並記錄該報告的ID
     useEffect(() => {
-        if (reverseRecords.length > 0 && isOpen) {
-            dispatch(fillReport({ report: reverseRecords[0] }))
-            setReportID(reports.id)
-            setRecords(reverseRecords)
-            setVersion(reverseRecords[0]._id)
+        if (records.length > 0 && isOpen) {
+            dispatch(fillReport({ report: records[0] }))
+            setVersion(records[0].id)
         }
     }, [isOpen])
 
     useEffect(() => {
-        dispatch(fillReport({ report: reverseRecords.find(r => r?._id === version) }))
+        if (isOpen) dispatch(fillReport({ report: records.find(r => r.id === version) }))
     }, [version])
 
     const handleEdit = () => {
         // 點擊編輯按鈕後判斷目前Dialog狀態，如果為編輯狀態則儲存
         if (isEditing) {
-            // dispatch(updateReport({ patient, reportID, report: currentReport }))
-            dispatch(openAlert({ title: '修改成功', icon: 'success' }))
+            dispatch(updateReport({ reportID, data: { report: { ...report, id: v4() }, status: 'finished' } }))
+            dispatch(
+                openAlert({
+                    toastTitle: '報告修改成功',
+                    text: `${patient.name} ${patient.gender === '男' ? '先生' : '小姐'}`,
+                })
+            )
             handleClose()
         } else {
             setIsEditing(true)
@@ -90,9 +91,10 @@ const ReportDialog = ({ mode }) => {
                     <FormControl variant="standard" sx={{ width: '5rem' }}>
                         <InputLabel id="select-label">版本</InputLabel>
                         <Select labelId="select-label" value={version} onChange={handleSelectOnChange}>
-                            {records?.map((record, index) => (
-                                <MenuItem key={record._id} value={record._id}>{`v${records.length - index}`}</MenuItem>
-                            ))}
+                            {records.length > 0 &&
+                                records.map((record, index) => (
+                                    <MenuItem key={record.id} value={record.id}>{`v${records.length - index}`}</MenuItem>
+                                ))}
                         </Select>
                     </FormControl>
                 )}
