@@ -3,7 +3,7 @@ import { Box, Divider, TableContainer, Table, TableHead, TableBody, TableRow, Ta
 import { Link } from 'react-router-dom'
 import useStyles from './Style'
 
-const LittleTable = ({ title, rows, route }) => {
+const LittleTable = ({ title, rows, cols, route }) => {
     const classes = useStyles()
 
     return (
@@ -16,27 +16,21 @@ const LittleTable = ({ title, rows, route }) => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.tableCell}>身分證字號</TableCell>
-                            <TableCell align="center" className={classes.tableCell}>
-                                姓名
-                            </TableCell>
-                            <TableCell align="center" className={classes.tableCell}>
-                                性別
-                            </TableCell>
+                            {cols.map(col => (
+                                <TableCell key={col.accessor} className={classes.tableCell}>
+                                    {col.Header}
+                                </TableCell>
+                            ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.slice(0, 4).map(row => (
+                        {rows.map(row => (
                             <TableRow key={row.id} className={[classes.tableRow, classes.link]} component={Link} to={route}>
-                                <TableCell component="th" scope="row" className={classes.tableCell}>
-                                    {row.id}
-                                </TableCell>
-                                <TableCell align="center" className={classes.tableCell}>
-                                    {row.name}
-                                </TableCell>
-                                <TableCell align="center" className={classes.tableCell}>
-                                    {row.gender}
-                                </TableCell>
+                                {cols.map(col => (
+                                    <TableCell key={col.accessor} component="th" scope="row" className={classes.tableCell}>
+                                        {row[col.accessor]}
+                                    </TableCell>
+                                ))}
                             </TableRow>
                         ))}
                     </TableBody>
