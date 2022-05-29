@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { Box, List, ListItem, ListItemButton, ListItemText, ListItemIcon, IconButton } from '@mui/material'
-import { ArrowDropDown, ArrowRight, Assignment, Visibility } from '@mui/icons-material'
+import { ArrowDropDown, ArrowRight, Assignment, Delete, Visibility } from '@mui/icons-material'
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -10,7 +10,8 @@ import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import { fetchReport, openDialog } from '../../Redux/Slices/Dialog'
 import { id } from 'date-fns/locale'
 import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
-import { apiGetReports } from '../../Axios/Report'
+import { apiDeleteReport, apiGetReports } from '../../Axios/Report'
+import { openAlert } from '../../Redux/Slices/Alert'
 
 const Report = () => {
     const classes = useStyles()
@@ -33,9 +34,18 @@ const Report = () => {
         setPage(Math.ceil(count / params.limit))
     }
 
-    const handleClick = reportID => {
-        dispatch(fetchReport(reportID))
-    }
+    const handlePreviewReport = reportID => dispatch(fetchReport(reportID))
+
+    const handleDeleteReport = reportID =>
+        dispatch(
+            openAlert({
+                alertTitle: '確定刪除該報告?',
+                toastTitle: '刪除成功',
+                icon: 'success',
+                type: 'confirm',
+                event: () => apiDeleteReport(reportID).then(() => setCount(0)),
+            })
+        )
 
     // const renderSubRow = useCallback(({ row }) => {
     //     return (
@@ -89,20 +99,26 @@ const Report = () => {
             },
             { accessor: 'patientID', Header: '身分證字號', Cell: row => row.row.original.patient.id },
             { accessor: 'name', Header: '姓名', Cell: row => row.row.original.patient.name },
-            { accessor: 'id', Header: '報告ID', Cell: row => row.row.original._id },
+            // { accessor: 'id', Header: '報告ID', Cell: row => row.row.original._id },
             { accessor: 'version', Header: '報告版本', Cell: row => row.row.original.records.length || '無' },
             { accessor: 'procedureCode', Header: '病例代碼', Cell: row => row.row.original.procedureCode },
             { accessor: 'blood', Header: '抽血編號', Cell: row => row.row.original.blood },
-            { accessor: 'department', Header: '部門單位', Cell: row => row.row.original.patient.department },
+            { accessor: 'createdAt', Header: '完成時間', Cell: row => new Date(row.row.original.createdAt).toLocaleString() },
+            // { accessor: 'department', Header: '部門單位', Cell: row => row.row.original.patient.department },
             {
                 accessor: 'actions',
                 Header: '操作',
                 Cell: row => (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         {row.row.original.status === 'finished' && (
-                            <IconButton onClick={() => handleClick(row.row.original._id)}>
-                                <Visibility />
-                            </IconButton>
+                            <>
+                                <IconButton onClick={() => handlePreviewReport(row.row.original._id)}>
+                                    <Visibility />
+                                </IconButton>
+                                <IconButton onClick={() => handleDeleteReport(row.row.original._id)}>
+                                    <Delete />
+                                </IconButton>
+                            </>
                         )}
                     </Box>
                 ),

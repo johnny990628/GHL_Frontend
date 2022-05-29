@@ -223,7 +223,7 @@ const patientsSlice = createSlice({
             return {
                 ...state,
                 loading: false,
-                data: state.data.filter(row => row.id !== id),
+                // data: state.data.filter(row => row.id !== id),
                 count: state.count - 1,
             }
         },
@@ -239,7 +239,6 @@ const patientsSlice = createSlice({
             return {
                 ...state,
                 loading: false,
-                data: state.data.map(row => (row.id === patient.id ? patient : row)),
                 count: 0,
             }
         },
