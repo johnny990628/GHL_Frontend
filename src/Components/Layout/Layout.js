@@ -52,9 +52,9 @@ const Main = () => {
         <Box className={`${classes.container} ${isOpen || 'close'}`}>
             <Box className={classes.header}>{/* <Box className={classes.title}>{page.display_name}</Box> */}</Box>
             <Router />
-            <IconButton color="primary" aria-label="add" className={classes.dashboardButton} onClick={() => dispatch(openDashboard())}>
+            {/* <IconButton color="primary" aria-label="add" className={classes.dashboardButton} onClick={() => dispatch(openDashboard())}>
                 <Apps sx={{ margin: '20px 30px 20px 8px' }} />
-            </IconButton>
+            </IconButton> */}
             <Dashboard />
             <CustomAlert />
         </Box>

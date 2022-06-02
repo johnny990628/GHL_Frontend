@@ -32,9 +32,9 @@ const data = [
         icon: <Person />,
     },
     {
-        display_name: '設定',
-        name: 'setting',
-        route: '/setting',
+        display_name: '部門管理',
+        name: 'department',
+        route: '/department',
         icon: <Settings />,
     },
 ]

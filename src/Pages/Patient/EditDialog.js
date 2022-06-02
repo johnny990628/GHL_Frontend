@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { closeDialog } from '../../Redux/Slices/Dialog'
 import { updatePatient } from '../../Redux/Slices/Patient'
 
-import CustomForm from '../CustomForm/CustomForm'
+import CustomForm from '../../Components/CustomForm/CustomForm'
 
 const EditDialog = () => {
     const { isOpen, row } = useSelector(state => state.dialog.patient)

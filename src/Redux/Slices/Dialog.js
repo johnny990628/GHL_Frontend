@@ -1,7 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { apiGetReportByReportID } from '../../Axios/Report'
 
-const initialState = { patient: { isOpen: false, row: {} }, report: { isOpen: false, row: { patient: {}, records: {}, reportID: '' } } }
+const initialState = {
+    patient: { isOpen: false, row: {} },
+    report: { isOpen: false, row: { patient: {}, records: {}, reportID: '' } },
+}
 
 export const fetchReport = createAsyncThunk('dialog/fetchReport', async reportID => {
     try {

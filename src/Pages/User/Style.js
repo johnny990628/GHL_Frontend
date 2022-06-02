@@ -1,5 +1,33 @@
 import { makeStyles } from '@mui/styles'
 
-const useStyles = makeStyles(theme => ({}))
+const useStyles = makeStyles(theme => ({
+    container: {
+        // display: 'flex',
+        // flexDirection: 'column',
+        // alignItems: 'center',
+
+        height: '100%',
+        margin: '1rem',
+        backgroundColor: theme.palette.secondary.main,
+        borderRadius: '1rem',
+        boxShadow: '6px 6px 10px rgba(0,0,0,0.2)',
+        border: `1px solid ${theme.palette.border.main}`,
+    },
+    status: {
+        backgroundColor: theme.palette.status.yet,
+        padding: '8px',
+        marginRight: '.6rem',
+        borderRadius: '1rem',
+        '&.processing': {
+            backgroundColor: theme.palette.status.processing,
+        },
+    },
+    statusBox: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        whiteSpace: 'nowrap',
+    },
+}))
 
 export default useStyles

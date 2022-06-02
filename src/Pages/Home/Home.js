@@ -9,7 +9,7 @@ import LittleTable from '../../Components/LittleTable/LittleTable'
 import { apiGetPatients } from '../../Axios/Patient'
 import { apiGetReports } from '../../Axios/Report'
 import { apiGetSchdules } from '../../Axios/Schedule'
-import { apiGetCounts } from '../../Axios/count'
+import { apiGetCounts } from '../../Axios/Count'
 
 const Home = () => {
     const classes = useStyles()

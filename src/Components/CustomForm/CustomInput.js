@@ -8,7 +8,7 @@ import { zhTW } from 'date-fns/locale'
 
 import useStyles from './Style'
 
-const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperText, error, mode, required, age }) => {
+const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperText, error, mode, required }) => {
     const classes = useStyles()
     const theme = useTheme()
 

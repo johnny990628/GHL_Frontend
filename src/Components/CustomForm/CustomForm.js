@@ -187,7 +187,6 @@ const CustomForm = ({ title, row, mode, sendData }) => {
                             error={errorField.includes(name)}
                             mode={mode}
                             required={required}
-                            age={age}
                         />
                     ))}
 

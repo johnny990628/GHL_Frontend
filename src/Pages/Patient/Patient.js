@@ -5,7 +5,7 @@ import { CalendarToday, ArrowDropDown, Delete, Edit, Cancel } from '@mui/icons-m
 import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import CustomForm from '../../Components/CustomForm/CustomForm'
-import EditDialog from '../../Components/CustomTable/EditDialog'
+import EditDialog from './EditDialog'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { addProcessing, removeProcessing, deletePatient, createPatient, fetchPatients } from '../../Redux/Slices/Patient'
