@@ -36,7 +36,6 @@ const CustomForm = ({ title, row, mode, sendData }) => {
     const classes = useStyles()
     const theme = useTheme()
     const dispatch = useDispatch()
-    const { data } = useSelector(state => state.patients)
 
     useEffect(() => {
         if (row) {
@@ -121,7 +120,7 @@ const CustomForm = ({ title, row, mode, sendData }) => {
     }
 
     const hasEmptyField = () => {
-        const errorFieldList = Object.entries({ id, name, address, phone, birth, gender })
+        const errorFieldList = Object.entries({ id, name, phone, birth })
             .map(([key, value]) => !value && key)
             .filter(key => key)
         setErrorField(errorFieldList)
@@ -154,7 +153,7 @@ const CustomForm = ({ title, row, mode, sendData }) => {
     const inputModel = [
         { name: 'id', label: '身分證字號', value: id, setValue: setId, required: true },
         { name: 'name', label: '姓名', value: name, setValue: setName, required: true },
-        { name: 'address', label: '地址', value: address, setValue: setAddress, required: true },
+        // { name: 'address', label: '地址', value: address, setValue: setAddress, required: true },
         { name: 'phone', label: '電話', value: phone, setValue: setPhone, required: true },
         { name: 'department', label: '部門', value: department, setValue: setDepartment, required: false },
         { name: 'birth', label: '生日', value: birth, setValue: setBirth, required: true },

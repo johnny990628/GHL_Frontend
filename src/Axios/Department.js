@@ -8,3 +8,5 @@ const departmentRequest = axios.create({
 })
 
 export const apiGetDepartments = params => departmentRequest.get('/department', { params })
+export const apiCreateDepartment = data => departmentRequest.post('/department', data)
+export const apiDeleteDepartment = departmentID => departmentRequest.delete(`/department/${departmentID}`)

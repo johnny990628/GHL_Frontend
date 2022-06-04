@@ -28,14 +28,6 @@ const Patient = () => {
                 Header: '排程',
                 Cell: row => (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        {/* <Box className={`${classes.status} ${processing && 'processing'}`}>
-                                {processing ? (
-                                    <Box className={classes.statusBox}>排程中</Box>
-                                ) : (
-                                    <Box className={classes.statusBox}>未排程</Box>
-                                )}
-                            </Box> */}
-
                         <IconButton
                             onClick={() => {
                                 const { id, name, gender } = row.row.original
@@ -63,7 +55,7 @@ const Patient = () => {
                     </Box>
                 ),
             },
-            // { accessor: 'blood', Header: '抽血編號' },
+
             { accessor: 'id', Header: '身分證字號' },
             { accessor: 'name', Header: '姓名' },
             { accessor: 'gender', Header: '性別' },

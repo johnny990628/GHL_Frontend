@@ -1,5 +1,5 @@
-import React, { useRef } from 'react'
-import { Box, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, TextField } from '@mui/material'
+import React, { useEffect, useRef, useState } from 'react'
+import { Box, FormControl, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField } from '@mui/material'
 import { useTheme } from '@mui/styles'
 
 import { LocalizationProvider, DatePicker } from '@mui/lab'
@@ -7,12 +7,13 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { zhTW } from 'date-fns/locale'
 
 import useStyles from './Style'
+import { apiGetDepartments } from '../../Axios/Department'
 
 const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperText, error, mode, required }) => {
     const classes = useStyles()
     const theme = useTheme()
 
-    const DatePickerCustomInput = ({ value, setValue }) => {
+    const DatePickerCustomInput = ({ value, setValue, error }) => {
         return (
             <LocalizationProvider dateAdapter={AdapterDateFns} locale={zhTW}>
                 <DatePicker
@@ -23,6 +24,7 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
                     views={['year', 'day']}
                     openTo="year"
                     value={value}
+                    error={error}
                     onChange={newValue => {
                         setValue(new Date(newValue))
                     }}
@@ -57,10 +59,40 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
         )
     }
 
+    const Department = ({ value, setValue, error }) => {
+        const [departments, setDepartments] = useState([])
+
+        useEffect(() => {
+            apiGetDepartments({ limit: 100, offset: 0 }).then(res => setDepartments(res.data.results))
+        }, [])
+
+        const handleSelectOnChange = e => {
+            setValue(e.target.value)
+        }
+
+        return (
+            <FormControl variant="standard" className={classes.textField}>
+                <InputLabel id="select-label" sx={{ fontsize: '1.3rem' }}>
+                    部門
+                </InputLabel>
+                <Select labelId="select-label" value={value} onChange={handleSelectOnChange} error={error}>
+                    {departments.length > 0 &&
+                        departments.map((department, index) => (
+                            <MenuItem key={department._id} value={department.name}>
+                                {department.name}
+                            </MenuItem>
+                        ))}
+                </Select>
+            </FormControl>
+        )
+    }
+
     return name === 'birth' ? (
-        <DatePickerCustomInput value={value} setValue={setValue} />
+        <DatePickerCustomInput value={value} setValue={setValue} error={error} />
     ) : name === 'gender' ? (
         <GenderPicker />
+    ) : name === 'department' ? (
+        <Department value={value} setValue={setValue} error={error} />
     ) : (
         <TextField
             error={error}
