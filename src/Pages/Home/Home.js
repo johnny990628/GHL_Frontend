@@ -52,7 +52,6 @@ const Home = () => {
 
     useEffect(() => {
         fetchData().then(({ patients, reports, schedules, count }) => {
-            console.log(schedules)
             setPatients(patients)
             setReports(reports)
             setSchedules(schedules)

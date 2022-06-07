@@ -1,11 +1,4 @@
-import axios from 'axios'
+import Request from './APIConfig'
 
-const bloodRequest = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: {
-        'Content-type': 'application/json',
-    },
-})
-
-export const apiAddBlood = body => bloodRequest.post(`/blood`, body)
-export const apiRemoveBlood = bloodNumber => bloodRequest.delete(`/blood/${bloodNumber}`)
+export const apiAddBlood = body => Request.post(`/blood`, body)
+export const apiRemoveBlood = bloodNumber => Request.delete(`/blood/${bloodNumber}`)

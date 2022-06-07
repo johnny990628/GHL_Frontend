@@ -1,10 +1,3 @@
-import axios from 'axios'
+import Request from './APIConfig'
 
-const countRequest = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: {
-        'Content-type': 'application/json',
-    },
-})
-
-export const apiGetCounts = () => countRequest.get(`/count`)
+export const apiGetCounts = () => Request.get(`/count`)

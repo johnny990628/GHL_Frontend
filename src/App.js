@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import Layout from './Components/Layout/Layout'
+import Login from './Pages/Login/Login'
 
 const App = () => {
-    return (
-        <>
-            <Layout />
-        </>
-    )
+    const { user, verify, token } = useSelector(state => state.auth)
+
+    return <>{verify ? <Layout /> : <Login />}</>
 }
 
 export default App

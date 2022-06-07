@@ -1,12 +1,5 @@
-import axios from 'axios'
+import Request from './APIConfig'
 
-const departmentRequest = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: {
-        'Content-type': 'application/json',
-    },
-})
-
-export const apiGetDepartments = params => departmentRequest.get('/department', { params })
-export const apiCreateDepartment = data => departmentRequest.post('/department', data)
-export const apiDeleteDepartment = departmentID => departmentRequest.delete(`/department/${departmentID}`)
+export const apiGetDepartments = params => Request.get('/department', { params })
+export const apiCreateDepartment = data => Request.post('/department', data)
+export const apiDeleteDepartment = departmentID => Request.delete(`/department/${departmentID}`)

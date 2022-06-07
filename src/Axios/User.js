@@ -1,11 +1,4 @@
-import axios from 'axios'
+import Request from './APIConfig'
 
-const userRequest = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: {
-        'Content-type': 'application/json',
-    },
-})
-
-export const apiGetUsers = params => userRequest.get('/user', { params })
-export const apiDeleteUser = userID => userRequest.delete(`/user/${userID}`)
+export const apiGetUsers = params => Request.get('/user', { params })
+export const apiDeleteUser = userID => Request.delete(`/user/${userID}`)

@@ -1,15 +1,8 @@
-import axios from 'axios'
+import Request from './APIConfig'
 
-const reportRequest = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: {
-        'Content-type': 'application/json',
-    },
-})
+export const apiCreateReport = body => Request.post(`/report`, body)
+export const apiUpdateReport = ({ reportID, data }) => Request.patch(`/report/${reportID}`, data)
+export const apiDeleteReport = reportID => Request.delete(`/report/${reportID}`)
 
-export const apiCreateReport = body => reportRequest.post(`/report`, body)
-export const apiUpdateReport = ({ reportID, data }) => reportRequest.patch(`/report/${reportID}`, data)
-export const apiDeleteReport = reportID => reportRequest.delete(`/report/${reportID}`)
-
-export const apiGetReports = params => reportRequest.get('/report', { params })
-export const apiGetReportByReportID = reportID => reportRequest.get(`/report/${reportID}`)
+export const apiGetReports = params => Request.get('/report', { params })
+export const apiGetReportByReportID = reportID => Request.get(`/report/${reportID}`)

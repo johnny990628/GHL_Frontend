@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Router from '../Router'
-import { BrowserRouter, useLocation, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, HashRouter, useLocation, Routes, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, IconButton } from '@mui/material'
 import { FileCopy, Save, Print, Share, Apps } from '@mui/icons-material'
@@ -17,7 +17,8 @@ import PatientForm from '../../Pages/PatientForm/index'
 
 const Layout = () => {
     return (
-        <BrowserRouter basename={process.env.REACT_APP_ROUTE_BASENAME}>
+        // <HashRouter basename={process.env.REACT_APP_ROUTE_BASENAME}>
+        <HashRouter>
             <Routes>
                 <Route
                     path="*"
@@ -32,7 +33,7 @@ const Layout = () => {
                 />
                 <Route path="/patientform" element={<PatientForm />} />
             </Routes>
-        </BrowserRouter>
+        </HashRouter>
     )
 }
 const Main = () => {

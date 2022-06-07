@@ -5,6 +5,7 @@ import sidebarReducer from './Slices/Sidebar'
 import dashboardReducer from './Slices/Dashboard'
 import dialogReducer from './Slices/Dialog'
 import alertReducer from './Slices/Alert'
+import authReducer from './Slices/Auth'
 
 export default configureStore({
     reducer: {
@@ -14,5 +15,6 @@ export default configureStore({
         dashboard: dashboardReducer,
         dialog: dialogReducer,
         alert: alertReducer,
+        auth: authReducer,
     },
 })

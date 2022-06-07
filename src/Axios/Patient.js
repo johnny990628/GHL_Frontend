@@ -1,14 +1,7 @@
-import axios from 'axios'
+import Request from './APIConfig'
 
-const patientRequest = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: {
-        'Content-type': 'application/json',
-    },
-})
-
-export const apiGetPatients = params => patientRequest.get('/patient', { params })
-export const apiCreatePatient = patient => patientRequest.post('/patient', patient)
-export const apiUpdatePatient = (id, data) => patientRequest.patch(`/patient/${id}`, data)
-export const apiDeletePatient = id => patientRequest.delete(`/patient/${id}`)
-export const apiDeletePatientAndBloodAndSchedule = patientID => patientRequest.delete('/patient', { data: { patientID } })
+export const apiGetPatients = params => Request.get('/patient', { params })
+export const apiCreatePatient = patient => Request.post('/patient', patient)
+export const apiUpdatePatient = (id, data) => Request.patch(`/patient/${id}`, data)
+export const apiDeletePatient = id => Request.delete(`/patient/${id}`)
+export const apiDeletePatientAndBloodAndSchedule = patientID => Request.delete('/patient', { data: { patientID } })
