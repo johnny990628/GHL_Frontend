@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import useStyles from './Style'
-import { addCancer, removeCancer } from '../../Redux/Slices/Report'
+import { addCancer, removeCancer } from '../../Redux/Slices/ReportForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { useDebouncedCallback } from 'use-debounce'
 

@@ -4,7 +4,7 @@ import { Drawer } from '@mui/material'
 
 import useStyles from './Style'
 import LittleTable from '../LittleTable/LittleTable'
-import { closeDashboard } from '../../Redux/Slices/Dashboard'
+// import { closeDashboard } from '../../Redux/Slices/Dashboard'
 
 const Dashboard = () => {
     const { isOpen } = useSelector(state => state.dashboard)
@@ -18,7 +18,7 @@ const Dashboard = () => {
             variant="temporary"
             transitionDuration={{ enter: 500, exit: 500 }}
             open={isOpen}
-            onClose={() => dispatch(closeDashboard())}
+            // onClose={() => dispatch(closeDashboard())}
             classes={{ paper: classes.container }}
         >
             <LittleTable title={'尚未檢查'} rows={data.filter(d => d.processing)} route={'/createReport'} />
@@ -27,4 +27,4 @@ const Dashboard = () => {
     )
 }
 
-export default Dashboard
+// export default Dashboard

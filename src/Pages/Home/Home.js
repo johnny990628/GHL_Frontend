@@ -6,25 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import Progressbar from '../../Components/Progressbar/Progressbar'
 import useStyles from './Style'
 import LittleTable from '../../Components/LittleTable/LittleTable'
-import { apiGetPatients } from '../../Axios/Patient'
-import { apiGetReports } from '../../Axios/Report'
-import { apiGetSchdules } from '../../Axios/Schedule'
-import { apiGetCounts } from '../../Axios/Count'
+import { fetchDashboard } from '../../Redux/Slices/Dashboard'
 
 const Home = () => {
     const classes = useStyles()
-    const [patients, setPatients] = useState([])
-    const [reports, setReports] = useState([])
-    const [schedules, setSchedules] = useState([])
-    const [count, setCount] = useState({ patient: 0, report: 0, schedule: 0 })
+    const dispatch = useDispatch()
+    const { patients, reports, schedules, count } = useSelector(state => state.dashboard)
 
-    const fetchData = async () => {
-        const patients = await apiGetPatients({ limit: 5, offset: 0 })
-        const reports = await apiGetReports({ limit: 5, offset: 0 })
-        const schedules = await apiGetSchdules({ procedureCode: '19009C' })
-        const count = await apiGetCounts()
-        return { patients: patients.data.results, reports: reports.data.results, schedules: schedules.data.results, count: count.data }
-    }
     const patientCol = useMemo(
         () => [
             { accessor: 'id', Header: '身分證字號' },
@@ -51,12 +39,7 @@ const Home = () => {
     )
 
     useEffect(() => {
-        fetchData().then(({ patients, reports, schedules, count }) => {
-            setPatients(patients)
-            setReports(reports)
-            setSchedules(schedules)
-            setCount(count)
-        })
+        dispatch(fetchDashboard())
     }, [])
 
     return (

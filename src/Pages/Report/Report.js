@@ -1,40 +1,34 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { Box, List, ListItem, ListItemButton, ListItemText, ListItemIcon, IconButton } from '@mui/material'
-import { ArrowDropDown, ArrowRight, Assignment, Delete, Visibility } from '@mui/icons-material'
+import { Delete, Visibility } from '@mui/icons-material'
 
 import { useDispatch, useSelector } from 'react-redux'
 
 import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
-import { fetchReport, openDialog } from '../../Redux/Slices/Dialog'
-import { id } from 'date-fns/locale'
-import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
-import { apiDeleteReport, apiGetReports } from '../../Axios/Report'
+import { fetchReportByReportID } from '../../Redux/Slices/Dialog'
+import { deleteReport, fetchReport, renderTrigger } from '../../Redux/Slices/Report'
+
+import { apiDeleteReport } from '../../Axios/Report'
 import { openAlert } from '../../Redux/Slices/Alert'
 
 const Report = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
-    const [data, setData] = useState([])
-    const [count, setCount] = useState(0)
-    const [page, setPage] = useState(1)
 
+    const { results, count, page } = useSelector(state => state.report)
     const { isOpen } = useSelector(state => state.dialog.report)
 
     useEffect(() => {
-        isOpen || setCount(0)
+        isOpen || dispatch(renderTrigger())
     }, [isOpen])
 
     const fetchData = async params => {
-        const res = await apiGetReports(params)
-        const { count, results } = res.data
-        setData(results)
-        setCount(count)
-        setPage(Math.ceil(count / params.limit))
+        dispatch(fetchReport(params))
     }
 
-    const handlePreviewReport = reportID => dispatch(fetchReport(reportID))
+    const handlePreviewReport = reportID => dispatch(fetchReportByReportID(reportID))
 
     const handleDeleteReport = reportID =>
         dispatch(
@@ -43,7 +37,7 @@ const Report = () => {
                 toastTitle: '刪除成功',
                 icon: 'success',
                 type: 'confirm',
-                event: () => apiDeleteReport(reportID).then(() => setCount(0)),
+                event: () => dispatch(deleteReport(reportID)),
             })
         )
 
@@ -129,8 +123,7 @@ const Report = () => {
 
     return (
         <Box className={classes.container}>
-            {/* <CustomTable renderSubRow={renderSubRow} data={data.filter(d => d.reports.length > 0)} columns={columns} /> */}
-            <CustomTable columns={columns} fetchData={fetchData} data={data} totalPage={page} totalCount={count} />
+            <CustomTable columns={columns} fetchData={fetchData} data={results} totalPage={page} totalCount={count} />
             <ReportDialog mode="edit" />
         </Box>
     )

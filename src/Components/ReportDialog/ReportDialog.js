@@ -30,7 +30,7 @@ import { closeDialog } from '../../Redux/Slices/Dialog'
 import CustomReportForm from '../CustomReport/CustomReportForm'
 import ReportFormHtml from './ReportFormHtml'
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
-import { updateReport, fillReport, resetReport } from '../../Redux/Slices/Report'
+import { updateReport, fillReport, resetReport } from '../../Redux/Slices/ReportForm'
 import { openAlert } from '../../Redux/Slices/Alert'
 
 const ReportDialog = ({ mode }) => {
@@ -43,7 +43,7 @@ const ReportDialog = ({ mode }) => {
     // reverse records and non-destructive
     // const reverseRecords = useMemo(() => [].concat(records).reverse(), [records])
 
-    const report = useSelector(state => state.report.edit)
+    const report = useSelector(state => state.reportForm.edit)
     const [version, setVersion] = useState('')
     const [isEditing, setIsEditing] = useState(false)
 

@@ -1,16 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { apiGetReportByReportID } from '../../Axios/Report'
+import { logout } from './Auth'
 
 const initialState = {
     patient: { isOpen: false, row: {} },
     report: { isOpen: false, row: { patient: {}, records: {}, reportID: '' } },
 }
 
-export const fetchReport = createAsyncThunk('dialog/fetchReport', async reportID => {
+export const fetchReportByReportID = createAsyncThunk('dialog/fetchReportByReportID', async (reportID, thunkAPI) => {
     try {
         const response = await apiGetReportByReportID(reportID)
         return response.data
     } catch (e) {
+        thunkAPI.dispatch(logout())
         return e
     }
 })
@@ -31,7 +33,7 @@ const dialogSlice = createSlice({
         },
     },
     extraReducers: {
-        [fetchReport.fulfilled]: (state, action) => {
+        [fetchReportByReportID.fulfilled]: (state, action) => {
             const { patient, records, _id } = action.payload
             return {
                 ...state,

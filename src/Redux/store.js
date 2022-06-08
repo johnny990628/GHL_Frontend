@@ -1,20 +1,26 @@
 import { configureStore } from '@reduxjs/toolkit'
 import patientsReducer from './Slices/Patient'
-import reportReducer from './Slices/Report'
+import reportFormReducer from './Slices/ReportForm'
 import sidebarReducer from './Slices/Sidebar'
-import dashboardReducer from './Slices/Dashboard'
 import dialogReducer from './Slices/Dialog'
 import alertReducer from './Slices/Alert'
 import authReducer from './Slices/Auth'
+import reportReducer from './Slices/Report'
+import departmentReducer from './Slices/Department'
+import userReducer from './Slices/User'
+import DashboardReducer from './Slices/Dashboard'
 
 export default configureStore({
     reducer: {
         patients: patientsReducer,
-        report: reportReducer,
+        reportForm: reportFormReducer,
         sidebar: sidebarReducer,
-        dashboard: dashboardReducer,
         dialog: dialogReducer,
         alert: alertReducer,
         auth: authReducer,
+        report: reportReducer,
+        department: departmentReducer,
+        user: userReducer,
+        dashboard: DashboardReducer,
     },
 })

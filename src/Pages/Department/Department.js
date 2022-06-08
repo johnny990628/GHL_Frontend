@@ -21,25 +21,20 @@ import CustomTable from '../../Components/CustomTable/CustomTable'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import CustomInput from '../../Components/CustomForm/CustomInput'
 import { ArrowDropDown, Delete } from '@mui/icons-material'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { openAlert } from '../../Redux/Slices/Alert'
+import { createDepartment, deleteDepartment, fetchDepartment } from '../../Redux/Slices/Department'
 
 const Department = () => {
-    const [departments, setDepartments] = useState([])
-    const [count, setCount] = useState(0)
-    const [page, setPage] = useState(1)
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
     const [errorField, setErrorField] = useState([])
     const dispatch = useDispatch()
     const classes = useStyles()
+    const { results, count, page } = useSelector(state => state.department)
 
     const fetchData = async params => {
-        const res = await apiGetDepartments(params)
-        const { count, results } = res.data
-        setDepartments(results)
-        setCount(count)
-        setPage(Math.ceil(count / params.limit))
+        dispatch(fetchDepartment(params))
     }
 
     const hasEmptyField = () => {
@@ -53,7 +48,7 @@ const Department = () => {
     const handleHelperText = fieldName => {
         switch (fieldName) {
             case 'name':
-                return departments.find(d => d.name === name) && '此部門已存在'
+                return results.find(d => d.name === name) && '此部門已存在'
             default:
                 return ''
         }
@@ -75,15 +70,7 @@ const Department = () => {
 
     const handleSubmit = async () => {
         if (hasEmptyField()) return
-        await apiCreateDepartment({ name, address })
-        dispatch(
-            openAlert({
-                toastTitle: '新增成功',
-                text: `${name} - ${address}`,
-                icon: 'success',
-            })
-        )
-        setCount(count => count + 1)
+        dispatch(createDepartment({ name, address }))
         setName('')
         setAddress('')
     }
@@ -108,7 +95,7 @@ const Department = () => {
                                             text: `${name} - ${address}`,
                                             icon: 'success',
                                             type: 'confirm',
-                                            event: () => apiDeleteDepartment(_id).then(() => setCount(c => c - 1)),
+                                            event: () => dispatch(deleteDepartment(_id)),
                                         })
                                     )
                                 }}
@@ -162,7 +149,7 @@ const Department = () => {
                 </AccordionDetails>
             </Accordion>
 
-            <CustomTable columns={columns} fetchData={fetchData} data={departments} totalPage={page} totalCount={count} />
+            <CustomTable columns={columns} fetchData={fetchData} data={results} totalPage={page} totalCount={count} />
             <ReportDialog mode="edit" />
         </Box>
     )

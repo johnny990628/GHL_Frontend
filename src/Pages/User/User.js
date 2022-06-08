@@ -7,31 +7,22 @@ import { useDispatch, useSelector } from 'react-redux'
 import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
-import { fetchReport } from '../../Redux/Slices/Dialog'
+import { deleteUser, fetchUser } from '../../Redux/Slices/User'
 
 import { apiDeleteReport, apiGetReports } from '../../Axios/Report'
 import { openAlert } from '../../Redux/Slices/Alert'
 import { apiDeleteUser, apiGetUsers } from '../../Axios/User'
+import { fetchDataByType } from '../../Redux/Slices/Report'
 
 const Report = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
-    const [data, setData] = useState([])
-    const [count, setCount] = useState(0)
-    const [page, setPage] = useState(1)
 
-    const { isOpen } = useSelector(state => state.dialog.report)
-
-    useEffect(() => {
-        isOpen || setCount(0)
-    }, [isOpen])
+    // const { isOpen } = useSelector(state => state.dialog.report)
+    const { results, count, page } = useSelector(state => state.user)
 
     const fetchData = async params => {
-        const res = await apiGetUsers(params)
-        const { count, results } = res.data
-        setData(results)
-        setCount(count)
-        setPage(Math.ceil(count / params.limit))
+        dispatch(fetchUser(params))
     }
 
     const handleDeleteUser = userID =>
@@ -41,7 +32,7 @@ const Report = () => {
                 toastTitle: '刪除成功',
                 icon: 'success',
                 type: 'confirm',
-                event: () => apiDeleteUser(userID).then(() => setCount(0)),
+                event: () => dispatch(deleteUser(userID)),
             })
         )
 
@@ -51,7 +42,11 @@ const Report = () => {
                 accessor: 'status',
                 Header: '狀態',
                 Cell: row => (
-                    <Box className={`${classes.status} ${row.row.original.roles.find(r => r.level === 3) === 'pending' || 'processing'}`}>
+                    <Box
+                        className={`${classes.status} ${
+                            (row.row.original.roles && row.row.original.roles.find(r => r.level === 3) === 'pending') || 'processing'
+                        }`}
+                    >
                         {row.row.original.roles.find(r => r.level === 3) ? (
                             <Box className={classes.statusBox}>管理者</Box>
                         ) : (
@@ -80,7 +75,7 @@ const Report = () => {
 
     return (
         <Box className={classes.container}>
-            <CustomTable columns={columns} fetchData={fetchData} data={data} totalPage={page} totalCount={count} />
+            <CustomTable columns={columns} fetchData={fetchData} data={results} totalPage={page} totalCount={count} />
             <ReportDialog mode="edit" />
         </Box>
     )

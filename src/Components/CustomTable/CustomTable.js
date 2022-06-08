@@ -22,6 +22,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 import useStyles from './Style'
+import { useLocation } from 'react-router-dom'
 
 const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalCount }) => {
     const [search, setSearch] = useState('')

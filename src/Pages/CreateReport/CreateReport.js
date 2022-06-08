@@ -16,11 +16,12 @@ import Pancreas from '../../Assets/OrganJson/pancreas.json'
 import Spleen from '../../Assets/OrganJson/spleen.json'
 import Suggestion from '../../Assets/OrganJson/suggestion.json'
 
-import { createReport, resetReport } from '../../Redux/Slices/Report'
+import { createReport, resetReport } from '../../Redux/Slices/ReportForm'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
-import { fetchReport, openDialog } from '../../Redux/Slices/Dialog'
+import { fetchReportByReportID } from '../../Redux/Slices/Dialog'
 import { apiDeleteScheduleAndBloodAndReport, apiGetSchdules } from '../../Axios/Schedule'
 import { openAlert } from '../../Redux/Slices/Alert'
+import { logout } from '../../Redux/Slices/Auth'
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
@@ -28,7 +29,7 @@ const CreateReport = () => {
     const [schedules, setSchedules] = useState([])
     const [patient, setPatient] = useState({})
     const steps = ['選擇病人', '新增報告', '完成']
-    const report = useSelector(state => state.report.create)
+    const report = useSelector(state => state.reportForm.create)
 
     const dispatch = useDispatch()
     const classes = useStyles()
@@ -171,7 +172,7 @@ const CreateReport = () => {
                                         },
                                     }}
                                     className={classes.button}
-                                    onClick={() => dispatch(fetchReport(patient.reportID))}
+                                    onClick={() => dispatch(fetchReportByReportID(patient.reportID))}
                                 >
                                     預覽
                                 </Button>
@@ -185,7 +186,7 @@ const CreateReport = () => {
                 </Box>
                 <IconButton
                     sx={{ display: currentStep === 2 && 'none' }}
-                    disabled={!patient}
+                    disabled={Object.keys(patient).length === 0}
                     className={classes.button}
                     onClick={() => {
                         setCurrentStep(p => p + 1)

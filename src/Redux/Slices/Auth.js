@@ -11,20 +11,12 @@ export const login = createAsyncThunk('auth/login', async data => {
         return e
     }
 })
-export const verify = createAsyncThunk('auth/verify', async (_, thunkAPI) => {
-    try {
-        const response = await apiVerify()
-        return response.data
-    } catch (e) {
-        return thunkAPI.rejectWithValue()
-    }
-})
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        verifyFailed: (state, action) => {
+        logout: (state, action) => {
             return initialState
         },
     },
@@ -40,5 +32,5 @@ const authSlice = createSlice({
     },
 })
 
-export const { verifyFailed } = authSlice.actions
+export const { logout } = authSlice.actions
 export default authSlice.reducer

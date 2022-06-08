@@ -8,12 +8,12 @@ import useStyles from './Style'
 
 import Sidebar from '../Sidebar/Sidebar'
 import SidebarItem from '../Sidebar/SidebarItem'
-import Dashboard from '../Dashboard/Dashboard'
-import { openDashboard } from '../../Redux/Slices/Dashboard'
+
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 import CustomAlert from '../CustomAlert/CustomAlert'
 
 import PatientForm from '../../Pages/PatientForm/index'
+import { clearData } from '../../Redux/Slices/Report'
 
 const Layout = () => {
     return (
@@ -56,7 +56,7 @@ const Main = () => {
             {/* <IconButton color="primary" aria-label="add" className={classes.dashboardButton} onClick={() => dispatch(openDashboard())}>
                 <Apps sx={{ margin: '20px 30px 20px 8px' }} />
             </IconButton> */}
-            <Dashboard />
+            {/* <Dashboard /> */}
             <CustomAlert />
         </Box>
     )

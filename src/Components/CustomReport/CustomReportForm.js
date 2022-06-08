@@ -7,7 +7,7 @@ import useStyles from './Style'
 import CustomReportInput from './CustomReportInput'
 import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearCancer } from '../../Redux/Slices/Report'
+import { clearCancer } from '../../Redux/Slices/ReportForm'
 import ReportList from './ReportList'
 
 const FormSection = ({ list, mode }) => {
@@ -15,7 +15,7 @@ const FormSection = ({ list, mode }) => {
     const [isNormal, setIsNormal] = useState(true)
 
     const dispatch = useDispatch()
-    const reportSection = useSelector(state => state.report.edit[list.name])
+    const reportSection = useSelector(state => state.reportForm.edit[list.name])
 
     const handleNormalOnClick = () => {
         if (!isNormal) {

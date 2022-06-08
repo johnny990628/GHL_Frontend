@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 
 const FormSection = ({ list }) => {
     const classes = useStyles()
-    const report = useSelector(state => state.report.edit)
+    const report = useSelector(state => state.reportForm.edit)
     const [cancerArr, setCancerArr] = useState([])
     useEffect(() => {
         if (report) {

@@ -1,92 +1,60 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { apiUpdateReport } from '../../Axios/Report'
-import { apiDeleteScheduleAndBloodAndReport } from '../../Axios/Schedule'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { apiGetDepartments } from '../../Axios/Department'
+import { apiDeleteReport, apiGetReports } from '../../Axios/Report'
+import { apiGetUsers } from '../../Axios/User'
+import { logout } from './Auth'
 
-const initialState = {
-    create: {
-        liver: [],
-        gallbladder: [],
-        kidney: [],
-        pancreas: [],
-        spleen: [],
-        suggestion: [],
-    },
-    edit: {
-        liver: [],
-        gallbladder: [],
-        kidney: [],
-        pancreas: [],
-        spleen: [],
-        suggestion: [],
-    },
-}
-
-export const createReport = createAsyncThunk('report/createReport', async ({ patientID, reportID, data }) => {
+export const fetchReport = createAsyncThunk('report/fetchReport', async (params, thunkAPI) => {
     try {
-        const response = await apiUpdateReport({ reportID, data })
-        await apiDeleteScheduleAndBloodAndReport(patientID)
+        const response = await apiGetReports(params)
+        const { results, count } = response.data
+        return { results, count, page: Math.ceil(count / params.limit) }
+    } catch (e) {
+        thunkAPI.dispatch(logout())
+        return thunkAPI.rejectWithValue()
+    }
+})
+export const deleteReport = createAsyncThunk('report/deleteReport', async (reportID, thunkAPI) => {
+    try {
+        const response = await apiDeleteReport(reportID)
         return response.data
     } catch (e) {
-        return e
+        thunkAPI.dispatch(logout())
+        return thunkAPI.rejectWithValue()
     }
 })
 
-export const updateReport = createAsyncThunk('report/updateReport', async ({ reportID, data }) => {
-    try {
-        const response = await apiUpdateReport({ reportID, data })
-        return response.data
-    } catch (e) {
-        return e
-    }
-})
+const initialState = { results: [], count: 0, page: 1 }
 
 const reportSlice = createSlice({
     name: 'report',
     initialState,
     reducers: {
-        addCancer: (state, action) => {
-            const { organ, name, type, value, mode } = action.payload
-            state[mode][organ].find(s => s.name === name) //if has the same name
-                ? (state[mode][organ] = [...state[mode][organ].filter(s => s.name !== name), { name, type, value }]) //replace the name with value
-                : (state[mode][organ] = [...state[mode][organ], { name, type, value }]) //or add the new one
-        },
-        removeCancer: (state, action) => {
-            const { organ, name, mode } = action.payload
-            state[mode][organ] = state[mode][organ].filter(c => c.name !== name)
-        },
-        clearCancer: (state, action) => {
-            const { organ, mode } = action.payload
-            state[mode][organ] = []
-        },
-        fillReport: (state, action) => {
-            const { report } = action.payload
+        renderTrigger: (state, action) => {
             return {
                 ...state,
-                edit: { ...report },
-            }
-        },
-        resetReport: (state, action) => {
-            const { mode } = action.payload
-            state[mode] = {
-                liver: [],
-                gallbladder: [],
-                kidney: [],
-                pancreas: [],
-                spleen: [],
-                suggestion: [],
+                count: state.count - 1,
             }
         },
     },
     extraReducers: {
-        [createReport.fulfilled]: (state, action) => {
+        [fetchReport.fulfilled]: (state, action) => {
+            return {
+                ...action.payload,
+            }
+        },
+        [fetchReport.rejected]: (state, action) => {
             return initialState
         },
-        [updateReport.fulfilled]: (state, action) => {
-            return initialState
+        [deleteReport.fulfilled]: (state, action) => {
+            return {
+                ...state,
+                count: state.count - 1,
+            }
         },
     },
 })
 
-export const { addCancer, removeCancer, clearCancer, fillReport, resetReport } = reportSlice.actions
+export const { renderTrigger } = reportSlice.actions
 
 export default reportSlice.reducer

@@ -1,177 +1,73 @@
-import {
-    apiCreatePatient,
-    apiDeletePatient,
-    apiDeletePatientAndBloodAndSchedule,
-    apiGetPatients,
-    apiUpdatePatient,
-} from '../../Axios/Patient'
-import { apiAddSchedule, apiDeleteScheduleAndBloodAndReport, apiRemoveSchedule } from '../../Axios/Schedule'
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { apiAddBlood, apiRemoveBlood } from '../../Axios/Blood'
-import { apiCreateReport } from '../../Axios/Report'
+import { apiCreatePatient, apiDeletePatientAndBloodAndSchedule, apiGetPatients, apiUpdatePatient } from '../../Axios/Patient'
+import { apiAddSchedule, apiDeleteScheduleAndBloodAndReport } from '../../Axios/Schedule'
 
-const patients = [
-    {
-        id: 'A131005438',
-        blood: '012',
-        name: '李柏勳',
-        gender: '男',
-        birth: new Date(),
-        phone: '0918189393',
-        department: 'cylab',
-        createdAt: new Date(),
-        address: '台北市北投區公館路279巷6號3樓',
-        processing: true,
-        reports: [],
-    },
-    {
-        id: 'P131005439',
-        blood: '013',
-        name: '李柏勳',
-        gender: '男',
-        birth: new Date(),
-        phone: '0918189393',
-        department: 'cylab',
-        createdAt: new Date(),
-        address: '台北市北投區公館路279巷6號3樓',
-        processing: true,
-        reports: [],
-    },
-    {
-        id: 'O131005437',
-        blood: '014',
-        name: '李柏勳',
-        gender: '男',
-        birth: new Date(),
-        phone: '0918189393',
-        department: 'cylab',
-        createdAt: new Date(),
-        address: '台北市北投區公館路279巷6號3樓',
-        processing: false,
-        reports: [],
-    },
-    {
-        id: 'Z131005437',
-        blood: '015',
-        name: '李柏勳',
-        gender: '男',
-        birth: new Date(),
-        phone: '0918189393',
-        department: 'cylab',
-        createdAt: new Date(),
-        address: '台北市北投區公館路279巷6號3樓',
-        processing: true,
-        reports: [],
-    },
-    {
-        id: 'Y131005437',
-        blood: '016',
-        name: '李柏勳',
-        gender: '男',
-        birth: new Date(),
-        phone: '0918189393',
-        department: 'cylab',
-        createdAt: new Date(),
-        address: '台北市北投區公館路279巷6號3樓',
-        processing: false,
-        reports: [],
-    },
-    {
-        id: 'G131005437',
-        blood: '017',
-        name: '李柏勳',
-        gender: '男',
-        birth: new Date(),
-        phone: '0918189393',
-        department: 'cylab',
-        createdAt: new Date(),
-        address: '台北市北投區公館路279巷6號3樓',
-        processing: false,
-        reports: [],
-    },
-    {
-        id: 'F131005437',
-        blood: '018',
-        name: '李柏勳',
-        gender: '男',
-        birth: new Date(),
-        phone: '0918189393',
-        department: 'cylab',
-        createdAt: new Date(),
-        address: '台北市北投區公館路279巷6號3樓',
-        processing: true,
-        reports: [],
-    },
-    {
-        id: 'E131005437',
-        blood: '019',
-        name: '李柏勳',
-        gender: '男',
-        birth: new Date(),
-        phone: '0918189393',
-        department: 'cylab',
-        createdAt: new Date(),
-        address: '台北市北投區公館路279巷6號3樓',
-        processing: true,
-        reports: [],
-    },
-]
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
+import { apiAddBlood } from '../../Axios/Blood'
+import { apiCreateReport } from '../../Axios/Report'
+import { logout } from './Auth'
 
 const initialState = { loading: false, data: [], count: 0, page: 1, error: '' }
 
-export const fetchPatients = createAsyncThunk('patients/fetchPatients', async ({ limit, offset, search, sort, desc }) => {
+export const fetchPatients = createAsyncThunk('patients/fetchPatients', async ({ limit, offset, search, sort, desc }, thunkAPI) => {
     try {
         const response = await apiGetPatients({ limit, offset, search, sort, desc })
         return { ...response.data, page: Math.ceil(response.data.count / limit) }
     } catch (e) {
-        return e
+        thunkAPI.dispatch(logout())
+        return thunkAPI.rejectWithValue()
     }
 })
 
-export const createPatient = createAsyncThunk('patients/createPatient', async data => {
+export const createPatient = createAsyncThunk('patients/createPatient', async (data, thunkAPI) => {
     try {
         const response = await apiCreatePatient(data)
         return response.data
     } catch (e) {
-        return e
+        thunkAPI.dispatch(logout())
+        return thunkAPI.rejectWithValue()
     }
 })
 
-export const updatePatient = createAsyncThunk('patients/updatePatient', async data => {
+export const updatePatient = createAsyncThunk('patients/updatePatient', async (data, thunkAPI) => {
     try {
         const response = await apiUpdatePatient(data.id, data)
         return response.data
     } catch (e) {
-        return e
+        thunkAPI.dispatch(logout())
+        return thunkAPI.rejectWithValue()
     }
 })
 
-export const deletePatient = createAsyncThunk('patients/deletePatient', async ({ patientID }) => {
+export const deletePatient = createAsyncThunk('patients/deletePatient', async ({ patientID }, thunkAPI) => {
     try {
         const response = await apiDeletePatientAndBloodAndSchedule(patientID)
         return response.data
     } catch (e) {
-        return e
+        thunkAPI.dispatch(logout())
+        return thunkAPI.rejectWithValue()
     }
 })
 
-export const addProcessing = createAsyncThunk('patients/addProcessing', async ({ patientID, procedureCode, blood }) => {
+export const addProcessing = createAsyncThunk('patients/addProcessing', async ({ patientID, procedureCode, blood }, thunkAPI) => {
     try {
         const reportResponse = await apiCreateReport({ patientID, procedureCode, blood })
         const reportID = reportResponse.data._id
         await apiAddSchedule({ patientID, reportID, procedureCode })
         await apiAddBlood({ patientID, number: blood })
     } catch (e) {
-        return e
+        thunkAPI.dispatch(logout())
+        return thunkAPI.rejectWithValue()
     }
 })
 
-export const removeProcessing = createAsyncThunk('patients/removeProcessing', async patientID => {
+export const removeProcessing = createAsyncThunk('patients/removeProcessing', async (patientID, thunkAPI) => {
     try {
         const response = await apiDeleteScheduleAndBloodAndReport(patientID)
         return response.data
     } catch (e) {
-        return e
+        thunkAPI.dispatch(logout())
+        return thunkAPI.rejectWithValue()
     }
 })
 
@@ -242,22 +138,27 @@ const patientsSlice = createSlice({
                 count: 0,
             }
         },
-        // [addReport.fulfilled]: (state, action) => {
-        //     const patient = action.payload
-        //     return {
-        //         ...state,
-        //         loading: false,
-        //         data: state.data.map(row => (row.id === patient.id ? patient : row)),
-        //     }
-        // },
-        // [updateReport.fulfilled]: (state, action) => {
-        //     const patient = action.payload
-        //     return {
-        //         ...state,
-        //         loading: false,
-        //         data: state.data.map(row => (row.id === patient.id ? patient : row)),
-        //     }
-        // },
+        [fetchPatients.rejected]: (state, action) => {
+            return initialState
+        },
+        [fetchPatients.rejected]: (state, action) => {
+            return initialState
+        },
+        [createPatient.rejected]: (state, action) => {
+            return initialState
+        },
+        [updatePatient.rejected]: (state, action) => {
+            return initialState
+        },
+        [deletePatient.rejected]: (state, action) => {
+            return initialState
+        },
+        [addProcessing.rejected]: (state, action) => {
+            return initialState
+        },
+        [removeProcessing.rejected]: (state, action) => {
+            return initialState
+        },
     },
 })
 
