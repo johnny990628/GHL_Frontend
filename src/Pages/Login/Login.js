@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -16,11 +16,12 @@ import { useDispatch } from 'react-redux'
 import { login } from '../../Redux/Slices/Auth'
 
 const Login = () => {
+    const [remember, setRemember] = useState(false)
     const dispatch = useDispatch()
     const handleSubmit = e => {
         e.preventDefault()
         const data = new FormData(e.currentTarget)
-        dispatch(login({ username: data.get('username'), password: data.get('password') }))
+        dispatch(login({ username: data.get('username'), password: data.get('password'), remember }))
     }
 
     return (
@@ -53,6 +54,10 @@ const Login = () => {
                         label="密碼"
                         type="password"
                         autoComplete="current-password"
+                    />
+                    <FormControlLabel
+                        control={<Checkbox checked={remember} onChange={e => setRemember(e.target.checked)} color="primary" />}
+                        label="記住我"
                     />
 
                     <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>

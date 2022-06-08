@@ -3,9 +3,10 @@ import { apiLogin, apiVerify } from '../../Axios/Auth'
 
 const initialState = { token: '', user: {}, verify: false }
 
-export const login = createAsyncThunk('auth/login', async data => {
+export const login = createAsyncThunk('auth/login', async ({ username, password, remember }, thunkAPI) => {
     try {
-        const response = await apiLogin(data)
+        const response = await apiLogin({ username, password })
+        remember && localStorage.setItem('isLoggedIn', response.data.token ? true : false)
         return response.data
     } catch (e) {
         return e
@@ -17,6 +18,7 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         logout: (state, action) => {
+            localStorage.removeItem('isLoggedIn')
             return initialState
         },
     },
