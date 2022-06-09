@@ -12,7 +12,7 @@ import { openAlert } from '../../Redux/Slices/Alert'
 import QRScanner from '../QRScanner/QRScanner'
 import CustomInput from './CustomInput'
 import { verifyID, verifyPhone } from '../../Utils/Verify'
-import { apiCheckPatientExists } from '../../Axios/Patient'
+
 import { apiCheckExists } from '../../Axios/Exists'
 
 const CustomForm = ({ title, row, mode, sendData }) => {

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { apiLogin, apiVerify } from '../../Axios/Auth'
+import { apiLogin, apiLogout, apiVerify } from '../../Axios/Auth'
 
 const initialState = { token: '', user: {}, verify: false }
 
@@ -13,13 +13,27 @@ export const login = createAsyncThunk('auth/login', async ({ username, password,
     }
 })
 
+export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+    try {
+        const response = await apiLogout()
+        localStorage.removeItem('isLoggedIn')
+        return response.data
+    } catch (e) {
+        return e
+    }
+})
+
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        logout: (state, action) => {
-            localStorage.removeItem('isLoggedIn')
-            return initialState
+        fillAuthState: (state, action) => {
+            const { token, user } = action.payload
+            return {
+                token,
+                user,
+                verify: true,
+            }
         },
     },
     extraReducers: {
@@ -31,8 +45,11 @@ const authSlice = createSlice({
                 verify: true,
             }
         },
+        [logout.fulfilled]: (state, action) => {
+            return initialState
+        },
     },
 })
 
-export const { logout } = authSlice.actions
+export const { fillAuthState } = authSlice.actions
 export default authSlice.reducer

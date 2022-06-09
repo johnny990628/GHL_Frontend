@@ -8,7 +8,7 @@ import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import { fetchReportByReportID } from '../../Redux/Slices/Dialog'
-import { deleteReport, fetchReport, renderTrigger } from '../../Redux/Slices/Report'
+import { deleteReport, fetchReport, reportTrigger } from '../../Redux/Slices/Report'
 
 import { apiDeleteReport } from '../../Axios/Report'
 import { openAlert } from '../../Redux/Slices/Alert'
@@ -21,7 +21,7 @@ const Report = () => {
     const { isOpen } = useSelector(state => state.dialog.report)
 
     useEffect(() => {
-        isOpen || dispatch(renderTrigger())
+        isOpen || dispatch(reportTrigger())
     }, [isOpen])
 
     const fetchData = async params => {

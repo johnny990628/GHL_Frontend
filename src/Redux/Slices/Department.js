@@ -1,11 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { apiCreateDepartment, apiDeleteDepartment, apiGetDepartments } from '../../Axios/Department'
-import { apiGetReports } from '../../Axios/Report'
-import { apiGetUsers } from '../../Axios/User'
+
 import { openAlert } from './Alert'
 import { logout } from './Auth'
 
-export const fetchDepartment = createAsyncThunk('report/fetchDepartment', async (params, thunkAPI) => {
+export const fetchDepartment = createAsyncThunk('department/fetchDepartment', async (params, thunkAPI) => {
     try {
         const response = await apiGetDepartments(params)
         const { results, count } = response.data
@@ -16,7 +15,7 @@ export const fetchDepartment = createAsyncThunk('report/fetchDepartment', async 
     }
 })
 
-export const createDepartment = createAsyncThunk('report/createDepartment', async ({ name, address }, thunkAPI) => {
+export const createDepartment = createAsyncThunk('department/createDepartment', async ({ name, address }, thunkAPI) => {
     try {
         const response = await apiCreateDepartment({ name, address })
         thunkAPI.dispatch(
@@ -32,7 +31,7 @@ export const createDepartment = createAsyncThunk('report/createDepartment', asyn
         return thunkAPI.rejectWithValue()
     }
 })
-export const deleteDepartment = createAsyncThunk('report/deleteDepartment', async (departmentID, thunkAPI) => {
+export const deleteDepartment = createAsyncThunk('department/deleteDepartment', async (departmentID, thunkAPI) => {
     try {
         const response = await apiDeleteDepartment(departmentID)
         return response.data
@@ -43,10 +42,12 @@ export const deleteDepartment = createAsyncThunk('report/deleteDepartment', asyn
 })
 
 const initialState = { results: [], count: 0, page: 1 }
-const reportSlice = createSlice({
-    name: 'report',
+const departmentSlice = createSlice({
+    name: 'department',
     initialState,
-    reducers: {},
+    reducers: {
+        departmentTrigger: (state, action) => ({ ...state, count: 0 }),
+    },
     extraReducers: {
         [fetchDepartment.fulfilled]: (state, action) => {
             return {
@@ -70,5 +71,5 @@ const reportSlice = createSlice({
         },
     },
 })
-
-export default reportSlice.reducer
+export const { departmentTrigger } = departmentSlice.actions
+export default departmentSlice.reducer

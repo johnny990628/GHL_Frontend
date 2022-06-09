@@ -74,6 +74,9 @@ export const removeProcessing = createAsyncThunk('patients/removeProcessing', as
 const patientsSlice = createSlice({
     name: 'patients',
     initialState,
+    reducers: {
+        patientTrigger: (state, action) => ({ ...state, count: 0 }),
+    },
     extraReducers: {
         [fetchPatients.pending]: (state, action) => {
             return {
@@ -119,7 +122,6 @@ const patientsSlice = createSlice({
             return {
                 ...state,
                 loading: false,
-                // data: state.data.filter(row => row.id !== id),
                 count: state.count - 1,
             }
         },
@@ -161,5 +163,7 @@ const patientsSlice = createSlice({
         },
     },
 })
+
+export const { patientTrigger } = patientsSlice.actions
 
 export default patientsSlice.reducer

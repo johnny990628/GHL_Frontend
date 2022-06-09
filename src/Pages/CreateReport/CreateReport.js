@@ -19,16 +19,15 @@ import Suggestion from '../../Assets/OrganJson/suggestion.json'
 import { createReport, resetReport } from '../../Redux/Slices/ReportForm'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import { fetchReportByReportID } from '../../Redux/Slices/Dialog'
-import { apiDeleteScheduleAndBloodAndReport, apiGetSchdules } from '../../Axios/Schedule'
 import { openAlert } from '../../Redux/Slices/Alert'
-import { logout } from '../../Redux/Slices/Auth'
+import { fetchSchedule, removeSchedule } from '../../Redux/Slices/Schedule'
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
     const [selection, setSelection] = useState([])
-    const [schedules, setSchedules] = useState([])
     const [patient, setPatient] = useState({})
     const steps = ['選擇病人', '新增報告', '完成']
+    const { schedules, patients, count } = useSelector(state => state.schedule)
     const report = useSelector(state => state.reportForm.create)
 
     const dispatch = useDispatch()
@@ -44,7 +43,7 @@ const CreateReport = () => {
 
     useEffect(() => {
         if (currentStep === 0) {
-            getSchedulesThenSetState()
+            dispatch(fetchSchedule())
         }
         if (currentStep === 2) {
             handleReportSubmit()
@@ -65,8 +64,6 @@ const CreateReport = () => {
         )
     }
 
-    const getSchedulesThenSetState = () => apiGetSchdules({ procedureCode: '19009C' }).then(res => setSchedules(res.data.results))
-
     const columns = [
         {
             field: 'processing',
@@ -79,10 +76,10 @@ const CreateReport = () => {
                             dispatch(
                                 openAlert({
                                     alertTitle: `確定要取消 ${name} ${gender === '男' ? '先生' : '小姐'}的排程?`,
-                                    toastTitle: '加入排程成功',
+                                    toastTitle: '取消排程成功',
                                     text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
                                     type: 'confirm',
-                                    event: () => apiDeleteScheduleAndBloodAndReport(id).then(getSchedulesThenSetState),
+                                    event: () => dispatch(removeSchedule(id)),
                                 })
                             )
                         }}
@@ -134,12 +131,7 @@ const CreateReport = () => {
 
                 <Box className={classes.tableContainer}>
                     {currentStep === 0 && (
-                        <CustomDataGrid
-                            data={schedules.map(s => s.patient)}
-                            columns={columns}
-                            selection={selection}
-                            setSelection={setSelection}
-                        />
+                        <CustomDataGrid data={patients} columns={columns} selection={selection} setSelection={setSelection} />
                     )}
                     {currentStep === 1 && (
                         <CustomReportForm

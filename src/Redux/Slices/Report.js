@@ -30,12 +30,7 @@ const reportSlice = createSlice({
     name: 'report',
     initialState,
     reducers: {
-        renderTrigger: (state, action) => {
-            return {
-                ...state,
-                count: state.count - 1,
-            }
-        },
+        reportTrigger: (state, action) => ({ ...state, count: 0 }),
     },
     extraReducers: {
         [fetchReport.fulfilled]: (state, action) => {
@@ -55,6 +50,6 @@ const reportSlice = createSlice({
     },
 })
 
-export const { renderTrigger } = reportSlice.actions
+export const { reportTrigger } = reportSlice.actions
 
 export default reportSlice.reducer

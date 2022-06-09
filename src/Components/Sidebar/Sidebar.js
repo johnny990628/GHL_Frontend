@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { List, ListItem, Box, Drawer, Tooltip, useMediaQuery } from '@mui/material'
+import { List, ListItem, Box, Drawer, Tooltip, useMediaQuery, Button, Avatar } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { Dehaze, DoubleArrow } from '@mui/icons-material'
 import useStyles from './Style'
@@ -14,6 +14,7 @@ const Sidebar = () => {
     const location = useLocation()
     const dispatch = useDispatch()
     const { isOpen } = useSelector(state => state.sidebar)
+
     const theme = useTheme()
     const tab = useMediaQuery(theme.breakpoints.down('lg'))
     const firstRender = useRef(true)

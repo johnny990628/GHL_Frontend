@@ -6,6 +6,7 @@ import dialogReducer from './Slices/Dialog'
 import alertReducer from './Slices/Alert'
 import authReducer from './Slices/Auth'
 import reportReducer from './Slices/Report'
+import scheduleReducer from './Slices/Schedule'
 import departmentReducer from './Slices/Department'
 import userReducer from './Slices/User'
 import DashboardReducer from './Slices/Dashboard'
@@ -19,6 +20,7 @@ export default configureStore({
         alert: alertReducer,
         auth: authReducer,
         report: reportReducer,
+        schedule: scheduleReducer,
         department: departmentReducer,
         user: userReducer,
         dashboard: DashboardReducer,

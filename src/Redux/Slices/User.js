@@ -27,7 +27,9 @@ const initialState = { results: [], count: 0, page: 1 }
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {},
+    reducers: {
+        userTrigger: (state, action) => ({ ...state, count: 0 }),
+    },
     extraReducers: {
         [fetchUser.fulfilled]: (state, action) => {
             return {
@@ -45,5 +47,5 @@ const userSlice = createSlice({
         },
     },
 })
-
+export const { userTrigger } = userSlice.actions
 export default userSlice.reducer
