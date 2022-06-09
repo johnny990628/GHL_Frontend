@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { apiLogin, apiLogout, apiVerify } from '../../Axios/Auth'
+import { apiLogin, apiLogout, apiRegister, apiVerify } from '../../Axios/Auth'
 
 const initialState = { token: '', user: {}, verify: false }
 
@@ -17,6 +17,15 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
     try {
         const response = await apiLogout()
         localStorage.removeItem('isLoggedIn')
+        return response.data
+    } catch (e) {
+        return e
+    }
+})
+
+export const register = createAsyncThunk('auth/register', async ({ username, password, name }, thunkAPI) => {
+    try {
+        const response = await apiRegister({ username, password, name })
         return response.data
     } catch (e) {
         return e
@@ -46,6 +55,9 @@ const authSlice = createSlice({
             }
         },
         [logout.fulfilled]: (state, action) => {
+            return initialState
+        },
+        [register.fulfilled]: (state, action) => {
             return initialState
         },
     },

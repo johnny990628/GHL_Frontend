@@ -42,11 +42,7 @@ const Report = () => {
                 accessor: 'status',
                 Header: '狀態',
                 Cell: row => (
-                    <Box
-                        className={`${classes.status} ${
-                            (row.row.original.roles && row.row.original.roles.find(r => r.level === 3) === 'pending') || 'processing'
-                        }`}
-                    >
+                    <Box className={`${classes.status} ${row.row.original.roles.find(r => r.level === 3) && 'processing'}`}>
                         {row.row.original.roles.find(r => r.level === 3) ? (
                             <Box className={classes.statusBox}>管理者</Box>
                         ) : (

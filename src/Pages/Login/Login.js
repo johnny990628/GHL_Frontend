@@ -11,22 +11,72 @@ import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-import { apiLogin } from '../../Axios/Auth'
 import { useDispatch } from 'react-redux'
-import { login } from '../../Redux/Slices/Auth'
+import { login, register } from '../../Redux/Slices/Auth'
 
 const Login = () => {
+    const [page, setPage] = useState('login')
     const [remember, setRemember] = useState(false)
     const dispatch = useDispatch()
-    const handleSubmit = e => {
+    const handleLoginSubmit = e => {
         e.preventDefault()
         const data = new FormData(e.currentTarget)
         dispatch(login({ username: data.get('username'), password: data.get('password'), remember }))
     }
+    const handleRegisterSubmit = e => {
+        e.preventDefault()
+        const data = new FormData(e.currentTarget)
+        dispatch(register({ username: data.get('username'), password: data.get('password'), name: data.get('name') }))
+        setPage('login')
+    }
 
-    return (
-        <Container component="main" maxWidth="xs">
-            <CssBaseline />
+    const RegisterSection = () => {
+        return (
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    backgroundColor: 'white',
+                    padding: '2rem',
+                    borderRadius: '1rem',
+                }}
+            >
+                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                    <LockOutlinedIcon />
+                </Avatar>
+                <Typography component="h1" variant="h5">
+                    好心肝註冊
+                </Typography>
+                <Box component="form" onSubmit={handleRegisterSubmit} noValidate sx={{ mt: 1 }}>
+                    <TextField margin="normal" required fullWidth label="帳號" name="username" autoComplete="username" autoFocus />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="密碼"
+                        type="password"
+                        autoComplete="current-password"
+                    />
+                    <TextField margin="normal" required fullWidth name="name" label="姓名" type="text" />
+
+                    <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                        註冊
+                    </Button>
+                    <Grid item>
+                        <Link href="#" variant="body2" onClick={() => setPage('login')}>
+                            有帳號了嗎?返回登入
+                        </Link>
+                    </Grid>
+                </Box>
+            </Box>
+        )
+    }
+
+    const LoginSection = () => {
+        return (
             <Box
                 sx={{
                     marginTop: 8,
@@ -44,7 +94,7 @@ const Login = () => {
                 <Typography component="h1" variant="h5">
                     好心肝登入
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                <Box component="form" onSubmit={handleLoginSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField margin="normal" required fullWidth label="帳號" name="username" autoComplete="username" autoFocus />
                     <TextField
                         margin="normal"
@@ -65,12 +115,19 @@ const Login = () => {
                     </Button>
 
                     <Grid item>
-                        <Link href="#" variant="body2">
+                        <Link href="#" variant="body2" onClick={() => setPage('register')}>
                             沒有帳號嗎?註冊
                         </Link>
                     </Grid>
                 </Box>
             </Box>
+        )
+    }
+
+    return (
+        <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            {page === 'login' ? <LoginSection /> : <RegisterSection />}
         </Container>
     )
 }
