@@ -209,9 +209,8 @@ const CustomForm = ({ title, row, mode, sendData }) => {
                             {mode === 'create' ? '新增' : '修改'}
                         </Button>
                         <Button
-                            variant="text"
+                            variant="outlined"
                             className={classes.button}
-                            color="secondary"
                             sx={{
                                 color: theme.palette.primary.main,
 

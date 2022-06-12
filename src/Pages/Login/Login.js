@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -13,11 +13,16 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { useDispatch } from 'react-redux'
 import { login, register } from '../../Redux/Slices/Auth'
+import useStyles from './Style'
+import { Grow } from '@mui/material'
 
 const Login = () => {
     const [page, setPage] = useState('login')
-    const [remember, setRemember] = useState(false)
+    const [remember, setRemember] = useState(true)
+
     const dispatch = useDispatch()
+    const classes = useStyles()
+
     const handleLoginSubmit = e => {
         e.preventDefault()
         const data = new FormData(e.currentTarget)
@@ -34,7 +39,6 @@ const Login = () => {
         return (
             <Box
                 sx={{
-                    marginTop: 8,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -44,7 +48,7 @@ const Login = () => {
                 }}
             >
                 <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                    <LockOutlinedIcon />
+                    <LockOutlinedIcon className={classes.icon} />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     好心肝註冊
@@ -79,7 +83,6 @@ const Login = () => {
         return (
             <Box
                 sx={{
-                    marginTop: 8,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -89,7 +92,7 @@ const Login = () => {
                 }}
             >
                 <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                    <LockOutlinedIcon />
+                    <LockOutlinedIcon className={classes.icon} />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     好心肝登入
@@ -125,9 +128,24 @@ const Login = () => {
     }
 
     return (
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" sx={{ padding: 20 }}>
             <CssBaseline />
-            {page === 'login' ? <LoginSection /> : <RegisterSection />}
+
+            {page === 'login' && (
+                <Grow in={page === 'login'} timeout={1000}>
+                    <div>
+                        <LoginSection />
+                    </div>
+                </Grow>
+            )}
+
+            {page === 'register' && (
+                <Grow in={page === 'register'} timeout={1000}>
+                    <div>
+                        <RegisterSection />
+                    </div>
+                </Grow>
+            )}
         </Container>
     )
 }
