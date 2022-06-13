@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { apiAddBlood } from '../../Axios/Blood'
 import { apiCreateDepartment, apiDeleteDepartment, apiGetDepartments } from '../../Axios/Department'
-import { apiDeleteScheduleAndBloodAndReport, apiGetSchdules } from '../../Axios/Schedule'
+import { apiCreateReport } from '../../Axios/Report'
+import { apiAddSchedule, apiDeleteScheduleAndBloodAndReport, apiGetSchdules } from '../../Axios/Schedule'
 
 import { openAlert } from './Alert'
 import { logout } from './Auth'
@@ -10,6 +12,18 @@ export const fetchSchedule = createAsyncThunk('schedule/fetchSchedule', async (_
         const response = await apiGetSchdules({ procedureCode: '19009C' })
         const { results, count } = response.data
         return { schedules: results, patients: results.map(s => s.patient), count }
+    } catch (e) {
+        thunkAPI.dispatch(logout())
+        return thunkAPI.rejectWithValue()
+    }
+})
+
+export const addSchedule = createAsyncThunk('schedule/addSchedule', async ({ patientID, procedureCode, blood }, thunkAPI) => {
+    try {
+        const reportResponse = await apiCreateReport({ patientID, procedureCode, blood })
+        const reportID = reportResponse.data._id
+        await apiAddSchedule({ patientID, reportID, procedureCode })
+        await apiAddBlood({ patientID, number: blood })
     } catch (e) {
         thunkAPI.dispatch(logout())
         return thunkAPI.rejectWithValue()
@@ -35,6 +49,11 @@ const scheduleSlice = createSlice({
         [fetchSchedule.fulfilled]: (state, action) => {
             return {
                 ...action.payload,
+            }
+        },
+        [addSchedule.fulfilled]: (state, action) => {
+            return {
+                ...state,
             }
         },
         [removeSchedule.fulfilled]: (state, action) => {

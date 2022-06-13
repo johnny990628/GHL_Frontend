@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { apiLogin, apiLogout, apiRegister, apiVerify } from '../../Axios/Auth'
+import { openAlert } from './Alert'
 
 const initialState = { token: '', user: {}, verify: false }
 
@@ -7,9 +8,23 @@ export const login = createAsyncThunk('auth/login', async ({ username, password,
     try {
         const response = await apiLogin({ username, password })
         remember && localStorage.setItem('isLoggedIn', response.data.token ? true : false)
+        thunkAPI.dispatch(
+            openAlert({
+                toastTitle: '登入成功',
+                text: `歡迎 ${response.data.user.name}`,
+                icon: 'success',
+            })
+        )
         return response.data
     } catch (e) {
-        return e
+        thunkAPI.dispatch(
+            openAlert({
+                toastTitle: '登入失敗',
+                text: '查無使用者或密碼錯誤',
+                icon: 'error',
+            })
+        )
+        return thunkAPI.rejectWithValue()
     }
 })
 
@@ -17,6 +32,12 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
     try {
         const response = await apiLogout()
         localStorage.removeItem('isLoggedIn')
+        thunkAPI.dispatch(
+            openAlert({
+                toastTitle: '登出成功',
+                icon: 'success',
+            })
+        )
         return response.data
     } catch (e) {
         return e
@@ -28,7 +49,14 @@ export const register = createAsyncThunk('auth/register', async ({ username, pas
         const response = await apiRegister({ username, password, name })
         return response.data
     } catch (e) {
-        return e
+        thunkAPI.dispatch(
+            openAlert({
+                toastTitle: '註冊失敗',
+                text: '使用者已存在',
+                icon: 'error',
+            })
+        )
+        return thunkAPI.rejectWithValue()
     }
 })
 
@@ -54,10 +82,16 @@ const authSlice = createSlice({
                 verify: true,
             }
         },
+        [login.rejected]: (state, action) => {
+            return initialState
+        },
         [logout.fulfilled]: (state, action) => {
             return initialState
         },
         [register.fulfilled]: (state, action) => {
+            return initialState
+        },
+        [register.rejected]: (state, action) => {
             return initialState
         },
     },

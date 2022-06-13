@@ -99,7 +99,7 @@ const Main = () => {
                 <Apps sx={{ margin: '20px 30px 20px 8px' }} />
             </IconButton> */}
             {/* <Dashboard /> */}
-            <CustomAlert />
+            {/* <CustomAlert /> */}
         </Box>
     )
 }

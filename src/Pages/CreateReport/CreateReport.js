@@ -76,7 +76,7 @@ const CreateReport = () => {
                             dispatch(
                                 openAlert({
                                     alertTitle: `確定要取消 ${name} ${gender === '男' ? '先生' : '小姐'}的排程?`,
-                                    toastTitle: '取消排程成功',
+                                    toastTitle: '取消排程',
                                     text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
                                     type: 'confirm',
                                     event: () => dispatch(removeSchedule(id)),

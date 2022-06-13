@@ -20,8 +20,9 @@ const useStyles = makeStyles(theme => ({
     status: {
         backgroundColor: theme.palette.status.yet,
         padding: '8px',
-        marginRight: '.6rem',
+        marginLeft: '.8rem',
         borderRadius: '1rem',
+        width: '6rem',
         '&.processing': {
             backgroundColor: theme.palette.status.processing,
         },

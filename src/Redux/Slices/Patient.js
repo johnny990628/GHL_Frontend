@@ -49,18 +49,6 @@ export const deletePatient = createAsyncThunk('patients/deletePatient', async ({
     }
 })
 
-export const addProcessing = createAsyncThunk('patients/addProcessing', async ({ patientID, procedureCode, blood }, thunkAPI) => {
-    try {
-        const reportResponse = await apiCreateReport({ patientID, procedureCode, blood })
-        const reportID = reportResponse.data._id
-        await apiAddSchedule({ patientID, reportID, procedureCode })
-        await apiAddBlood({ patientID, number: blood })
-    } catch (e) {
-        thunkAPI.dispatch(logout())
-        return thunkAPI.rejectWithValue()
-    }
-})
-
 export const removeProcessing = createAsyncThunk('patients/removeProcessing', async (patientID, thunkAPI) => {
     try {
         const response = await apiDeleteScheduleAndBloodAndReport(patientID)
@@ -125,21 +113,7 @@ const patientsSlice = createSlice({
                 count: state.count - 1,
             }
         },
-        [addProcessing.fulfilled]: (state, action) => {
-            return {
-                ...state,
-                loading: false,
-                count: 0,
-            }
-        },
-        [removeProcessing.fulfilled]: (state, action) => {
-            const patient = action.payload
-            return {
-                ...state,
-                loading: false,
-                count: 0,
-            }
-        },
+
         [fetchPatients.rejected]: (state, action) => {
             return initialState
         },
@@ -153,12 +127,6 @@ const patientsSlice = createSlice({
             return initialState
         },
         [deletePatient.rejected]: (state, action) => {
-            return initialState
-        },
-        [addProcessing.rejected]: (state, action) => {
-            return initialState
-        },
-        [removeProcessing.rejected]: (state, action) => {
             return initialState
         },
     },

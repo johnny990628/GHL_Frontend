@@ -8,10 +8,11 @@ import CustomForm from '../../Components/CustomForm/CustomForm'
 import EditDialog from './EditDialog'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { addProcessing, removeProcessing, deletePatient, createPatient, fetchPatients } from '../../Redux/Slices/Patient'
+import { deletePatient, createPatient, fetchPatients, patientTrigger } from '../../Redux/Slices/Patient'
 import { openDialog } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
 import { apiCheckExists } from '../../Axios/Exists'
+import { addSchedule, removeSchedule } from '../../Redux/Slices/Schedule'
 
 const Patient = () => {
     const classes = useStyles()
@@ -23,37 +24,65 @@ const Patient = () => {
         () => [
             {
                 accessor: row => {
-                    return row.processing ? 1 : 0
+                    return row.schedule.length > 0 ? 1 : 0
                 },
-                Header: '排程',
-                Cell: row => (
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <IconButton
-                            onClick={() => {
-                                const { id, name, gender } = row.row.original
-                                dispatch(
-                                    openAlert({
-                                        alertTitle: '請輸入抽血編號',
-                                        toastTitle: '加入排程成功',
-                                        text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
-                                        type: 'input',
-                                        event: text => dispatch(addProcessing({ patientID: id, procedureCode: '19009C', blood: text })),
-                                        preConfirm: async text => {
-                                            const { data: blood } = await apiCheckExists({ type: 'blood', value: text })
-                                            const { data: schedule } = await apiCheckExists({ type: 'schedule', value: id })
-                                            let warning = ''
-                                            if (blood) warning += '此編號已被使用 '
-                                            if (schedule) warning += '此病人已在排程中'
-                                            return { exists: blood || schedule, warning }
-                                        },
-                                    })
-                                )
-                            }}
-                        >
-                            <CalendarToday />
-                        </IconButton>
-                    </Box>
-                ),
+                Header: '排程狀態',
+                Cell: row => {
+                    const isOnSchedule = row.row.original.schedule.length > 0
+                    const { id, name, gender } = row.row.original
+                    return (
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            {isOnSchedule ? (
+                                <IconButton
+                                    onClick={() => {
+                                        dispatch(
+                                            openAlert({
+                                                alertTitle: `確定要取消 ${name} ${gender === '男' ? '先生' : '小姐'}的排程?`,
+                                                toastTitle: '取消排程',
+                                                text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                                                type: 'confirm',
+                                                event: () => dispatch(removeSchedule(id)).then(() => dispatch(patientTrigger())),
+                                            })
+                                        )
+                                    }}
+                                >
+                                    <Cancel />
+                                </IconButton>
+                            ) : (
+                                <IconButton
+                                    onClick={() => {
+                                        dispatch(
+                                            openAlert({
+                                                alertTitle: '請輸入抽血編號',
+                                                toastTitle: '加入排程',
+                                                text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                                                type: 'input',
+                                                event: text =>
+                                                    dispatch(addSchedule({ patientID: id, procedureCode: '19009C', blood: text })).then(
+                                                        () => dispatch(patientTrigger())
+                                                    ),
+                                                preConfirm: async text => {
+                                                    const { data: blood } = await apiCheckExists({ type: 'blood', value: text })
+                                                    const { data: schedule } = await apiCheckExists({ type: 'schedule', value: id })
+                                                    let warning = ''
+                                                    if (blood) warning += '此編號已被使用 '
+                                                    if (schedule) warning += '此病人已在排程中'
+                                                    return { exists: blood || schedule, warning }
+                                                },
+                                            })
+                                        )
+                                    }}
+                                >
+                                    <CalendarToday />
+                                </IconButton>
+                            )}
+
+                            <Box className={`${classes.status} ${isOnSchedule && 'processing'}`}>
+                                <Box className={classes.statusBox}>{isOnSchedule ? '排程中' : '未排程'}</Box>
+                            </Box>
+                        </Box>
+                    )
+                },
             },
 
             { accessor: 'id', Header: '身分證字號' },
