@@ -123,23 +123,26 @@ const Department = () => {
                     <Box className={classes.formWrapper}>
                         <Box className={classes.formHeader}>新增部門</Box>
                         <Box className={classes.formContainer}>
-                            {inputModel.map(({ name, label, value, setValue, required }) => (
-                                <CustomInput
-                                    key={name}
-                                    name={name}
-                                    label={label}
-                                    value={value}
-                                    setValue={setValue}
-                                    handleChange={handleChange}
-                                    handleHelperText={handleHelperText}
-                                    error={errorField.includes(name)}
-                                    required={required}
-                                />
-                            ))}
+                            <Box className={classes.formBody}>
+                                {inputModel.map(({ name, label, value, setValue, required }) => (
+                                    <CustomInput
+                                        key={name}
+                                        name={name}
+                                        label={label}
+                                        value={value}
+                                        setValue={setValue}
+                                        handleChange={handleChange}
+                                        handleHelperText={handleHelperText}
+                                        error={errorField.includes(name)}
+                                        required={required}
+                                    />
+                                ))}
+                            </Box>
                             <Button
                                 variant="contained"
                                 className={classes.button}
-                                sx={{ fontSize: '1.1rem ', padding: '.1rem', marginRight: '.5rem' }}
+                                fullWidth
+                                sx={{ fontSize: '1.1rem ', padding: '.5rem', margin: '1rem' }}
                                 onClick={handleSubmit}
                             >
                                 新增

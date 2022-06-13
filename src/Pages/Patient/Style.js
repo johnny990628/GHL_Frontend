@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     },
     accordion: {
         backgroundColor: theme.palette.secondary.main,
-        width: '100%',
+        width: '90%',
     },
     status: {
         backgroundColor: theme.palette.status.yet,
