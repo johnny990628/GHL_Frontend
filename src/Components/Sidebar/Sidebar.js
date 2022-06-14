@@ -69,7 +69,7 @@ const Sidebar = () => {
             )}
             {isOpen && (
                 <img
-                    src="./logo2.jpg"
+                    src="./logo.jpg"
                     className={classes.logo}
                     alt="logo"
                     style={{ width: '3.8rem', height: '4rem', position: 'fixed', top: 2 }}

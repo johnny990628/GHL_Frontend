@@ -11,10 +11,12 @@ import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
+import { useTheme } from '@mui/material/styles'
 import { useDispatch } from 'react-redux'
 import { login, register } from '../../Redux/Slices/Auth'
 import useStyles from './Style'
-import { Grow } from '@mui/material'
+import { Grow, IconButton, useMediaQuery } from '@mui/material'
+import { AccountCircle, Person, PersonAdd } from '@mui/icons-material'
 
 const Login = () => {
     const [page, setPage] = useState('login')
@@ -22,6 +24,8 @@ const Login = () => {
 
     const dispatch = useDispatch()
     const classes = useStyles()
+    const theme = useTheme()
+    const com = useMediaQuery(theme.breakpoints.up('lg'))
 
     const handleLoginSubmit = e => {
         e.preventDefault()
@@ -37,21 +41,10 @@ const Login = () => {
 
     const RegisterSection = () => {
         return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    backgroundColor: 'white',
-                    padding: '2rem',
-                    borderRadius: '1rem',
-                }}
-            >
-                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                    <LockOutlinedIcon className={classes.icon} />
-                </Avatar>
+            <Box className={classes.formContainer}>
+                <img src="./logo2.jpg" alt="logo" style={{ width: '3.8rem', height: '4rem' }} />
                 <Typography component="h1" variant="h5">
-                    好心肝註冊
+                    註冊
                 </Typography>
                 <Box component="form" onSubmit={handleRegisterSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField margin="normal" required fullWidth label="帳號" name="username" autoComplete="username" autoFocus />
@@ -81,21 +74,11 @@ const Login = () => {
 
     const LoginSection = () => {
         return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    backgroundColor: 'white',
-                    padding: '2rem',
-                    borderRadius: '1rem',
-                }}
-            >
-                <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                    <LockOutlinedIcon className={classes.icon} />
-                </Avatar>
+            <Box className={classes.formContainer}>
+                <img src="./logo.jpg" alt="logo" style={{ width: '3.8rem', height: '4rem' }} />
+
                 <Typography component="h1" variant="h5">
-                    好心肝登入
+                    登入
                 </Typography>
                 <Box component="form" onSubmit={handleLoginSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField margin="normal" required fullWidth label="帳號" name="username" autoComplete="username" autoFocus />
@@ -128,8 +111,17 @@ const Login = () => {
     }
 
     return (
-        <Container component="main" maxWidth="xs" sx={{ padding: 20 }}>
+        <Container
+            component="main"
+            sx={{ height: '90vh', display: 'flex', justifyContent: com ? 'space-between' : 'center', alignItems: 'center' }}
+        >
             <CssBaseline />
+
+            {com && (
+                <IconButton className={classes.iconButton} sx={{ backgroundColor: '#72B2B2' }} onClick={() => setPage('login')}>
+                    <Person className={classes.icons} />
+                </IconButton>
+            )}
 
             {page === 'login' && (
                 <Grow in={page === 'login'} timeout={1000}>
@@ -145,6 +137,11 @@ const Login = () => {
                         <RegisterSection />
                     </div>
                 </Grow>
+            )}
+            {com && (
+                <IconButton className={classes.iconButton} sx={{ backgroundColor: '#EAA7B8' }} onClick={() => setPage('register')}>
+                    <PersonAdd className={classes.icons} />
+                </IconButton>
             )}
         </Container>
     )
