@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Button, FormControlLabel, FormGroup, Switch } from '@mui/material'
-
 import { useTheme } from '@mui/styles'
-import useStyles from './Style'
-
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { closeDialog } from '../../Redux/Slices/Dialog'
-import { openAlert } from '../../Redux/Slices/Alert'
+import useStyles from './Style'
+
 import QRScanner from '../QRScanner/QRScanner'
 import CustomInput from './CustomInput'
+import { closeDialog } from '../../Redux/Slices/Dialog'
+import { openAlert } from '../../Redux/Slices/Alert'
 import { verifyID, verifyPhone } from '../../Utils/Verify'
-
 import { apiCheckExists } from '../../Axios/Exists'
 
 const CustomForm = ({ title, row, mode, sendData }) => {
@@ -153,7 +151,6 @@ const CustomForm = ({ title, row, mode, sendData }) => {
     const inputModel = [
         { name: 'id', label: '身分證字號', value: id, setValue: setId, required: true },
         { name: 'name', label: '姓名', value: name, setValue: setName, required: true },
-        // { name: 'address', label: '地址', value: address, setValue: setAddress, required: true },
         { name: 'phone', label: '電話', value: phone, setValue: setPhone, required: true },
         { name: 'department', label: '部門', value: department, setValue: setDepartment, required: false },
         { name: 'birth', label: '生日', value: birth, setValue: setBirth, required: true },

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Html5Qrcode } from 'html5-qrcode'
-import { Box, Button } from '@mui/material'
+import { Button } from '@mui/material'
 import useStyles from './Style'
 const qrConfig = { fps: 10, qrbox: { width: 300, height: 300 } }
 let html5QrCode

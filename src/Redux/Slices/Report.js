@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { apiGetDepartments } from '../../Axios/Department'
 import { apiDeleteReport, apiGetReports } from '../../Axios/Report'
-import { apiGetUsers } from '../../Axios/User'
 import { logout } from './Auth'
 
 export const fetchReport = createAsyncThunk('report/fetchReport', async (params, thunkAPI) => {

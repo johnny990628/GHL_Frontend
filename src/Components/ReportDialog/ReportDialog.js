@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
-    Box,
     Dialog,
     DialogContent,
     DialogTitle,
     DialogActions,
     IconButton,
-    ListItem,
     ListItemText,
     Button,
     Select,
@@ -15,7 +13,7 @@ import {
     InputLabel,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { Close, ConnectingAirportsOutlined, FormatListBulleted } from '@mui/icons-material'
+import { Close } from '@mui/icons-material'
 import { v4 } from 'uuid'
 
 import useStyles from './Style'
@@ -29,7 +27,6 @@ import Suggestion from '../../Assets/OrganJson/suggestion.json'
 import { closeDialog } from '../../Redux/Slices/Dialog'
 import CustomReportForm from '../CustomReport/CustomReportForm'
 import ReportFormHtml from './ReportFormHtml'
-import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 import { updateReport, fillReport, resetReport } from '../../Redux/Slices/ReportForm'
 import { openAlert } from '../../Redux/Slices/Alert'
 
@@ -40,8 +37,6 @@ const ReportDialog = ({ mode }) => {
         isOpen,
         row: { patient, records, reportID },
     } = useSelector(state => state.dialog.report)
-    // reverse records and non-destructive
-    // const reverseRecords = useMemo(() => [].concat(records).reverse(), [records])
 
     const report = useSelector(state => state.reportForm.edit)
     const [version, setVersion] = useState('')

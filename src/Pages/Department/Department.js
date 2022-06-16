@@ -1,22 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Box,
-    Button,
-    FormControl,
-    IconButton,
-    InputLabel,
-    ListItemText,
-    MenuItem,
-    MenuList,
-    Select,
-} from '@mui/material'
+import React, { useMemo, useState } from 'react'
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, IconButton } from '@mui/material'
 import { useDebouncedCallback } from 'use-debounce'
 
 import useStyles from './Style'
-import { apiCreateDepartment, apiDeleteDepartment, apiGetDepartments } from '../../Axios/Department'
+
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import CustomInput from '../../Components/CustomForm/CustomInput'

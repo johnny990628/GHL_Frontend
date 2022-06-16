@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Stepper, Step, StepLabel, IconButton, Button } from '@mui/material'
 import { ArrowBack, ArrowForward, CheckCircleOutline, Cancel } from '@mui/icons-material'
 import { useTheme } from '@mui/styles'
@@ -101,14 +101,6 @@ const CreateReport = () => {
             },
         },
         { field: 'phone', headerName: '電話', flex: 1 },
-        // {
-        //     field: 'updateTime',
-        //     headerName: '排程時間',
-        //     flex: 1,
-        //     renderCell: params => {
-        //         return <Box>{new Date(params.row.createdAt).toLocaleTimeString()}</Box>
-        //     },
-        // },
     ]
 
     return (

@@ -1,10 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { apiAddBlood } from '../../Axios/Blood'
-import { apiCreateDepartment, apiDeleteDepartment, apiGetDepartments } from '../../Axios/Department'
 import { apiCreateReport } from '../../Axios/Report'
 import { apiAddSchedule, apiDeleteScheduleAndBloodAndReport, apiGetSchdules } from '../../Axios/Schedule'
-
-import { openAlert } from './Alert'
 import { logout } from './Auth'
 
 export const fetchSchedule = createAsyncThunk('schedule/fetchSchedule', async (_, thunkAPI) => {

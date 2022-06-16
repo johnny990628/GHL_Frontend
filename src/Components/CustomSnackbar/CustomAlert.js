@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Snackbar, Alert } from '@mui/material'
+import React, { useEffect } from 'react'
+
 import Swal from 'sweetalert2'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -32,14 +32,7 @@ const CustomSnackbar = () => {
 
     const handleClose = () => dispatch(closeSnackbar())
 
-    return (
-        <div />
-        // <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'right' }} open={isOpen} autoHideDuration={3000} onClose={handleClose}>
-        //     {/* <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-        //         {message}
-        //     </Alert> */}
-        // </Snackbar>
-    )
+    return <div />
 }
 
 export default CustomSnackbar

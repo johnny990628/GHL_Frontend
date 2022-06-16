@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
-import { Box, List, ListItem, ListItemButton, ListItemText, ListItemIcon, IconButton } from '@mui/material'
+import React, { useEffect, useMemo } from 'react'
+import { Box, IconButton } from '@mui/material'
 import { Delete, Visibility } from '@mui/icons-material'
-
 import { useDispatch, useSelector } from 'react-redux'
 
 import useStyles from './Style'
+
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import { fetchReportByReportID } from '../../Redux/Slices/Dialog'
 import { deleteReport, fetchReport, reportTrigger } from '../../Redux/Slices/Report'
-
-import { apiDeleteReport } from '../../Axios/Report'
 import { openAlert } from '../../Redux/Slices/Alert'
 
 const Report = () => {
@@ -93,12 +91,10 @@ const Report = () => {
             },
             { accessor: 'patientID', Header: '身分證字號', Cell: row => row.row.original.patient.id },
             { accessor: 'name', Header: '姓名', Cell: row => row.row.original.patient.name },
-            // { accessor: 'id', Header: '報告ID', Cell: row => row.row.original._id },
             { accessor: 'version', Header: '報告版本', Cell: row => row.row.original.records.length || '無' },
             { accessor: 'procedureCode', Header: '病例代碼', Cell: row => row.row.original.procedureCode },
             { accessor: 'blood', Header: '抽血編號', Cell: row => row.row.original.blood },
             { accessor: 'createdAt', Header: '完成時間', Cell: row => new Date(row.row.original.createdAt).toLocaleString() },
-            // { accessor: 'department', Header: '部門單位', Cell: row => row.row.original.patient.department },
             {
                 accessor: 'actions',
                 Header: '操作',

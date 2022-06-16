@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react'
-import { Dialog, DialogContent, Box } from '@mui/material'
+import React, { useCallback } from 'react'
+import { Dialog, DialogContent } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { closeDialog } from '../../Redux/Slices/Dialog'
@@ -16,7 +16,6 @@ const EditDialog = () => {
 
     return (
         <Dialog open={isOpen} onClose={() => dispatch(closeDialog({ type: 'patient' }))}>
-            {/* <DialogTitle>修改</DialogTitle> */}
             <DialogContent>
                 <CustomForm title="修改病人" row={row} mode="edit" sendData={sendData} />
             </DialogContent>

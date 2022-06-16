@@ -1,10 +1,8 @@
 import { apiCreatePatient, apiDeletePatientAndBloodAndSchedule, apiGetPatients, apiUpdatePatient } from '../../Axios/Patient'
-import { apiAddSchedule, apiDeleteScheduleAndBloodAndReport } from '../../Axios/Schedule'
+import { apiDeleteScheduleAndBloodAndReport } from '../../Axios/Schedule'
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import { apiAddBlood } from '../../Axios/Blood'
-import { apiCreateReport } from '../../Axios/Report'
 import { logout } from './Auth'
 
 const initialState = { loading: false, data: [], count: 0, page: 1, error: '' }
@@ -90,7 +88,6 @@ const patientsSlice = createSlice({
             }
         },
         [createPatient.fulfilled]: (state, action) => {
-            const patient = action.payload
             return {
                 ...state,
                 loading: false,
@@ -98,15 +95,13 @@ const patientsSlice = createSlice({
             }
         },
         [updatePatient.fulfilled]: (state, action) => {
-            const patient = action.payload
             return {
                 ...state,
                 loading: false,
-                data: state.data.map(row => (row.id === patient.id ? patient : row)),
+                count: 0,
             }
         },
         [deletePatient.fulfilled]: (state, action) => {
-            const { id } = action.payload
             return {
                 ...state,
                 loading: false,

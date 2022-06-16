@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo, useEffect } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Box, Accordion, AccordionSummary, AccordionDetails, IconButton } from '@mui/material'
 import { CalendarToday, ArrowDropDown, Delete, Edit, Cancel } from '@mui/icons-material'
 
@@ -88,10 +88,7 @@ const Patient = () => {
             { accessor: 'id', Header: '身分證字號' },
             { accessor: 'name', Header: '姓名' },
             { accessor: 'gender', Header: '性別' },
-            // { accessor: 'birth', Header: '生日' },
-            // { accessor: 'phone', Header: '電話' },
-            // { accessor: 'department', Header: '部門單位' },
-            // { accessor: 'address', Header: '地址' },
+
             {
                 accessor: 'createdAt',
                 Header: '建立日期',

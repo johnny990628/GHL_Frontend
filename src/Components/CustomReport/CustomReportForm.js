@@ -4,6 +4,7 @@ import { useTheme } from '@mui/styles'
 import Scrollspy from 'react-scrollspy'
 
 import useStyles from './Style'
+
 import CustomReportInput from './CustomReportInput'
 import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
 import { useDispatch, useSelector } from 'react-redux'
@@ -40,10 +41,6 @@ const FormSection = ({ list, mode }) => {
                 className={classes.toggleButton}
             >
                 <Box className={classes.formLabel}>{list.label}</Box>
-                {/* <FormControlLabel
-                    control={<Checkbox checked={isNormal} onChange={handleNormalOnChange} />}
-                    label={<Box className={classes.inputLabel}>正常</Box>}
-                /> */}
             </ToggleButton>
 
             <Box>
@@ -74,12 +71,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
         <>
             {mode === 'create' && (
                 <Box className={classes.patientInfo}>
-                    <Chip
-                        // icon={<EmojiEmotionsOutlined />}
-                        label={`${patient.id} / ${patient.name} / ${patient.gender}`}
-                        variant="outlined"
-                        className={classes.chip}
-                    />
+                    <Chip label={`${patient.id} / ${patient.name} / ${patient.gender}`} variant="outlined" className={classes.chip} />
                 </Box>
             )}
 

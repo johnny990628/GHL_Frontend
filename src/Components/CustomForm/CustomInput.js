@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, FormControl, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField } from '@mui/material'
 import { useTheme } from '@mui/styles'
-
 import { LocalizationProvider, DatePicker } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import { zhTW } from 'date-fns/locale'
 
 import useStyles from './Style'
+
 import { apiGetDepartments } from '../../Axios/Department'
 
 const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperText, error, mode, required }) => {

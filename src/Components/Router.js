@@ -6,13 +6,10 @@ import Patient from '../Pages/Patient/Patient'
 import Department from '../Pages/Department/Department'
 import Report from '../Pages/Report/Report'
 import User from '../Pages/User/User'
-import { useDispatch } from 'react-redux'
-import { verify } from '../Redux/Slices/Auth'
-import { apiVerify } from '../Axios/Auth'
 
 const Router = () => {
     const location = useLocation()
-    const dispatch = useDispatch()
+
     useEffect(() => {}, [location.pathname])
     return (
         <Routes>

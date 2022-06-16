@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { apiLogin, apiLogout, apiRegister, apiVerify } from '../../Axios/Auth'
+import { apiLogin, apiLogout, apiRegister } from '../../Axios/Auth'
 import { openAlert } from './Alert'
 
 const initialState = { token: '', user: {}, verify: false }

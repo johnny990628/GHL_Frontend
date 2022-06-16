@@ -1,4 +1,4 @@
-import { Home, EventAvailable, ReceiptLong, Accessible, Settings, CreateNewFolder, Person } from '@mui/icons-material'
+import { Home, EventAvailable, Accessible, CreateNewFolder, Person, AccountBalance } from '@mui/icons-material'
 
 const data = [
     {
@@ -35,7 +35,7 @@ const data = [
         display_name: '部門管理',
         name: 'department',
         route: '/department',
-        icon: <Settings />,
+        icon: <AccountBalance />,
     },
 ]
 

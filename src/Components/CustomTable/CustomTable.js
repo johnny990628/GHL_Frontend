@@ -18,22 +18,19 @@ import {
 import { useTheme } from '@mui/styles'
 import { Search, ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 import { useTable, useGlobalFilter, usePagination, useSortBy, useExpanded } from 'react-table'
-import { useDebouncedCallback } from 'use-debounce'
-import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 import useStyles from './Style'
-import { useLocation } from 'react-router-dom'
+
+import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
 const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalCount }) => {
     const [search, setSearch] = useState('')
 
     const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) => {
-        // const count = preGlobalFilteredRows.length
         const [value, setValue] = useState('')
 
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
-                {/* <Box className={classes.tableHeaderTotal}>{`總共${count}筆資料`}</Box> */}
                 <Search sx={{ mr: 1 }} />
                 <TextField
                     variant="standard"
@@ -118,10 +115,6 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
         fetchData({ limit: pageSize, offset: pageIndex, search, sort: sortBy[0]?.id, desc: sortBy[0]?.desc ? -1 : 1 })
     }, [pageIndex, pageSize, sortBy, search, totalCount])
 
-    // const handleDelete = () => {
-    //     dispatch(deleteAction(selectionModel))
-    //     dispatch(openSnackbar('刪除成功'))
-    // }
     return (
         <Box className={classes.container}>
             <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />

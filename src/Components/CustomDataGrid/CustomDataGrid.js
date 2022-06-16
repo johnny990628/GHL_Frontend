@@ -1,20 +1,9 @@
-import React, { useState } from 'react'
-
-import {
-    DataGrid,
-    GridToolbarContainer,
-    GridToolbarColumnsButton,
-    GridToolbarFilterButton,
-    GridToolbarDensitySelector,
-    GridToolbarExport,
-} from '@mui/x-data-grid'
-import { useDispatch } from 'react-redux'
+import React from 'react'
+import { DataGrid } from '@mui/x-data-grid'
 import useStyles from './Style'
 
-const CustomDataGrid = ({ data, columns, loading, selection, setSelection }) => {
+const CustomDataGrid = ({ data, columns, selection, setSelection }) => {
     const classes = useStyles()
-
-    const dispatch = useDispatch()
 
     return (
         <DataGrid
@@ -26,10 +15,7 @@ const CustomDataGrid = ({ data, columns, loading, selection, setSelection }) => 
             checkboxSelection={false}
             autoPageSize
             hideFooter
-            // components={{ Toolbar: CustomToolbar }}
-            // componentsProps={{ toolbar: { handleDelete } }}
             className={classes.table}
-            // loading={loading}
         />
     )
 }

@@ -3,7 +3,6 @@ import { Select, MenuItem, InputLabel, Button, TextField, FormControl } from '@m
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
-import { format } from 'date-fns'
 import { zhTW } from 'date-fns/locale' //給DatePicker用的中文月份
 import QRCode from 'qrcode.react'
 

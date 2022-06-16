@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { List, ListItem, Box, Drawer, Tooltip, useMediaQuery, Button, Avatar } from '@mui/material'
+import { List, ListItem, Box, Drawer, Tooltip, useMediaQuery } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { Dehaze, DoubleArrow } from '@mui/icons-material'
+
 import useStyles from './Style'
 
 import SidebarItem from './SidebarItem'

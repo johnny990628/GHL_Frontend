@@ -1,22 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import {
-    Box,
-    TextField,
-    FormControlLabel,
-    Checkbox,
-    Radio,
-    Select,
-    MenuItem,
-    FormControl,
-    InputLabel,
-    Button,
-    ToggleButton,
-} from '@mui/material'
+import { Box, TextField, FormControlLabel, Checkbox, Radio, Select, MenuItem, ToggleButton } from '@mui/material'
 import { useTheme } from '@mui/styles'
+import { useDispatch } from 'react-redux'
+import { useDebouncedCallback } from 'use-debounce'
+
 import useStyles from './Style'
 import { addCancer, removeCancer } from '../../Redux/Slices/ReportForm'
-import { useDispatch, useSelector } from 'react-redux'
-import { useDebouncedCallback } from 'use-debounce'
 
 const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mode }) => {
     const classes = useStyles()
@@ -169,10 +158,6 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
                     sx={{ color: checked && theme.palette.text.secondary }}
                 >
                     <Box className={classes.inputLabel}>{label}</Box>
-                    {/* <FormControlLabel
-                    control={<Checkbox checked={checked} onClick={handleChange} />}
-                    label={<Box className={classes.inputLabel}>{label}</Box>}
-                /> */}
                 </ToggleButton>
             )}
             {type === 'radio' && (
@@ -193,19 +178,7 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
                     >
                         <Box className={classes.inputLabel}>{label}</Box>
                     </ToggleButton>
-                    {/* <FormControlLabel
-                        control={
-                            <Checkbox
-                                disabled={!radio}
-                                checked={checked}
-                                onClick={() => {
-                                    setChecked(!checked)
-                                    setRadio('')
-                                }}
-                            />
-                        }
-                        label={<Box className={classes.inputLabel}>{label}</Box>}
-                    /> */}
+
                     {options.map(option => (
                         <FormControlLabel
                             key={option.label}

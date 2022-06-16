@@ -1,26 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import Router from '../Router'
-import { BrowserRouter, HashRouter, useLocation, Routes, Route } from 'react-router-dom'
+
+import { HashRouter, useLocation, Routes, Route } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, SpeedDial, SpeedDialAction, SpeedDialIcon, IconButton, Avatar, Button } from '@mui/material'
-import { FileCopy, Save, Print, Share, Apps, Person, Logout, Refresh } from '@mui/icons-material'
+import { Box, SpeedDial, SpeedDialAction } from '@mui/material'
+import { Dehaze, Logout, Refresh } from '@mui/icons-material'
 import { useDebouncedCallback } from 'use-debounce'
+
 import useStyles from './Style'
 
+import Router from '../Router'
 import Sidebar from '../Sidebar/Sidebar'
 import SidebarItem from '../Sidebar/SidebarItem'
-
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
-import CustomAlert from '../CustomAlert/CustomAlert'
-
 import PatientForm from '../../Pages/PatientForm/index'
-import { clearData, reportTrigger } from '../../Redux/Slices/Report'
-import { logout } from '../../Redux/Slices/Auth'
+import { reportTrigger } from '../../Redux/Slices/Report'
 import { fetchDashboard } from '../../Redux/Slices/Dashboard'
 import { patientTrigger } from '../../Redux/Slices/Patient'
 import { userTrigger } from '../../Redux/Slices/User'
 import { departmentTrigger } from '../../Redux/Slices/Department'
 import { fetchSchedule } from '../../Redux/Slices/Schedule'
+import { logout } from '../../Redux/Slices/Auth'
 
 const Layout = () => {
     return (
@@ -90,16 +89,11 @@ const Main = () => {
     return (
         <Box className={`${classes.container} ${isOpen || 'close'}`}>
             <Router />
-            <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'fixed', bottom: 25, right: 25 }} icon={<SpeedDialIcon />}>
+            <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'fixed', bottom: 25, right: 25 }} icon={<Dehaze />}>
                 {actions.map(action => (
                     <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} onClick={action.event} />
                 ))}
             </SpeedDial>
-            {/* <IconButton color="primary" aria-label="add" className={classes.dashboardButton} onClick={() => dispatch(openDashboard())}>
-                <Apps sx={{ margin: '20px 30px 20px 8px' }} />
-            </IconButton> */}
-            {/* <Dashboard /> */}
-            {/* <CustomAlert /> */}
         </Box>
     )
 }
