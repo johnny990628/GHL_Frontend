@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useCookies } from 'react-cookie'
+
 import Layout from './Components/Layout/Layout'
 import Login from './Pages/Login/Login'
 import { apiVerify } from './Axios/Auth'
