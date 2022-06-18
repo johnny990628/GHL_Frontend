@@ -67,6 +67,11 @@ const CustomReportForm = ({ lists, patient, mode }) => {
 
     const [tabIndex, setTabIndex] = useState(0)
 
+    const tabOnClick = ({ index, id }) => {
+        setTabIndex(index)
+        window.document.getElementById(id).scrollIntoView()
+    }
+
     return (
         <>
             {mode === 'create' && (
@@ -85,9 +90,9 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                                     label={list.label}
                                     disableRipple
                                     component="a"
-                                    href={`#${list.name}`}
+                                    // href={`#${list.name}`}
                                     className={classes.scrollspyButton}
-                                    onClick={() => setTabIndex(index)}
+                                    onClick={() => tabOnClick({ index, id: list.name })}
                                 />
                             ))}
                         </Tabs>

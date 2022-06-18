@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { Box, IconButton } from '@mui/material'
 import { Delete, Edit } from '@mui/icons-material'
 
@@ -9,16 +9,12 @@ import CustomTable from '../../Components/CustomTable/CustomTable'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import { deleteUser, fetchUser } from '../../Redux/Slices/User'
 
-import { apiDeleteReport, apiGetReports } from '../../Axios/Report'
 import { openAlert } from '../../Redux/Slices/Alert'
-import { apiDeleteUser, apiGetUsers } from '../../Axios/User'
-import { fetchDataByType } from '../../Redux/Slices/Report'
 
 const Report = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
 
-    // const { isOpen } = useSelector(state => state.dialog.report)
     const { results, count, page } = useSelector(state => state.user)
 
     const fetchData = async params => {
