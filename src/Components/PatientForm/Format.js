@@ -1,5 +1,34 @@
+import { apiGetDepartments } from "../../Axios/Department";
+import React, { useEffect, useState } from "react";
+
+const department = {};
+apiGetDepartments({ limit: 100, offset: 0 }).then(
+    (res) => (department = res.data.results)
+);
+
 export const Format = {
-    Format: [
+    Format: [ 
+        {
+            formtype: "Select",
+            name: "department",
+            label: department.map((item) => {
+                return {
+                    name: item.name,
+                    Lable: item.name,
+                };
+            }),
+            // [
+            //     {
+            //         name: "紅十字會",
+            //         label: "紅十字會",
+            //     },
+            //     {
+            //         name: "創世基金會",
+            //         label: "創世基金會",
+            //     },
+            // ],
+            required: true,
+        },
         {
             formtype: "Text",
             name: "id",
@@ -33,7 +62,13 @@ export const Format = {
             disabled: false,
         },
         {
-            formtype: "Select",
+            formtype: "Time",
+            name: "birth",
+            label: "生日",
+            required: true,
+        },
+        {
+            formtype: "Radio",
             name: "gender",
             label: [
                 {
@@ -45,12 +80,6 @@ export const Format = {
                     label: "女性",
                 },
             ],
-            required: true,
-        },
-        {
-            formtype: "Time",
-            name: "birth",
-            label: "生日",
             required: true,
         },
     ],
