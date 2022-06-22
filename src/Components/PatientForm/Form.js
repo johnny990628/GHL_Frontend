@@ -25,12 +25,12 @@ const Form = () => {
     const [userData, setUserData] = useState({});
     const [value, setValue] = useState(new Date("2000-01-01"));
     const [showQRcodeDiv, setShowQRcodeDiv] = useState(false);
-
+    console.log(Format);
     const style = {
         marginTop: "20px",
         textAlign: "center",
     };
-    
+
     const FormDiv = () => {
         return (
             <form>
