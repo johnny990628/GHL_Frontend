@@ -47,7 +47,7 @@ const Login = () => {
     const RegisterSection = () => {
         return (
             <Box className={classes.formContainer}>
-                <img src="./logo.jpg" alt="logo" style={{ width: '3.8rem', height: '4rem' }} />
+                <img src="./logo.png" alt="logo" style={{ width: '3.8rem', height: '4rem' }} />
                 <Typography component="h1" variant="h5">
                     註冊
                 </Typography>
@@ -80,7 +80,7 @@ const Login = () => {
     const LoginSection = () => {
         return (
             <Box className={classes.formContainer}>
-                <img src="./logo.jpg" alt="logo" style={{ width: '3.8rem', height: '4rem' }} />
+                <img src="./logo.png" alt="logo" style={{ width: '3.8rem', height: '4rem' }} />
 
                 <Typography component="h1" variant="h5">
                     登入
