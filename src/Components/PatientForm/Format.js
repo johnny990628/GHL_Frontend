@@ -1,42 +1,8 @@
-import { apiGetDepartments } from "../../Axios/Department";
-
-const getDepartments = async () => {
-    var departmen = [];
-    await apiGetDepartments({ limit: 100, offset: 0 }).then((res) => {
-        departmen = res.data.results;
-    });
-    return departmen;
-};
-
-//export const
-
 export const Format = {
     Format: [
         {
             formtype: "Select",
             name: "department",
-            label:
-                //  Departments.then((item) => {
-                //     const department = [];
-                //     item.map((item2) => {
-                //         department.push({
-                //             name: item2.name,
-                //             Lable: item2.name,
-                //         });
-                //     });
-                //     return department;
-                // }),
-
-                [
-                    {
-                        name: "紅十字會",
-                        label: "紅十字會",
-                    },
-                    {
-                        name: "創世基金會",
-                        label: "創世基金會",
-                    },
-                ],
             required: true,
         },
         {

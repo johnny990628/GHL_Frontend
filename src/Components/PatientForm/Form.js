@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Select,
     MenuItem,
@@ -14,9 +14,9 @@ import {
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import DatePicker from "@mui/lab/DatePicker";
-import { format } from "date-fns";
 import { zhTW } from "date-fns/locale"; //給DatePicker用的中文月份
 import QRCode from "qrcode.react";
+import { apiGetDepartments } from "../../Axios/Department";
 
 import { Format } from "./Format";
 import { verifyID } from "../../Utils/Verify";
@@ -25,7 +25,16 @@ const Form = () => {
     const [userData, setUserData] = useState({});
     const [value, setValue] = useState(new Date("2000-01-01"));
     const [showQRcodeDiv, setShowQRcodeDiv] = useState(false);
+    const [department, setDepartment] = useState([]);
+
+    useEffect(async () => {
+        await apiGetDepartments({ limit: 100, offset: 0 }).then((item) => {
+            setDepartment(item.data.results);
+        });
+    }, []);
     console.log(Format);
+    console.log(department);
+
     const style = {
         marginTop: "20px",
         textAlign: "center",
@@ -88,7 +97,17 @@ const Form = () => {
                                             });
                                         }}
                                     >
-                                        {Format.label.map((label) => {
+                                        {department.map((item) => {
+                                            return (
+                                                <MenuItem
+                                                    value={item.name}
+                                                    key={item.name}
+                                                >
+                                                    {item.name}
+                                                </MenuItem>
+                                            );
+                                        })}
+                                        {/* {Format.label.map((label) => {
                                             return (
                                                 <MenuItem
                                                     value={label.name}
@@ -97,7 +116,7 @@ const Form = () => {
                                                     {label.label}
                                                 </MenuItem>
                                             );
-                                        })}
+                                        })} */}
                                     </Select>
                                 </FormControl>
                             </div>
