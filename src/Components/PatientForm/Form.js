@@ -32,8 +32,6 @@ const Form = () => {
             setDepartment(item.data.results);
         });
     }, []);
-    console.log(Format);
-    console.log(department);
 
     const style = {
         marginTop: "20px",
