@@ -163,7 +163,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
     return (
         <>
             {mode === 'create' && (
-                <Stack direction="row" spacing={1} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', m: 1 }}>
+                <Stack direction="row" spacing={1} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', m: 1 }}>
                     <Tooltip
                         onClose={() => setToolkitOpen(false)}
                         open={toolkitOpen}
@@ -178,7 +178,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                             startIcon={listening ? <CircularProgress size={20} /> : <Mic />}
                             sx={{ borderRadius: '2rem', height: 'auto' }}
                         >
-                            {listening ? '錄音中' : '開始錄音'}
+                            {listening ? '辨識中' : '開始辨識'}
                         </Button>
                     </Tooltip>
 
