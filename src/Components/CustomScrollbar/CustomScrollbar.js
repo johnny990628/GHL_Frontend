@@ -5,6 +5,7 @@ import useStyles from './Style'
 
 const CustomScrollbar = ({ children }) => {
     const classes = useStyles()
+
     return (
         <Scrollbars
             autoHide

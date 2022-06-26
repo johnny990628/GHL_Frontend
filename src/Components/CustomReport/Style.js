@@ -65,6 +65,9 @@ const useStyles = makeStyles(theme => ({
             padding: '.3rem',
         },
     },
+    optionToggleButton: {
+        padding: '.5rem',
+    },
 }))
 
 export default useStyles

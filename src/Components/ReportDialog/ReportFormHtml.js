@@ -45,7 +45,7 @@ const FormSection = ({ list }) => {
                                             <input
                                                 type="radio"
                                                 value={option.value}
-                                                checked={cancerArr?.some(c => c.name === col.name && c.value.includes(option.value))}
+                                                checked={cancerArr?.some(c => c.name === col.name && c.value?.includes(option.value))}
                                                 readOnly
                                             />
                                             {option.label}

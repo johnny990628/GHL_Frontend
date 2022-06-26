@@ -75,7 +75,7 @@ const Main = () => {
             default:
                 break
         }
-    }, 500)
+    }, 1000)
 
     const actions = [
         { icon: <Logout />, name: '登出', event: () => dispatch(logout()) },

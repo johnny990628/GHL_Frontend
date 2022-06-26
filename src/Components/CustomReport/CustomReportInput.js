@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Box, TextField, FormControlLabel, Checkbox, Radio, Select, MenuItem, ToggleButton } from '@mui/material'
+import {
+    Box,
+    TextField,
+    FormControlLabel,
+    Checkbox,
+    Radio,
+    Select,
+    MenuItem,
+    ToggleButton,
+    RadioGroup,
+    ToggleButtonGroup,
+} from '@mui/material'
 import { useTheme } from '@mui/styles'
 import { useDispatch } from 'react-redux'
 import { useDebouncedCallback } from 'use-debounce'
@@ -7,115 +18,62 @@ import { useDebouncedCallback } from 'use-debounce'
 import useStyles from './Style'
 import { addCancer, removeCancer } from '../../Redux/Slices/ReportForm'
 
-const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mode }) => {
+const CustomReportInput = ({ row, organ, input, mode }) => {
     const classes = useStyles()
     const theme = useTheme()
     const { label, name, type, options } = row
-    const [checked, setChecked] = useState(false)
-    const [radio, setRadio] = useState([])
+
     const [text, setText] = useState('')
-    const [yam, setYam] = useState([])
 
     const dispatch = useDispatch()
 
-    // 如果radio被取消，將checkbox設為false
     useEffect(() => {
-        if (radio.length === 0) setChecked(false)
-    }, [radio])
-
-    // 如果有疾病被勾選，將器官正常設為false
-    useEffect(() => {
-        if (checked || text) setIsNormal(false)
-        if (!checked) setYam([])
-    }, [checked, text])
-
-    // 如果正常被勾選，清空所有欄位
-    useEffect(() => {
-        if (isNormal && !defaultValue) {
-            setChecked(false)
-            setRadio('')
-        }
-    }, [isNormal])
-
-    // 用於編輯頁面，將資料讀進state
-    useEffect(() => {
-        if (defaultValue) handleFillValue()
-    }, [])
-
-    // 用於編輯頁面，將資料填入
-    const handleFillValue = () => {
-        const { name, type, value } = defaultValue
-
-        switch (type) {
-            case 'checkbox':
-                setChecked(value)
-                break
-            case 'radio':
-                setChecked(true)
-                setRadio(value)
-                break
-            case 'text':
-                setText(value)
-                break
-            case 'select':
-                setChecked(true)
-                setYam([...value])
-            default:
-                break
-        }
-    }
+        input ? setText(input.value) : setText('')
+    }, [input])
 
     //debounce the input while onchange
     const handleDispatch = useDebouncedCallback(value => {
         switch (type) {
             case 'checkbox':
-                dispatch(value ? removeCancer({ organ, name, mode }) : addCancer({ organ, name, type, value: true, mode }))
+                Boolean(value)
+                    ? dispatch(removeCancer({ organ, name, mode }))
+                    : dispatch(addCancer({ organ, name, type, value: true, mode }))
                 break
             case 'radio':
-                dispatch(value.length > 0 ? addCancer({ organ, name, type, value, mode }) : removeCancer({ organ, name, mode }))
+                input?.value.includes(value)
+                    ? dispatch(removeCancer({ organ, name, mode }))
+                    : dispatch(addCancer({ organ, name, type, value, mode }))
                 break
             case 'text':
-                dispatch(addCancer({ organ, name, type, value, mode }))
+                Boolean(value) ? dispatch(addCancer({ organ, name, type, value, mode })) : dispatch(removeCancer({ organ, name, mode }))
                 break
             case 'select':
                 dispatch(addCancer({ organ, name, type, value, mode }))
             default:
                 break
         }
-    }, 500)
+    }, 250)
 
     //處理資料變動
-    const handleChange = (e, value) => {
+    const handleChange = (e, alignment) => {
         switch (type) {
             case 'checkbox':
-                setChecked(!checked)
-                handleDispatch(checked)
+                handleDispatch(input?.value)
                 break
             case 'radio':
-                setChecked(true)
-                if (radio.includes(value)) {
-                    setRadio(prev => prev.filter(p => p !== value))
-                    handleDispatch(radio.filter(r => r !== value))
-                } else {
-                    setRadio(prev => [...prev, value])
-                    handleDispatch([...radio, value])
-                }
+                handleDispatch(alignment)
                 break
             case 'text':
                 setText(e.target.value)
                 handleDispatch(e.target.value)
                 break
             case 'select':
-                if (value === 0) {
-                    setYam(pre => [e.target.value, pre[1]])
-                    handleDispatch([e.target.value, yam[1]])
+                if (alignment === 0) {
+                    handleDispatch([e.target.value, input?.value[1]])
                 }
-                if (value === 1) {
-                    setYam(pre => [pre[0], e.target.value])
-                    handleDispatch([yam[0], e.target.value])
+                if (alignment === 1) {
+                    handleDispatch([input?.value[0], e.target.value])
                 }
-                setChecked(true)
-
             default:
                 break
         }
@@ -128,7 +86,7 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
                     <Box key={l} sx={{ display: 'flex', alignItems: 'center' }}>
                         <Box className={classes.inputLabel}>{l}</Box>
                         {index + 1 === label.split('_').length || (
-                            <Select value={yam[index]} defaultValue="" onChange={e => handleChange(e, index)}>
+                            <Select value={input?.value[index]} defaultValue="" onChange={e => handleChange(e, index)}>
                                 {Array(12)
                                     .fill()
                                     .map((_, index) => {
@@ -152,10 +110,10 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
                 <ToggleButton
                     color="primary"
                     value="check"
-                    selected={checked}
+                    selected={input?.value}
                     onChange={handleChange}
                     className={classes.toggleButton}
-                    sx={{ color: checked && theme.palette.text.secondary }}
+                    sx={{ color: input?.value && theme.palette.text.secondary }}
                 >
                     <Box className={classes.inputLabel}>{label}</Box>
                 </ToggleButton>
@@ -165,44 +123,36 @@ const CustomReportInput = ({ row, organ, isNormal, setIsNormal, defaultValue, mo
                     <ToggleButton
                         color="primary"
                         value="check"
-                        selected={checked}
-                        onClick={() => {
-                            if (radio) {
-                                setChecked(!checked)
-                                setRadio('')
-                                dispatch(removeCancer({ organ, name, mode }))
-                            }
+                        selected={input?.value.length > 0}
+                        onChange={() => {
+                            dispatch(removeCancer({ organ, name, mode }))
                         }}
                         className={classes.toggleButton}
-                        sx={{ color: checked && theme.palette.text.secondary }}
+                        sx={{ color: input?.value && theme.palette.text.secondary }}
                     >
                         <Box className={classes.inputLabel}>{label}</Box>
                     </ToggleButton>
 
-                    {options.map(option => (
-                        <FormControlLabel
-                            key={option.label}
-                            value={option.value}
-                            control={
-                                <Radio checked={checked && radio.includes(option.value)} onClick={e => handleChange(e, option.value)} />
-                            }
-                            label={<Box className={classes.inputLabel}>{option.label}</Box>}
-                        />
-                    ))}
+                    <ToggleButtonGroup value={input?.value} onChange={handleChange}>
+                        {options.map(option => (
+                            <ToggleButton
+                                key={option.label}
+                                value={option.value}
+                                disableRipple
+                                disableFocusRipple
+                                disableElevation
+                                className={classes.optionToggleButton}
+                            >
+                                {option.label}
+                            </ToggleButton>
+                        ))}
+                    </ToggleButtonGroup>
                 </Box>
             )}
             {type === 'text' && <TextField fullWidth label={label} variant="standard" value={text} onChange={handleChange} />}
             {type === 'select' && (
                 <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={checked}
-                            onClick={() => {
-                                setChecked(!checked)
-                                dispatch(removeCancer({ organ, name, mode }))
-                            }}
-                        />
-                    }
+                    control={<Checkbox checked={input?.value.length > 0} onChange={() => dispatch(removeCancer({ organ, name, mode }))} />}
                     label={<SelectLabel />}
                 />
             )}

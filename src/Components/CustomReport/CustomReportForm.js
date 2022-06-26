@@ -1,33 +1,55 @@
-import React, { useState, useEffect } from 'react'
-import { Box, Tabs, Tab, ToggleButton, useMediaQuery, Grid, Chip } from '@mui/material'
+import React, { useState, useEffect, useMemo } from 'react'
+import {
+    Box,
+    Tabs,
+    Tab,
+    ToggleButton,
+    useMediaQuery,
+    Grid,
+    Chip,
+    IconButton,
+    Button,
+    Stack,
+    CircularProgress,
+    Tooltip,
+} from '@mui/material'
 import { useTheme } from '@mui/styles'
 import Scrollspy from 'react-scrollspy'
-
+import { useDebouncedCallback } from 'use-debounce'
 import useStyles from './Style'
 
 import CustomReportInput from './CustomReportInput'
 import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearCancer } from '../../Redux/Slices/ReportForm'
+import { addCancer, clearCancer } from '../../Redux/Slices/ReportForm'
 import ReportList from './ReportList'
+import { Mic } from '@mui/icons-material'
+import useSpeech2Text from '../../Hooks/useSpeech2Text'
 
 const FormSection = ({ list, mode }) => {
     const classes = useStyles()
-    const [isNormal, setIsNormal] = useState(true)
 
     const dispatch = useDispatch()
-    const reportSection = useSelector(state => state.reportForm.edit[list.name])
+    const editReport = useSelector(state => state.reportForm.edit[list.name])
+    const createReport = useSelector(state => state.reportForm.create[list.name])
 
-    const handleNormalOnClick = () => {
-        if (!isNormal) {
-            setIsNormal(!isNormal)
-            dispatch(clearCancer({ organ: list.name, mode }))
+    const setupNormal = () => {
+        if (mode === 'create') {
+            return createReport.length === 0
+        }
+        if (mode === 'edit') {
+            return editReport.length === 0
         }
     }
 
-    useEffect(() => {
-        if (reportSection) setIsNormal(reportSection.length === 0)
-    }, [])
+    const setupValue = ({ row }) => {
+        if (mode === 'create') {
+            return createReport.find(d => d.name === row.name)
+        }
+        if (mode === 'edit') {
+            return editReport.find(d => d.name === row.name)
+        }
+    }
 
     return (
         <Box id={list.name} className={classes.formContainer}>
@@ -36,8 +58,8 @@ const FormSection = ({ list, mode }) => {
                 disableRipple
                 color="primary"
                 value="check"
-                selected={isNormal}
-                onClick={handleNormalOnClick}
+                selected={setupNormal()}
+                onClick={() => dispatch(clearCancer({ organ: list.name, mode }))}
                 className={classes.toggleButton}
             >
                 <Box className={classes.formLabel}>{list.label}</Box>
@@ -45,15 +67,7 @@ const FormSection = ({ list, mode }) => {
 
             <Box>
                 {list.cols.map(row => (
-                    <CustomReportInput
-                        key={row.label}
-                        row={row}
-                        isNormal={isNormal}
-                        setIsNormal={setIsNormal}
-                        organ={list.name}
-                        defaultValue={reportSection && reportSection.find(d => d.name === row.name)}
-                        mode={mode}
-                    />
+                    <CustomReportInput key={row.label} row={row} organ={list.name} input={setupValue({ row })} mode={mode} />
                 ))}
             </Box>
         </Box>
@@ -64,20 +78,114 @@ const CustomReportForm = ({ lists, patient, mode }) => {
     const classes = useStyles()
     const theme = useTheme()
     const isComputer = useMediaQuery(theme.breakpoints.up('lg'))
+    const dispatch = useDispatch()
+    const commandList = useMemo(() => lists.map(list => list.cols).reduce((acc, col) => acc.concat(col)), [lists])
+
+    const [audio] = useState(new Audio('./audio.mp3'))
+    const { transcript, setRecord, listening } = useSpeech2Text()
+
+    const speechAction = useDebouncedCallback(() => {
+        // 辨識的疾病名稱
+        const cancerOfTranscript = commandList.find(col => new RegExp(col.label).test(transcript))
+        // 辨識的器官名稱
+        const organOfTranscript = lists.find(list => new RegExp(list.label).test(transcript))
+
+        //如果語音含有疾病名稱
+        if (!!cancerOfTranscript) {
+            // 疾病的器官
+            const organOfCancer = lists.find(list => list.cols.find(l => l.name === cancerOfTranscript.name))
+
+            if (cancerOfTranscript.type === 'radio') {
+                const option = cancerOfTranscript.options.find(option => new RegExp(option.label).test(transcript))
+                if (option) {
+                    dispatch(
+                        addCancer({
+                            organ: organOfCancer.name,
+                            name: cancerOfTranscript.name,
+                            type: cancerOfTranscript.type,
+                            value: option.value,
+                            mode,
+                        })
+                    )
+                    audio.play()
+                }
+            }
+
+            if (cancerOfTranscript.type === 'checkbox') {
+                dispatch(
+                    addCancer({
+                        organ: organOfCancer.name,
+                        name: cancerOfTranscript.name,
+                        type: cancerOfTranscript.tㄓype,
+                        value: true,
+                        mode,
+                    })
+                )
+                audio.play()
+            }
+        }
+
+        //如果語音含有器官名稱
+        if (!!organOfTranscript) {
+            // 清除器官
+            if (new RegExp('清除').test(transcript))
+                dispatch(clearCancer({ organ: organOfTranscript.name, name: organOfTranscript.name, mode }))
+            // 新增備註
+            else
+                dispatch(
+                    addCancer({
+                        organ: organOfTranscript.name,
+                        name: 'other',
+                        type: 'text',
+                        value: transcript.replace(organOfTranscript.label, ''),
+                        mode,
+                    })
+                )
+            audio.play()
+        }
+    }, 250)
+
+    useEffect(() => {
+        speechAction()
+    }, [transcript])
 
     const [tabIndex, setTabIndex] = useState(0)
-
     const tabOnClick = ({ index, id }) => {
         setTabIndex(index)
-        window.document.getElementById(id).scrollIntoView()
+        window.document.getElementById(id).scrollIntoView({ behavior: 'smooth' })
+    }
+    const [toolkitOpen, setToolkitOpen] = useState(false)
+    const handleRecordClick = e => {
+        setRecord(s => !s)
+        setToolkitOpen(b => !b)
     }
 
     return (
         <>
             {mode === 'create' && (
-                <Box className={classes.patientInfo}>
-                    <Chip label={`${patient.id} / ${patient.name} / ${patient.gender}`} variant="outlined" className={classes.chip} />
-                </Box>
+                <Stack direction="row" spacing={1} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', m: 1 }}>
+                    <Tooltip
+                        onClose={() => setToolkitOpen(false)}
+                        open={toolkitOpen}
+                        disableFocusListener
+                        disableHoverListener
+                        disableTouchListener
+                        title={transcript}
+                    >
+                        <Button
+                            variant={listening ? 'outlined' : 'contained'}
+                            onClick={handleRecordClick}
+                            startIcon={listening ? <CircularProgress size={20} /> : <Mic />}
+                            sx={{ borderRadius: '2rem', height: 'auto' }}
+                        >
+                            {listening ? '錄音中' : '開始錄音'}
+                        </Button>
+                    </Tooltip>
+
+                    <Box className={classes.patientInfo}>
+                        <Chip label={`${patient.id} / ${patient.name} / ${patient.gender}`} variant="outlined" className={classes.chip} />
+                    </Box>
+                </Stack>
             )}
 
             <Box className={classes.container}>
@@ -90,7 +198,6 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                                     label={list.label}
                                     disableRipple
                                     component="a"
-                                    // href={`#${list.name}`}
                                     className={classes.scrollspyButton}
                                     onClick={() => tabOnClick({ index, id: list.name })}
                                 />
