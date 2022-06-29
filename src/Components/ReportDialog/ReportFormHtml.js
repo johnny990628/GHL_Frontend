@@ -10,6 +10,38 @@ import Spleen from '../../Assets/OrganJson/spleen.json'
 import Suggestion from '../../Assets/OrganJson/suggestion.json'
 import { useSelector } from 'react-redux'
 
+export const ReportFormForPDF = React.forwardRef((_, ref) => {
+    return (
+        <div style={{ width: '100%', padding: '3rem' }} ref={ref}>
+            <FormHeader />
+            <PatientForm />
+            <ReportFormHtml />
+            <FormFooter />
+        </div>
+    )
+})
+
+const ReportFormHtml = () => {
+    const classes = useStyles()
+    return (
+        <table className={classes.table} style={{ width: '90%', margin: 'auto' }}>
+            <tbody>
+                <tr>
+                    <td className={classes.table}>
+                        <b>項目</b>
+                    </td>
+                    <td colSpan="3" className={classes.table}>
+                        <b>檢查結果及說明</b>
+                    </td>
+                </tr>
+                {[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion].map(list => (
+                    <FormSection key={list.name} list={list} />
+                ))}
+            </tbody>
+        </table>
+    )
+}
+
 const FormSection = ({ list }) => {
     const classes = useStyles()
     const report = useSelector(state => state.reportForm.edit)
@@ -64,7 +96,7 @@ const FormSection = ({ list }) => {
                         )}
                         {col.type === 'text' && (
                             <tr>
-                                <td colSpan="3" className={classes.table}>
+                                <td className={classes.table}>
                                     <input type="checkbox" checked={checked} readOnly />
                                     {col.label}:{cancerArr?.find(c => c.name === col.name)?.value}
                                 </td>
@@ -90,24 +122,74 @@ const FormSection = ({ list }) => {
     )
 }
 
-const ReportFormHtml = () => {
+const PatientForm = () => {
     const classes = useStyles()
+
+    const {
+        row: { patient },
+    } = useSelector(state => state.dialog.report)
+
     return (
-        <table className={classes.table} style={{ width: '60%' }}>
-            <tbody>
-                <tr>
-                    <td className={classes.table}>
-                        <b>項目</b>
-                    </td>
-                    <td colSpan="3" className={classes.table}>
-                        <b>檢查結果及說明</b>
-                    </td>
-                </tr>
-                {[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion].map(list => (
-                    <FormSection key={list.name} list={list} />
-                ))}
-            </tbody>
+        <table className={classes.table} style={{ width: '90%', margin: 'auto', marginBottom: '1rem' }}>
+            <tr>
+                <td className={classes.table}>
+                    <b>姓名</b>
+                </td>
+                <td className={classes.table}>{patient.name}</td>
+                <td className={classes.table}>
+                    <b>性別</b>
+                </td>
+                <td className={classes.table}>
+                    <input type="checkbox" checked={patient.gender === '男'} readOnly />男
+                    <input type="checkbox" checked={patient.gender === '女'} readOnly />女
+                </td>
+                <td className={classes.table}>
+                    <b>出生年月日</b>
+                </td>
+                <td className={classes.table}>{new Date(patient.birth).toLocaleDateString()}</td>
+            </tr>
+            <tr>
+                <td className={classes.table}>
+                    <b>電話</b>
+                </td>
+                <td className={classes.table} colSpan="5">
+                    {patient.phone}
+                </td>
+            </tr>
+            <tr>
+                <td className={classes.table}>
+                    <b>部門單位</b>
+                </td>
+                <td className={classes.table} colSpan="2">
+                    {patient.department}
+                </td>
+                <td className={classes.table}>
+                    <b>身份證字號</b>
+                </td>
+                <td className={classes.table} colSpan="2">
+                    {patient.id}
+                </td>
+            </tr>
         </table>
+    )
+}
+
+const FormHeader = () => {
+    return (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <img alt="logo" src="./print_logo.png" style={{ width: '2rem' }} />
+                <b style={{ fontSize: '1.5rem' }}>財團法人肝病防治學術基金會</b>
+            </div>
+            <b style={{ fontSize: '1.5rem' }}>腹部超音波檢查報告</b>
+        </div>
+    )
+}
+const FormFooter = () => {
+    return (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <p style={{ fontSize: '1.2rem' }}>~感謝您參與本次檢驗活動，祝您健康~ 肝病諮詢專線 : 0800-000-583</p>
+        </div>
     )
 }
 

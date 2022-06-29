@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -13,8 +13,9 @@ import {
     InputLabel,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { Close } from '@mui/icons-material'
+import { Close, Print } from '@mui/icons-material'
 import { v4 } from 'uuid'
+import { useReactToPrint } from 'react-to-print'
 
 import useStyles from './Style'
 
@@ -26,9 +27,10 @@ import Spleen from '../../Assets/OrganJson/spleen.json'
 import Suggestion from '../../Assets/OrganJson/suggestion.json'
 import { closeDialog } from '../../Redux/Slices/Dialog'
 import CustomReportForm from '../CustomReport/CustomReportForm'
-import ReportFormHtml from './ReportFormHtml'
+import ReportFormHtml, { ReportFormForPDF } from './ReportFormHtml'
 import { updateReport, fillReport, resetReport } from '../../Redux/Slices/ReportForm'
 import { openAlert } from '../../Redux/Slices/Alert'
+import { Box } from '@mui/system'
 
 const ReportDialog = ({ mode }) => {
     const classes = useStyles()
@@ -78,10 +80,21 @@ const ReportDialog = ({ mode }) => {
         setVersion(e.target.value)
     }
 
+    const formRef = useRef()
+    const handlePrint = useReactToPrint({
+        content: () => formRef.current,
+    })
+
     return (
         <Dialog open={isOpen} onClose={handleClose} fullWidth maxWidth={'md'}>
             <DialogTitle sx={{ display: 'flex', alignItems: 'center', padding: '.5rem 2rem' }}>
+                {!isEditing && (
+                    <IconButton onClick={handlePrint} sx={{ marginRight: '1rem' }}>
+                        <Print />
+                    </IconButton>
+                )}
                 <ListItemText secondary={`${patient.id} / ${patient.name} / ${patient.gender}`} />
+
                 {mode === 'edit' && (
                     <FormControl variant="standard" sx={{ width: '5rem' }}>
                         <InputLabel id="select-label">版本</InputLabel>
@@ -104,7 +117,13 @@ const ReportDialog = ({ mode }) => {
                 {isEditing ? (
                     <CustomReportForm lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]} patient={patient} mode="edit" />
                 ) : (
-                    <ReportFormHtml />
+                    <>
+                        <ReportFormHtml />
+                        {/* For PDF Print */}
+                        <Box sx={{ display: 'none' }}>
+                            <ReportFormForPDF ref={formRef} />
+                        </Box>
+                    </>
                 )}
             </DialogContent>
             <DialogActions sx={{ padding: '1rem' }}>
