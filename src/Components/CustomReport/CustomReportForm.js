@@ -85,10 +85,10 @@ const CustomReportForm = ({ lists, patient, mode }) => {
     const { transcript, setRecord, listening } = useSpeech2Text()
 
     const speechAction = useDebouncedCallback(() => {
-        // 辨識的疾病名稱
+        // 辨識的疾病名稱，使用Regex防止疾病含有相同的字串
         const cancerOfTranscript = commandList.find(col => new RegExp(col.label).test(transcript))
         // 辨識的器官名稱
-        const organOfTranscript = lists.find(list => new RegExp(list.label).test(transcript))
+        const organOfTranscript = lists.find(list => transcript.includes(list.label))
 
         //如果語音含有疾病名稱
         if (!!cancerOfTranscript) {
@@ -96,7 +96,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
             const organOfCancer = lists.find(list => list.cols.find(l => l.name === cancerOfTranscript.name))
 
             if (cancerOfTranscript.type === 'radio') {
-                const option = cancerOfTranscript.options.find(option => new RegExp(option.label).test(transcript))
+                const option = cancerOfTranscript.options.find(option => transcript.includes(option.label))
                 if (option) {
                     dispatch(
                         addCancer({
@@ -128,8 +128,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
         //如果語音含有器官名稱
         if (!!organOfTranscript) {
             // 清除器官
-            if (new RegExp('清除').test(transcript))
-                dispatch(clearCancer({ organ: organOfTranscript.name, name: organOfTranscript.name, mode }))
+            if (transcript.includes('清除')) dispatch(clearCancer({ organ: organOfTranscript.name, name: organOfTranscript.name, mode }))
             // 新增備註
             else
                 dispatch(
