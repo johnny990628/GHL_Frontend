@@ -103,7 +103,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                             organ: organOfCancer.name,
                             name: cancerOfTranscript.name,
                             type: cancerOfTranscript.type,
-                            value: option.value,
+                            value: [option.value],
                             mode,
                         })
                     )
