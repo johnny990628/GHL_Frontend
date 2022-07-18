@@ -94,7 +94,7 @@ const ReportDialog = ({ mode }) => {
                     </IconButton>
                 )}
                 <ListItemText
-                    primary={`${patient.id} / ${patient.name} / ${patient.gender} ${user ? `(${user.name}醫師)` : '(建立者已移除)'}`}
+                    primary={`${patient.id} / ${patient.name} / ${patient.gender} (${user ? `${user.name}醫師` : '建立者已移除'})`}
                     secondary={
                         <Box>
                             <Box>{`建立 : ${new Date(createdAt).toLocaleString()}`}</Box>
