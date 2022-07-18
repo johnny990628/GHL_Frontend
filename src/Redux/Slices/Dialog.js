@@ -34,12 +34,12 @@ const dialogSlice = createSlice({
     },
     extraReducers: {
         [fetchReportByReportID.fulfilled]: (state, action) => {
-            const { patient, records, createdAt, updatedAt, _id } = action.payload
+            const { patient, user, records, createdAt, updatedAt, _id } = action.payload
             return {
                 ...state,
                 report: {
                     isOpen: true,
-                    row: { patient, createdAt, updatedAt, records: [].concat(records).reverse(), reportID: _id },
+                    row: { patient, user, createdAt, updatedAt, records: [].concat(records).reverse(), reportID: _id },
                 },
             }
         },

@@ -212,7 +212,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                         <Chip label={`${patient.id} / ${patient.name} / ${patient.gender}`} variant="outlined" className={classes.chip} />
                     </Box>
 
-                    {!isComputer && (
+                    {!isComputer && patient.reports.length > 1 && (
                         <Badge badgeContent={patient.reports.length - 1} color="primary">
                             <IconButton onClick={handleHistoryClick}>
                                 <History />
@@ -250,13 +250,11 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                             </CustomScrollbar>
                         </Grid>
                         {isComputer && (
-                            <Grid item xl={2}>
-                                {!!patient.reports.length && (
-                                    <CustomScrollbar>
-                                        <Box className={classes.formLabel}>歷史報告</Box>
-                                        <ReportList patient={patient} />
-                                    </CustomScrollbar>
-                                )}
+                            <Grid item xs={2}>
+                                <CustomScrollbar>
+                                    <Box className={classes.formLabel}>歷史報告</Box>
+                                    <ReportList patient={patient} />
+                                </CustomScrollbar>
                             </Grid>
                         )}
                     </Grid>

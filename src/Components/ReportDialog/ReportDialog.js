@@ -37,7 +37,7 @@ const ReportDialog = ({ mode }) => {
     const dispatch = useDispatch()
     const {
         isOpen,
-        row: { patient, updatedAt, records, reportID },
+        row: { patient, user, createdAt, updatedAt, records, reportID },
     } = useSelector(state => state.dialog.report)
 
     const report = useSelector(state => state.reportForm.edit)
@@ -94,8 +94,13 @@ const ReportDialog = ({ mode }) => {
                     </IconButton>
                 )}
                 <ListItemText
-                    secondary={`${patient.id} / ${patient.name} / ${patient.gender} 
-                     ( 更新時間:${new Date(updatedAt).toLocaleString()} )`}
+                    primary={`${patient.id} / ${patient.name} / ${patient.gender} ${user ? `(${user.name}醫師)` : '(建立者已移除)'}`}
+                    secondary={
+                        <Box>
+                            <Box>{`建立 : ${new Date(createdAt).toLocaleString()}`}</Box>
+                            <Box>{`更新 : ${new Date(updatedAt).toLocaleString()}`}</Box>
+                        </Box>
+                    }
                 />
 
                 {mode === 'edit' && (

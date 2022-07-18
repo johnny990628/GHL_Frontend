@@ -28,6 +28,7 @@ const CreateReport = () => {
     const [patient, setPatient] = useState({})
     const steps = ['選擇病人', '新增報告', '完成']
     const { schedules, patients, count } = useSelector(state => state.schedule)
+    const { user } = useSelector(state => state.auth)
     const report = useSelector(state => state.reportForm.create)
 
     const dispatch = useDispatch()
@@ -59,7 +60,7 @@ const CreateReport = () => {
             createReport({
                 patientID: patient.id,
                 reportID: patient.reportID,
-                data: { report: { ...report, id: v4() }, status: 'finished' },
+                data: { report: { ...report, id: v4() }, userID: user._id, status: 'finished' },
             })
         )
     }
