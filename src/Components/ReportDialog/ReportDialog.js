@@ -37,7 +37,7 @@ const ReportDialog = ({ mode }) => {
     const dispatch = useDispatch()
     const {
         isOpen,
-        row: { patient, records, reportID },
+        row: { patient, updatedAt, records, reportID },
     } = useSelector(state => state.dialog.report)
 
     const report = useSelector(state => state.reportForm.edit)
@@ -93,7 +93,10 @@ const ReportDialog = ({ mode }) => {
                         <Print />
                     </IconButton>
                 )}
-                <ListItemText secondary={`${patient.id} / ${patient.name} / ${patient.gender}`} />
+                <ListItemText
+                    secondary={`${patient.id} / ${patient.name} / ${patient.gender} 
+                     ( 更新時間:${new Date(updatedAt).toLocaleString()} )`}
+                />
 
                 {mode === 'edit' && (
                     <FormControl variant="standard" sx={{ width: '5rem' }}>

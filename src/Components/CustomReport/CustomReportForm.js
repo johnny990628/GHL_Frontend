@@ -12,6 +12,8 @@ import {
     Stack,
     CircularProgress,
     Tooltip,
+    Badge,
+    Popover,
 } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import Scrollspy from 'react-scrollspy'
@@ -23,7 +25,7 @@ import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { addCancer, clearCancer } from '../../Redux/Slices/ReportForm'
 import ReportList from './ReportList'
-import { Mic } from '@mui/icons-material'
+import { History, Mic } from '@mui/icons-material'
 import useSpeech2Text from '../../Hooks/useSpeech2Text'
 
 const FormSection = ({ list, mode }) => {
@@ -77,11 +79,12 @@ const FormSection = ({ list, mode }) => {
 const CustomReportForm = ({ lists, patient, mode }) => {
     const classes = useStyles()
     const theme = useTheme()
-    const isComputer = useMediaQuery(theme.breakpoints.up('lg'))
+    const isComputer = useMediaQuery(theme.breakpoints.up('xl'))
     const dispatch = useDispatch()
     const commandList = useMemo(() => lists.map(list => list.cols).reduce((acc, col) => acc.concat(col)), [lists])
 
     const [audio] = useState(new Audio('./audio.mp3'))
+    const [anchorEl, setAnchorEl] = useState(null)
     const { transcript, setRecord, listening } = useSpeech2Text()
 
     const speechAction = useDebouncedCallback(() => {
@@ -159,6 +162,30 @@ const CustomReportForm = ({ lists, patient, mode }) => {
         setToolkitOpen(b => !b)
     }
 
+    const handleHistoryClick = event => {
+        setAnchorEl(event.currentTarget)
+    }
+
+    const PopoverCom = () => {
+        const handleClose = () => {
+            setAnchorEl(null)
+        }
+        return (
+            <Popover
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                classes={{ paper: classes.popover }}
+            >
+                <ReportList patient={patient} />
+            </Popover>
+        )
+    }
+
     return (
         <>
             {mode === 'create' && (
@@ -184,6 +211,15 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                     <Box className={classes.patientInfo}>
                         <Chip label={`${patient.id} / ${patient.name} / ${patient.gender}`} variant="outlined" className={classes.chip} />
                     </Box>
+
+                    {!isComputer && (
+                        <Badge badgeContent={patient.reports.length - 1} color="primary">
+                            <IconButton onClick={handleHistoryClick}>
+                                <History />
+                            </IconButton>
+                        </Badge>
+                    )}
+                    <PopoverCom />
                 </Stack>
             )}
 
@@ -206,16 +242,23 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                 )}
                 {mode === 'create' && (
                     <Grid container sx={{ height: '100%' }} spacing={2}>
-                        <Grid item xs={9} lg={10}>
+                        <Grid item xs={12} xl={10}>
                             <CustomScrollbar>
                                 {lists.map(list => (
                                     <FormSection key={list.name} list={list} mode={mode} />
                                 ))}
                             </CustomScrollbar>
                         </Grid>
-                        <Grid item xs={3} lg={2}>
-                            {patient.reports.length > 0 && <ReportList patient={patient} />}
-                        </Grid>
+                        {isComputer && (
+                            <Grid item xl={2}>
+                                {!!patient.reports.length && (
+                                    <CustomScrollbar>
+                                        <Box className={classes.formLabel}>歷史報告</Box>
+                                        <ReportList patient={patient} />
+                                    </CustomScrollbar>
+                                )}
+                            </Grid>
+                        )}
                     </Grid>
                 )}
                 {mode === 'edit' && (

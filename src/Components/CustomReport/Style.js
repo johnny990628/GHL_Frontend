@@ -68,6 +68,10 @@ const useStyles = makeStyles(theme => ({
     optionToggleButton: {
         padding: '.5rem',
     },
+    popover: {
+        padding: '.5rem',
+        maxHeight: '30rem',
+    },
 }))
 
 export default useStyles

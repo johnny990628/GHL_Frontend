@@ -15,13 +15,13 @@ export const ReportFormForPDF = React.forwardRef((_, ref) => {
         <div style={{ width: '100%', padding: '3rem' }} ref={ref}>
             <FormHeader />
             <PatientForm />
-            <ReportFormHtml />
+            <ReportFormHtml print={true} />
             <FormFooter />
         </div>
     )
 })
 
-const ReportFormHtml = () => {
+const ReportFormHtml = ({ print }) => {
     const classes = useStyles()
     return (
         <table className={classes.table} style={{ width: '90%', margin: 'auto' }}>
@@ -37,6 +37,18 @@ const ReportFormHtml = () => {
                 {[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion].map(list => (
                     <FormSection key={list.name} list={list} />
                 ))}
+                {print && (
+                    <tr>
+                        <td className={classes.table} style={{ fontSize: '1.5rem' }}>
+                            醫師簽章
+                        </td>
+                        <td colSpan="3" className={classes.table}>
+                            <div>
+                                <img src="./docSign.png" alt="docSign" style={{ width: '15rem', height: '3rem' }} />
+                            </div>
+                        </td>
+                    </tr>
+                )}
             </tbody>
         </table>
     )
@@ -175,6 +187,9 @@ const PatientForm = () => {
 }
 
 const FormHeader = () => {
+    const {
+        row: { createdAt },
+    } = useSelector(state => state.dialog.report)
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -182,12 +197,16 @@ const FormHeader = () => {
                 <b style={{ fontSize: '1.5rem' }}>財團法人肝病防治學術基金會</b>
             </div>
             <b style={{ fontSize: '1.5rem' }}>腹部超音波檢查報告</b>
+            <hr></hr>
+            <div style={{ width: '90%' }}>
+                <div>檢查日期 : {new Date(createdAt).toLocaleDateString()}</div>
+            </div>
         </div>
     )
 }
 const FormFooter = () => {
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <p style={{ fontSize: '1.2rem' }}>~感謝您參與本次檢驗活動，祝您健康~ 肝病諮詢專線 : 0800-000-583</p>
         </div>
     )

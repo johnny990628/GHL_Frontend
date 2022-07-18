@@ -13,28 +13,25 @@ const ReportList = ({ patient }) => {
         dispatch(fetchReportByReportID(reportID))
     }
     return (
-        <CustomScrollbar>
-            <Box className={classes.formLabel}>歷史報告</Box>
-            <List>
-                {patient.reports.map((report, index) => (
-                    <>
-                        {report.status === 'finished' && (
-                            <ListItem key={report._id} classes={{ root: classes.reportListItem }} onClick={() => handleClick(report._id)}>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        <Assignment />
-                                    </ListItemIcon>
-                                    <ListItemText
-                                        primary={`第${index + 1}次報告`}
-                                        secondary={new Date(report.createdAt).toLocaleDateString()}
-                                    />
-                                </ListItemButton>
-                            </ListItem>
-                        )}
-                    </>
-                ))}
-            </List>
-        </CustomScrollbar>
+        <List>
+            {patient.reports.map((report, index) => (
+                <>
+                    {report.status === 'finished' && (
+                        <ListItem key={report._id} classes={{ root: classes.reportListItem }} onClick={() => handleClick(report._id)}>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    <Assignment />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={`第${index + 1}次報告`}
+                                    secondary={new Date(report.createdAt).toLocaleDateString()}
+                                />
+                            </ListItemButton>
+                        </ListItem>
+                    )}
+                </>
+            ))}
+        </List>
     )
 }
 

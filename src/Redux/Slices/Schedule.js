@@ -8,7 +8,7 @@ export const fetchSchedule = createAsyncThunk('schedule/fetchSchedule', async (_
     try {
         const response = await apiGetSchdules({ procedureCode: '19009C' })
         const { results, count } = response.data
-        return { schedules: results, patients: results.map(s => s.patient), count }
+        return { schedules: results, patients: results.map(({ patient, blood }) => ({ ...patient, blood: blood.number })), count }
     } catch (e) {
         thunkAPI.dispatch(logout())
         return thunkAPI.rejectWithValue()
