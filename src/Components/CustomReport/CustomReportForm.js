@@ -14,6 +14,7 @@ import {
     Tooltip,
     Badge,
     Popover,
+    Popper,
 } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import Scrollspy from 'react-scrollspy'
@@ -25,7 +26,7 @@ import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { addCancer, clearCancer } from '../../Redux/Slices/ReportForm'
 import ReportList from './ReportList'
-import { History, Mic } from '@mui/icons-material'
+import { Cast, History, Mic } from '@mui/icons-material'
 import useSpeech2Text from '../../Hooks/useSpeech2Text'
 
 const FormSection = ({ list, mode }) => {
@@ -84,7 +85,9 @@ const CustomReportForm = ({ lists, patient, mode }) => {
     const commandList = useMemo(() => lists.map(list => list.cols).reduce((acc, col) => acc.concat(col)), [lists])
 
     const [audio] = useState(new Audio('./audio.mp3'))
-    const [anchorEl, setAnchorEl] = useState(null)
+    const [historyAnchorEl, setHistoryAnchorEl] = useState(null)
+    const [dicomAnchorEl, setDicomAnchorEl] = useState(null)
+
     const { transcript, setRecord, listening } = useSpeech2Text()
 
     const speechAction = useDebouncedCallback(() => {
@@ -163,17 +166,21 @@ const CustomReportForm = ({ lists, patient, mode }) => {
     }
 
     const handleHistoryClick = event => {
-        setAnchorEl(event.currentTarget)
+        setHistoryAnchorEl(event.currentTarget)
     }
 
-    const PopoverCom = () => {
+    const handleDicomClick = event => {
+        setDicomAnchorEl(dicom => (dicom ? null : event.currentTarget))
+    }
+
+    const HistoryPopover = () => {
         const handleClose = () => {
-            setAnchorEl(null)
+            setHistoryAnchorEl(null)
         }
         return (
             <Popover
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
+                open={Boolean(historyAnchorEl)}
+                anchorEl={historyAnchorEl}
                 onClose={handleClose}
                 anchorOrigin={{
                     vertical: 'bottom',
@@ -186,10 +193,24 @@ const CustomReportForm = ({ lists, patient, mode }) => {
         )
     }
 
+    const DicomPopper = () => {
+        return (
+            <Popper open={Boolean(dicomAnchorEl)} anchorEl={dicomAnchorEl}>
+                <iframe src={process.env.REACT_APP_BLUELIGHT_URL} style={{ height: '70vh', width: '45vw' }} />
+            </Popper>
+        )
+    }
+    // Prevent Component Rerender
+    const DicomPopperCom = useMemo(() => <DicomPopper />, [dicomAnchorEl])
+
     return (
         <>
             {mode === 'create' && (
                 <Stack direction="row" spacing={1} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', m: 1 }}>
+                    <Box className={classes.patientInfo}>
+                        <Chip label={`${patient.id} / ${patient.name} / ${patient.gender}`} variant="outlined" className={classes.chip} />
+                    </Box>
+
                     <Tooltip
                         onClose={() => setToolkitOpen(false)}
                         open={toolkitOpen}
@@ -204,13 +225,19 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                             startIcon={listening ? <CircularProgress size={20} /> : <Mic />}
                             sx={{ borderRadius: '2rem', height: 'auto' }}
                         >
-                            {listening ? '辨識中' : '開始辨識'}
+                            {listening ? '辨識中' : '語音辨識'}
                         </Button>
                     </Tooltip>
 
-                    <Box className={classes.patientInfo}>
-                        <Chip label={`${patient.id} / ${patient.name} / ${patient.gender}`} variant="outlined" className={classes.chip} />
-                    </Box>
+                    <Button
+                        variant={Boolean(dicomAnchorEl) ? 'outlined' : 'contained'}
+                        onClick={handleDicomClick}
+                        startIcon={Boolean(dicomAnchorEl) ? <CircularProgress color="contrast" size={20} /> : <Cast />}
+                        color="contrast"
+                        sx={{ borderRadius: '2rem', height: 'auto', color: Boolean(dicomAnchorEl) ? 'contrast.main' : 'white' }}
+                    >
+                        超音波影像
+                    </Button>
 
                     {!isComputer && patient.reports.length > 1 && (
                         <Badge badgeContent={patient.reports.length - 1} color="primary">
@@ -219,7 +246,8 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                             </IconButton>
                         </Badge>
                     )}
-                    <PopoverCom />
+                    <HistoryPopover />
+                    {DicomPopperCom}
                 </Stack>
             )}
 
