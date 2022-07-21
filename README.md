@@ -1,6 +1,7 @@
 
 # GHL 
 GHL is a responsive React app interface for manangerment medical reports built on [Material-UI](https://mui.com/zh/) .
+
 ![](https://github.com/johnny990628/GHL_Frontend/blob/master/public/ghl.gif)
 <img src="./public/logo.png" width="20%" />
 
