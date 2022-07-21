@@ -26,6 +26,17 @@ cd GHL_Frontend
 npm install
 ```
 
+## Configuration
+
+#### dotenv
+
+```bash
+REACT_APP_API_URL="your api url"
+REACT_APP_AUTH_URL="your user authentication url"
+REACT_APP_ROUTE_BASENAME="your route base name"
+REACT_APP_BLUELIGHT_URL="dicom server url"
+```
+
 #### Run the app
 ```bash
 npm run start
