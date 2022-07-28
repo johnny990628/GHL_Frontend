@@ -7,6 +7,12 @@ import Department from '../Pages/Department/Department'
 import Report from '../Pages/Report/Report'
 import User from '../Pages/User/User'
 
+import { useDispatch, useSelector } from 'react-redux'
+import { apiVerify } from '../Axios/Auth'
+import { fillAuthState } from '../Redux/Slices/Auth'
+import PatientForm from '../Pages/PatientForm'
+import Login from '../Pages/Login/Login'
+
 const Router = () => {
     const location = useLocation()
 
@@ -19,8 +25,12 @@ const Router = () => {
             <Route path="/department" element={<Department />} />
             <Route path="/report" element={<Report />} />
             <Route path="/user" element={<User />} />
+           
         </Routes>
+           
+
     )
 }
+
 
 export default Router

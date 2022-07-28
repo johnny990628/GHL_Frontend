@@ -10,39 +10,15 @@ import CustomAlert from "./Components/CustomAlert/CustomAlert";
 import PatientForm from "./Pages/PatientForm";
 
 const App = () => {
-    const dispatch = useDispatch();
-    const { verify } = useSelector((state) => state.auth);
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-    useEffect(() => {
-        if (isLoggedIn)
-            apiVerify().then((res) =>
-                dispatch(
-                    fillAuthState({
-                        user: res.data.user,
-                        token: res.data.token,
-                    })
-                )
-            );
-    }, []);
+   
 
     return (
         <>
-            {verify ? <Layout /> : <NotLoginLayOut />}
+            <Layout/>
             <CustomAlert />
         </>
     );
 };
 
-const NotLoginLayOut = () => {
-    return (
-        <HashRouter>
-            <Routes>
-                <Route path="*" element={<Login />} />
-                <Route path="/patientform" element={<PatientForm />} />
-            </Routes>
-        </HashRouter>
-    );
-};
 
 export default App;

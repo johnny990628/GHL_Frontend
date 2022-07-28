@@ -19,9 +19,28 @@ import { patientTrigger } from '../../Redux/Slices/Patient'
 import { userTrigger } from '../../Redux/Slices/User'
 import { departmentTrigger } from '../../Redux/Slices/Department'
 import { fetchSchedule } from '../../Redux/Slices/Schedule'
-import { logout } from '../../Redux/Slices/Auth'
+import { fillAuthState, logout } from '../../Redux/Slices/Auth'
+import { apiVerify } from '../../Axios/Auth'
+import Login from '../../Pages/Login/Login'
 
 const Layout = () => {
+
+    const { verify } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+    useEffect(() => {
+        if (isLoggedIn)
+            apiVerify().then((res) =>
+                dispatch(
+                    fillAuthState({
+                        user: res.data.user,
+                        token: res.data.token,
+                    })
+                )
+            );
+    }, [])
     return (
         // <HashRouter basename={process.env.REACT_APP_ROUTE_BASENAME}>
         <HashRouter>
@@ -29,12 +48,7 @@ const Layout = () => {
                 <Route
                     path="*"
                     element={
-                        <Box sx={{ height: '100vh', display: 'flex' }}>
-                            <Sidebar />
-                            <CustomScrollbar>
-                                <Main />
-                            </CustomScrollbar>
-                        </Box>
+                        verify ? <Main/> : <Login />
                     }
                 />
                 <Route path="/patientform" element={<PatientForm />} />
@@ -87,13 +101,18 @@ const Main = () => {
     }, [location.pathname])
 
     return (
-        <Box className={`${classes.container} ${isOpen || 'close'}`}>
-            <Router />
-            <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'fixed', bottom: 25, right: 25 }} icon={<Dehaze />}>
-                {actions.map(action => (
-                    <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} onClick={action.event} />
-                ))}
-            </SpeedDial>
+        <Box sx={{ height: '100vh', display: 'flex' }}>
+            <Sidebar />
+            <CustomScrollbar>
+                <Box className={`${classes.container} ${isOpen || 'close'}`}>
+                    <Router />
+                    <SpeedDial ariaLabel="SpeedDial basic example" sx={{ position: 'fixed', bottom: 25, right: 25 }} icon={<Dehaze />}>
+                        {actions.map(action => (
+                            <SpeedDialAction key={action.name} icon={action.icon} tooltipTitle={action.name} onClick={action.event} />
+                        ))}
+                    </SpeedDial>
+                </Box>
+            </CustomScrollbar>
         </Box>
     )
 }
