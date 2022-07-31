@@ -12,6 +12,7 @@ export const useFormat = () => {
             formtype: 'Select',
             name: 'department',
             label: departments,
+            value:"部門",
             required: true,
         },
         {
@@ -52,21 +53,21 @@ export const useFormat = () => {
             label: '生日',
             required: true,
         },
-        {
-            formtype: 'Radio',
-            name: 'gender',
-            label: [
-                {
-                    name: '男',
-                    label: '男性',
-                },
-                {
-                    name: '女',
-                    label: '女性',
-                },
-            ],
-            required: true,
-        },
+        // {
+        //     formtype: 'Radio',
+        //     name: 'gender',
+        //     label: [
+        //         {
+        //             name: '男',
+        //             label: '男性',
+        //         },
+        //         {
+        //             name: '女',
+        //             label: '女性',
+        //         },
+        //     ],
+        //     required: true,
+        // },
     ]
 
     return { format }
