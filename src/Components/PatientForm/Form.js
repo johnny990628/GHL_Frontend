@@ -61,7 +61,7 @@ const Form = () => {
                                     }}
                                     key={f.name}
                                 >
-                                    <InputLabel id="demo-simple-select-label">{f.name}</InputLabel>
+                                    <InputLabel id="demo-simple-select-label">{f.value}</InputLabel>
                                     <Select
                                         labelId="demo-simple-select-label"
                                         value={userData[f.name]}
@@ -225,7 +225,11 @@ const Form = () => {
                 variant="contained"
                 onClick={event => {
                     verify()
-
+                    if(userData.id.substring(1,2) === '1'){
+                        userData.gender="男"
+                    }else{
+                        userData.gender="女"
+                    }
                     console.log(userData)
                 }}
             >
@@ -259,10 +263,6 @@ const Form = () => {
         }
         if (!userData.address) {
             nullErrorMessage += ' 地址'
-        }
-
-        if (!userData.gender) {
-            nullErrorMessage += ' 性別'
         }
 
         if (!userData.birth) {
