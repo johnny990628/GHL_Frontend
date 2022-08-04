@@ -1,16 +1,36 @@
+const backgroundimage = require("./backgroundimage.jpg");
+const logo = require("./logo.png");
+
 const Header = () => {
+    const style = {
+        textAlign: "center",
+        paddingTop: "1px",
+        height: `${window.innerHeight / 3}px`,
+        padding: 1,
+        boxShadow: "1px 1px 1x ",
+        backgroundImage: `url(${backgroundimage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center center",
+    };
+
     return (
-        <div
-            style={{
-                textAlign: "center",
-                backgroundColor: "#FFC1E0",
-                paddingTop: "1px",
-                padding: 1,
-                borderRadius: "0% 0% 20% 20%",
-                boxShadow: "1px 1px 1x ",
-            }}
-        >
-            <h2>好心肝診所 超音波檢查表單</h2>
+        <div style={style}>
+            <img
+                src={logo}
+                alt="logo"
+                style={{
+                    width: window.innerWidth / 4,
+                    paddingTop: "20px",
+                }}
+            />
+            <p
+                style={{
+                    fontSize: "24px",
+                    color: "#ffffff",
+                }}
+            >
+                好心肝診所　健康檢查表單
+            </p>
         </div>
     );
 };
