@@ -78,9 +78,13 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
                 <Select labelId="select-label" value={value} onChange={handleSelectOnChange} error={error}>
                     {departments.length > 0 &&
                         departments.map((department, index) => (
-                            <MenuItem key={department._id} value={department.name}>
-                                {department.name}
-                            </MenuItem>
+                            <>
+                                {department.active && (
+                                    <MenuItem key={department._id} value={department.name}>
+                                        {department.name}
+                                    </MenuItem>
+                                )}
+                            </>
                         ))}
                 </Select>
             </FormControl>

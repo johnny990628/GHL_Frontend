@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, IconButton } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, FormControlLabel, FormGroup, IconButton, Switch } from '@mui/material'
 import { useDebouncedCallback } from 'use-debounce'
 
 import useStyles from './Style'
@@ -10,11 +10,12 @@ import CustomInput from '../../Components/CustomForm/CustomInput'
 import { ArrowDropDown, Delete } from '@mui/icons-material'
 import { useDispatch, useSelector } from 'react-redux'
 import { openAlert } from '../../Redux/Slices/Alert'
-import { createDepartment, deleteDepartment, fetchDepartment } from '../../Redux/Slices/Department'
+import { activeDepartment, createDepartment, deleteDepartment, fetchDepartment } from '../../Redux/Slices/Department'
 
 const Department = () => {
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
+    const [activeSwitch, setActiveSwitch] = useState(true)
     const [errorField, setErrorField] = useState([])
     const dispatch = useDispatch()
     const classes = useStyles()
@@ -57,13 +58,26 @@ const Department = () => {
 
     const handleSubmit = async () => {
         if (hasEmptyField()) return
-        dispatch(createDepartment({ name, address }))
+        dispatch(createDepartment({ name, address, active: activeSwitch }))
         setName('')
         setAddress('')
     }
 
     const columns = useMemo(
         () => [
+            {
+                accessor: 'active',
+                Header: '啟用',
+                Cell: row => {
+                    const { _id, active } = row.row.original
+                    return (
+                        <Switch
+                            checked={active}
+                            onChange={e => dispatch(activeDepartment({ departmentID: _id, active: e.target.checked }))}
+                        />
+                    )
+                },
+            },
             { accessor: 'name', Header: '部門名稱', Cell: row => row.row.original.name },
             { accessor: 'address', Header: '部門地址', Cell: row => row.row.original.address },
             {
@@ -109,6 +123,12 @@ const Department = () => {
                 <AccordionDetails>
                     <Box className={classes.formWrapper}>
                         <Box className={classes.formHeader}>新增部門</Box>
+                        <FormGroup>
+                            <FormControlLabel
+                                control={<Switch checked={activeSwitch} onChange={e => setActiveSwitch(e.target.checked)} />}
+                                label={<Box sx={{ fontSize: '1.4rem' }}>自動啟用部門</Box>}
+                            />
+                        </FormGroup>
                         <Box className={classes.formContainer}>
                             <Box className={classes.formBody}>
                                 {inputModel.map(({ name, label, value, setValue, required }) => (

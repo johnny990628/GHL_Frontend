@@ -198,8 +198,9 @@ const FormHeader = () => {
             </div>
             <b style={{ fontSize: '1.5rem' }}>腹部超音波檢查報告</b>
             <hr></hr>
-            <div style={{ width: '90%' }}>
+            <div style={{ width: '90%', display: 'flex', justifyContent: 'space-between' }}>
                 <div>檢查日期 : {new Date(createdAt).toLocaleDateString()}</div>
+                <div>報告列印時間 : {new Date().toLocaleString()}</div>
             </div>
         </div>
     )

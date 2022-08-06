@@ -94,7 +94,7 @@ const Report = () => {
             { accessor: 'version', Header: '報告版本', Cell: row => row.row.original.records.length || '無' },
             { accessor: 'procedureCode', Header: '病例代碼', Cell: row => row.row.original.procedureCode },
             { accessor: 'blood', Header: '抽血編號', Cell: row => row.row.original.blood },
-            { accessor: 'user', Header: '建立者', Cell: row => row.row.original.user?.name || '用戶已移除' },
+            { accessor: 'user', Header: '建立者', Cell: row => row.row.original.user?.name || '無' },
             { accessor: 'createdAt', Header: '完成時間', Cell: row => new Date(row.row.original.createdAt).toLocaleString() },
             {
                 accessor: 'actions',

@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Box, Stepper, Step, StepLabel, IconButton, Button } from '@mui/material'
-import { ArrowBack, ArrowForward, CheckCircleOutline, Cancel } from '@mui/icons-material'
+import { ArrowBack, ArrowForward, CheckCircleOutline, Cancel, Check, Close } from '@mui/icons-material'
 import { useTheme } from '@mui/styles'
 import useStyles from './Style'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 } from 'uuid'
+import Lottie from 'lottie-react'
 
 import CustomDataGrid from '../../Components/CustomDataGrid/CustomDataGrid'
 import CustomReportForm from '../../Components/CustomReport/CustomReportForm'
@@ -21,12 +22,15 @@ import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import { fetchReportByReportID } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
 import { fetchSchedule, removeSchedule } from '../../Redux/Slices/Schedule'
+import success from '../../Assets/Animation/success.json'
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
     const [selection, setSelection] = useState([])
+    const [selectTrigger, setSelectTrigger] = useState(false)
     const [patient, setPatient] = useState({})
-    const steps = ['選擇病人', '新增報告', '完成']
+    const [reportDialogMode, setReportDialogMode] = useState('create')
+
     const { schedules, patients, count } = useSelector(state => state.schedule)
     const { user } = useSelector(state => state.auth)
     const report = useSelector(state => state.reportForm.create)
@@ -39,14 +43,19 @@ const CreateReport = () => {
         if (selection.length > 0) {
             const { patient, reportID, reports } = schedules.find(s => s.patientID === selection[0])
             setPatient({ ...patient, reportID, reports })
+            if (!selectTrigger) setCurrentStep(1)
+            setSelectTrigger(false)
         }
     }, [selection])
 
     useEffect(() => {
         if (currentStep === 0) {
+            setReportDialogMode('create')
             dispatch(fetchSchedule())
+            dispatch(resetReport({ mode: 'create' }))
         }
         if (currentStep === 2) {
+            setReportDialogMode('edit')
             handleReportSubmit()
         }
     }, [currentStep])
@@ -74,6 +83,7 @@ const CreateReport = () => {
                     <IconButton
                         onClick={() => {
                             const { id, name, gender } = params.row
+                            setSelectTrigger(true)
                             dispatch(
                                 openAlert({
                                     alertTitle: `確定要取消 ${name} ${gender === '男' ? '先生' : '小姐'}的排程?`,
@@ -105,83 +115,82 @@ const CreateReport = () => {
         { field: 'phone', headerName: '電話', flex: 1 },
     ]
 
+    const FinishSection = () => {
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100%',
+                }}
+            >
+                <Lottie style={{ width: '60vw', height: '50vh' }} animationData={success} loop={true} />
+
+                <Box sx={{ fontSize: '3rem' }}>報告已成功儲存</Box>
+                <Box sx={{ fontSize: '2rem' }}>檢查者:{patient.name}</Box>
+                <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                    <Button
+                        variant="contained"
+                        sx={{
+                            background: theme.palette.contrast.main,
+                            '&:hover': {
+                                backgroundColor: theme.palette.contrast.dark,
+                            },
+                        }}
+                        className={classes.button}
+                        onClick={() => dispatch(fetchReportByReportID(patient.reportID))}
+                    >
+                        預覽
+                    </Button>
+
+                    <Button variant="contained" className={classes.button} onClick={() => setCurrentStep(0)}>
+                        返回
+                    </Button>
+                </Box>
+            </Box>
+        )
+    }
+
     return (
         <Box sx={{ width: '100%', height: '100%' }}>
-            <Stepper activeStep={currentStep} alternativeLabel>
-                {steps.map(label => (
-                    <Step key={label}>
-                        <StepLabel classes={{ label: classes.stepLabel }}>{label}</StepLabel>
-                    </Step>
-                ))}
-            </Stepper>
             <Box className={classes.container}>
-                <IconButton
-                    sx={{ display: (currentStep === 0 || currentStep === 2) && 'none' }}
-                    className={classes.button}
-                    onClick={() => setCurrentStep(p => p - 1)}
-                >
-                    <ArrowBack />
-                </IconButton>
-
                 <Box className={classes.tableContainer}>
                     {currentStep === 0 && (
                         <CustomDataGrid data={patients} columns={columns} selection={selection} setSelection={setSelection} />
                     )}
                     {currentStep === 1 && (
-                        <CustomReportForm
-                            lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]}
-                            patient={patient}
-                            mode="create"
-                        />
-                    )}
-                    {currentStep === 2 && (
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: '100%',
-                            }}
-                        >
-                            <CheckCircleOutline sx={{ fontSize: '10rem', color: theme.palette.contrast.main }} />
-
-                            <Box sx={{ fontSize: '3rem' }}>報告已成功儲存</Box>
-                            <Box sx={{ fontSize: '2rem' }}>檢查者:{patient.name}</Box>
-                            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                        <>
+                            <CustomReportForm
+                                lists={[Liver, Gallbladder, Kidney, Pancreas, Spleen, Suggestion]}
+                                patient={patient}
+                                mode="create"
+                            />
+                            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
                                 <Button
                                     variant="contained"
-                                    sx={{
-                                        background: theme.palette.contrast.main,
-                                        '&:hover': {
-                                            backgroundColor: theme.palette.contrast.dark,
-                                        },
-                                    }}
-                                    className={classes.button}
-                                    onClick={() => dispatch(fetchReportByReportID(patient.reportID))}
+                                    startIcon={<Check />}
+                                    sx={{ borderRadius: '2rem', height: 'auto', marginRight: '1rem' }}
+                                    onClick={() => setCurrentStep(2)}
                                 >
-                                    預覽
+                                    完成報告
                                 </Button>
-
-                                <Button variant="contained" className={classes.button} onClick={() => setCurrentStep(0)}>
-                                    返回
+                                <Button
+                                    variant="outlined"
+                                    startIcon={<Close />}
+                                    sx={{ borderRadius: '2rem', height: 'auto' }}
+                                    onClick={() => setCurrentStep(0)}
+                                >
+                                    取消
                                 </Button>
                             </Box>
-                        </Box>
+                        </>
                     )}
+                    {currentStep === 2 && <FinishSection />}
                 </Box>
-                <IconButton
-                    sx={{ display: currentStep === 2 && 'none' }}
-                    disabled={Object.keys(patient).length === 0}
-                    className={classes.button}
-                    onClick={() => {
-                        setCurrentStep(p => p + 1)
-                    }}
-                >
-                    <ArrowForward />
-                </IconButton>
             </Box>
-            <ReportDialog mode="create" />
+            <ReportDialog mode={reportDialogMode} />
         </Box>
     )
 }

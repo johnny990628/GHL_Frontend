@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { apiCreateDepartment, apiDeleteDepartment, apiGetDepartments } from '../../Axios/Department'
+import { apiCreateDepartment, apiDeleteDepartment, apiGetDepartments, apiUpdateDepartment } from '../../Axios/Department'
 
 import { openAlert } from './Alert'
 import { logout } from './Auth'
@@ -15,9 +15,9 @@ export const fetchDepartment = createAsyncThunk('department/fetchDepartment', as
     }
 })
 
-export const createDepartment = createAsyncThunk('department/createDepartment', async ({ name, address }, thunkAPI) => {
+export const createDepartment = createAsyncThunk('department/createDepartment', async ({ name, address, active }, thunkAPI) => {
     try {
-        const response = await apiCreateDepartment({ name, address })
+        const response = await apiCreateDepartment({ name, address, active })
         thunkAPI.dispatch(
             openAlert({
                 toastTitle: '新增成功',
@@ -34,6 +34,16 @@ export const createDepartment = createAsyncThunk('department/createDepartment', 
 export const deleteDepartment = createAsyncThunk('department/deleteDepartment', async (departmentID, thunkAPI) => {
     try {
         const response = await apiDeleteDepartment(departmentID)
+        return response.data
+    } catch (e) {
+        thunkAPI.dispatch(logout())
+        return thunkAPI.rejectWithValue()
+    }
+})
+
+export const activeDepartment = createAsyncThunk('department/activeDepartment', async ({ departmentID, active }, thunkAPI) => {
+    try {
+        const response = await apiUpdateDepartment(departmentID, { active })
         return response.data
     } catch (e) {
         thunkAPI.dispatch(logout())
@@ -64,6 +74,12 @@ const departmentSlice = createSlice({
             }
         },
         [deleteDepartment.fulfilled]: (state, action) => {
+            return {
+                ...state,
+                count: state.count - 1,
+            }
+        },
+        [activeDepartment.fulfilled]: (state, action) => {
             return {
                 ...state,
                 count: state.count - 1,
