@@ -25,8 +25,11 @@ import { apiGetDepartments } from "../../Axios/Department";
 import { useFormat } from "./useFormat";
 
 const Form = () => {
+    //userData
     const [userData, setUserData] = useState({});
+    //preset patient birthday time
     const [value, setValue] = useState(new Date("2000-01-01"));
+    //Modal view open state
     const [showQRcodeDiv, setShowQRcodeDiv] = useState(false);
 
     const style = {
@@ -40,8 +43,10 @@ const Form = () => {
         boxShadow: "1px 1px 7px rgba(0, 0, 0, 0.7)",
         borderRadius: "10px",
     };
+
     const { format } = useFormat();
 
+    //Determine the data type from useFormat and render it
     const FormDiv = () => {
         return (
             <form>
@@ -99,14 +104,17 @@ const Form = () => {
                                             });
                                         }}
                                     >
-                                        {f.label.map((label) => (
-                                            <MenuItem
-                                                value={label.name}
-                                                key={label.name}
-                                            >
-                                                {label.name}
-                                            </MenuItem>
-                                        ))}
+                                        {f.label.map((label) =>
+                                        //判斷是否開啟active
+                                            label.active ? (
+                                                <MenuItem
+                                                    value={label.name}
+                                                    key={label.name}
+                                                >
+                                                    {label.name}
+                                                </MenuItem>
+                                            ) : null
+                                        )}
                                     </Select>
                                 </FormControl>
                             </div>
@@ -193,6 +201,7 @@ const Form = () => {
         );
     };
 
+    //download QRcode function 
     const downloadQR = () => {
         const canvas = document.getElementById("QRCode");
         const pngUrl = canvas
@@ -206,6 +215,8 @@ const Form = () => {
         document.body.removeChild(downloadLink);
     };
 
+
+    //QRcode view function
     const QRCodeDiv = () => {
         return (
             <div
@@ -258,8 +269,9 @@ const Form = () => {
                 </Button>
             </div>
         );
-    };
+    }
 
+    //Button view function
     const ButtonDiv = () => {
         return (
             <Button
@@ -284,6 +296,7 @@ const Form = () => {
         );
     };
 
+    //verify patientID and patient phone number function
     const verify = () => {
         var nullErrorMessage = "";
         var verifyErrorMessage = "";
@@ -326,8 +339,8 @@ const Form = () => {
 
     return (
         <div style={style}>
+            
             {FormDiv()}
-
             {ButtonDiv()}
 
             <Modal

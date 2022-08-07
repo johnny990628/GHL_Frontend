@@ -19,7 +19,7 @@ const Header = () => {
                 src={logo}
                 alt="logo"
                 style={{
-                    width: window.innerWidth / 4,
+                    height: `${window.innerHeight / 5}px`,
                     paddingTop: "20px",
                 }}
             />
@@ -27,6 +27,7 @@ const Header = () => {
                 style={{
                     fontSize: "24px",
                     color: "#ffffff",
+                    marginTop: "-0px",
                 }}
             >
                 好心肝診所　健康檢查表單
