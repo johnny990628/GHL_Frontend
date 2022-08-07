@@ -2,6 +2,7 @@ import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(theme => ({
     container: {
+        position: 'relative',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -25,12 +26,20 @@ const useStyles = makeStyles(theme => ({
         '&.processing': {
             backgroundColor: theme.palette.status.processing,
         },
+        '&.finish': {
+            backgroundColor: theme.palette.status.finish,
+        },
     },
     statusBox: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         whiteSpace: 'nowrap',
+    },
+    radioGroup: {
+        position: 'absolute',
+        left: 20,
+        top: 30,
     },
 }))
 

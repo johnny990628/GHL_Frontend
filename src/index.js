@@ -7,8 +7,7 @@ import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/
 import './Assets/Css/index.css'
 
 import store from './Redux/store'
-import { fetchPatients } from './Redux/Slices/Patient'
-import { Provider, useDispatch } from 'react-redux'
+import { Provider } from 'react-redux'
 
 const pinkTheme = createTheme({
     palette: {
@@ -59,6 +58,7 @@ const whiteTheme = createTheme({
         },
         status: {
             processing: 'rgba(163, 64, 89,.2)',
+            finish: 'rgba(46, 67, 114,.2)',
             yet: 'rgba(64, 127, 127,.2)',
         },
     },

@@ -26,8 +26,9 @@ const useStyles = makeStyles(theme => ({
     },
     tableFooter: {
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        paddingInline: '1rem',
     },
     tableFooterItem: {
         marginRight: '1rem',

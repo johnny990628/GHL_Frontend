@@ -1,5 +1,16 @@
-import React, { useCallback, useMemo } from 'react'
-import { Box, Accordion, AccordionSummary, AccordionDetails, IconButton } from '@mui/material'
+import React, { useCallback, useMemo, useState } from 'react'
+import {
+    Box,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    IconButton,
+    FormControl,
+    FormLabel,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+} from '@mui/material'
 import { CalendarToday, ArrowDropDown, Delete, Edit, Cancel } from '@mui/icons-material'
 
 import useStyles from './Style'
@@ -13,12 +24,19 @@ import { openDialog } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
 import { apiCheckExists } from '../../Axios/Exists'
 import { addSchedule, removeSchedule } from '../../Redux/Slices/Schedule'
+import { useEffect } from 'react'
 
 const Patient = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
 
+    const [status, setStatus] = useState('all')
+
     const { data, count, page } = useSelector(state => state.patients)
+
+    useEffect(() => {
+        dispatch(patientTrigger())
+    }, [status])
 
     const columns = useMemo(
         () => [
@@ -28,11 +46,12 @@ const Patient = () => {
                 },
                 Header: '排程狀態',
                 Cell: row => {
-                    const isOnSchedule = row.row.original.schedule.length > 0
+                    const hasSchedule = row.row.original.schedule.length > 0
+                    const hasReport = row.row.original.report.length > 0
                     const { id, name, gender } = row.row.original
                     return (
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            {isOnSchedule ? (
+                            {hasSchedule ? (
                                 <IconButton
                                     onClick={() => {
                                         dispatch(
@@ -80,8 +99,8 @@ const Patient = () => {
                                 </IconButton>
                             )}
 
-                            <Box className={`${classes.status} ${isOnSchedule && 'processing'}`}>
-                                <Box className={classes.statusBox}>{isOnSchedule ? '排程中' : '未排程'}</Box>
+                            <Box className={`${classes.status} ${hasSchedule ? 'processing' : hasReport ? 'finish' : ''} `}>
+                                <Box className={classes.statusBox}>{hasSchedule ? '排程中' : hasReport ? '已完成' : '未排程'}</Box>
                             </Box>
                         </Box>
                     )
@@ -139,6 +158,21 @@ const Patient = () => {
 
     const sendData = useCallback(data => dispatch(createPatient(data), []))
 
+    const StatusRadioGroup = () => {
+        const handleOnChange = e => setStatus(e.target.value)
+        return (
+            <FormControl>
+                <FormLabel id="demo-radio-buttons-group-label">狀態</FormLabel>
+                <RadioGroup row aria-labelledby="demo-radio-buttons-group-label" value={status} onChange={handleOnChange}>
+                    <FormControlLabel value="all" control={<Radio />} label="全部" />
+                    <FormControlLabel value="yet" control={<Radio />} label="未排程" />
+                    <FormControlLabel value="processing" control={<Radio />} label="排程中" />
+                    <FormControlLabel value="finish" control={<Radio />} label="已完成" />
+                </RadioGroup>
+            </FormControl>
+        )
+    }
+
     return (
         <Box className={classes.container}>
             <Accordion elevation={0} className={classes.accordion}>
@@ -148,7 +182,15 @@ const Patient = () => {
                 </AccordionDetails>
             </Accordion>
 
-            <CustomTable columns={columns} fetchData={fetchData} data={data} totalPage={page} totalCount={count} />
+            <CustomTable
+                columns={columns}
+                fetchData={fetchData}
+                data={data}
+                totalPage={page}
+                totalCount={count}
+                StatusRadioGroup={<StatusRadioGroup />}
+                status={status}
+            />
             <EditDialog />
         </Box>
     )
