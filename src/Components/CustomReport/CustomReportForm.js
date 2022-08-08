@@ -286,7 +286,6 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                         {isComputer && (
                             <Grid item xs={2}>
                                 <CustomScrollbar>
-                                    <Button onClick={() => setTabIndex(2)}>123</Button>
                                     <Box className={classes.formLabel}>歷史報告</Box>
                                     <ReportList patient={patient} />
                                 </CustomScrollbar>
