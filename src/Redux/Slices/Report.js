@@ -28,7 +28,7 @@ const reportSlice = createSlice({
     name: 'report',
     initialState,
     reducers: {
-        reportTrigger: (state, action) => ({ ...state, count: 0 }),
+        reportTrigger: (state, action) => ({ ...state, count: -1 }),
     },
     extraReducers: {
         [fetchReport.fulfilled]: (state, action) => {

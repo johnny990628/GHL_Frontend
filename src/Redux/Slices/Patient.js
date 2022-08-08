@@ -61,7 +61,7 @@ const patientsSlice = createSlice({
     name: 'patients',
     initialState,
     reducers: {
-        patientTrigger: (state, action) => ({ ...state, count: 0 }),
+        patientTrigger: (state, action) => ({ ...state, count: -1 }),
     },
     extraReducers: {
         [fetchPatients.pending]: (state, action) => {

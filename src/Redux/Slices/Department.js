@@ -56,7 +56,7 @@ const departmentSlice = createSlice({
     name: 'department',
     initialState,
     reducers: {
-        departmentTrigger: (state, action) => ({ ...state, count: 0 }),
+        departmentTrigger: (state, action) => ({ ...state, count: -1 }),
     },
     extraReducers: {
         [fetchDepartment.fulfilled]: (state, action) => {
