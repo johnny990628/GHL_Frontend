@@ -2,14 +2,8 @@ import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(theme => ({
     container: {
-        // margin: theme.spacing(0.4),
         width: '100%',
-        // height: '100%',
-        height: '80vh',
-        // boxShadow: '6px 6px 10px rgba(0,0,0,0.1)',
-        // backgroundColor: theme.palette.secondary.main,
-        // borderRadius: '0 0 1rem 1rem',
-        // border: `1px solid ${theme.palette.border.main}`,
+        height: '100%',
         padding: '1rem',
     },
     tableHeader: {
@@ -29,6 +23,7 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingInline: '1rem',
+        height: '10%',
     },
     tableFooterItem: {
         marginRight: '1rem',

@@ -173,6 +173,12 @@ const CustomReportForm = ({ lists, patient, mode }) => {
         setDicomAnchorEl(dicom => (dicom ? null : event.currentTarget))
     }
 
+    const onScrollEvent = useDebouncedCallback(event => {
+        let index = Math.floor(event.target.scrollTop / 100)
+        index = index < lists.length - 1 ? index : lists.length - 1
+        setTabIndex(index)
+    }, 100)
+
     const HistoryPopover = () => {
         const handleClose = () => {
             setHistoryAnchorEl(null)
@@ -271,7 +277,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                 {mode === 'create' && (
                     <Grid container sx={{ height: '100%' }} spacing={2}>
                         <Grid item xs={12} xl={10}>
-                            <CustomScrollbar>
+                            <CustomScrollbar onScroll={onScrollEvent}>
                                 {lists.map(list => (
                                     <FormSection key={list.name} list={list} mode={mode} />
                                 ))}
@@ -280,6 +286,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                         {isComputer && (
                             <Grid item xs={2}>
                                 <CustomScrollbar>
+                                    <Button onClick={() => setTabIndex(2)}>123</Button>
                                     <Box className={classes.formLabel}>歷史報告</Box>
                                     <ReportList patient={patient} />
                                 </CustomScrollbar>

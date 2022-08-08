@@ -123,7 +123,7 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
         <Box className={classes.container}>
             <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
 
-            <TableContainer {...getTableProps()} sx={{ height: '82%' }}>
+            <TableContainer {...getTableProps()} sx={{ height: '78%' }}>
                 <CustomScrollbar>
                     <Table stickyHeader>
                         <TableHead>
