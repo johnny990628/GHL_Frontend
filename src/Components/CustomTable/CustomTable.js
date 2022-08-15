@@ -14,6 +14,10 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
+    FormLabel,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
 } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import { Search, ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
@@ -23,7 +27,7 @@ import useStyles from './Style'
 
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
-const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalCount }) => {
+const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalCount, StatusRadioGroup, status }) => {
     const [search, setSearch] = useState('')
 
     const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) => {
@@ -112,14 +116,14 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
     )
 
     useEffect(() => {
-        fetchData({ limit: pageSize, offset: pageIndex, search, sort: sortBy[0]?.id, desc: sortBy[0]?.desc ? -1 : 1 })
+        fetchData({ limit: pageSize, offset: pageIndex, search, status, sort: sortBy[0]?.id, desc: sortBy[0]?.desc ? -1 : 1 })
     }, [pageIndex, pageSize, sortBy, search, totalCount])
 
     return (
         <Box className={classes.container}>
             <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
 
-            <TableContainer {...getTableProps()} sx={{ height: '82%' }}>
+            <TableContainer {...getTableProps()} sx={{ height: '78%' }}>
                 <CustomScrollbar>
                     <Table stickyHeader>
                         <TableHead>
@@ -176,56 +180,61 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
             </TableContainer>
 
             <Box className={classes.tableFooter}>
-                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                    <InputLabel id="rows">列數</InputLabel>
-                    <Select
-                        labelId="rows"
-                        label="列數"
-                        value={pageSize}
-                        onChange={e => {
-                            setPageSize(Number(e.target.value))
-                        }}
-                        className={classes.tableFooterItem}
-                    >
-                        {[5, 10, 20, 30, 40].map(pageSize => (
-                            <MenuItem key={pageSize} value={pageSize}>
-                                {pageSize}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                <Box>{StatusRadioGroup}</Box>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="rows">列數</InputLabel>
+                        <Select
+                            labelId="rows"
+                            label="列數"
+                            value={pageSize}
+                            onChange={e => {
+                                setPageSize(Number(e.target.value))
+                            }}
+                            className={classes.tableFooterItem}
+                        >
+                            {[5, 10, 20, 30, 40].map(pageSize => (
+                                <MenuItem key={pageSize} value={pageSize}>
+                                    {pageSize}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
 
-                <Box className={classes.tableFooterItem}>
-                    <TextField
-                        type="number"
-                        variant="standard"
-                        label="頁數"
-                        defaultValue={pageIndex + 1}
-                        value={pageIndex + 1}
-                        onChange={e => {
-                            const page = e.target.value ? Number(e.target.value) - 1 : 0
-                            gotoPage(page)
-                        }}
-                        style={{ width: '100px' }}
-                    />
+                    <Box className={classes.tableFooterItem}>
+                        <TextField
+                            type="number"
+                            variant="standard"
+                            label="頁數"
+                            defaultValue={pageIndex + 1}
+                            value={pageIndex + 1}
+                            onChange={e => {
+                                const page = e.target.value ? Number(e.target.value) - 1 : 0
+                                gotoPage(page)
+                            }}
+                            style={{ width: '100px' }}
+                        />
+                    </Box>
+
+                    <Box className={classes.tableFooterItem} sx={{ fontSize: '1.1rem' }}>{`第${pageIndex + 1}/${
+                        pageOptions.length
+                    }頁`}</Box>
+
+                    <ButtonGroup variant="outlined" className={classes.tableFooterItem}>
+                        <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                            {'<<'}
+                        </Button>
+                        <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
+                            {'<'}
+                        </Button>
+                        <Button onClick={() => nextPage()} disabled={!canNextPage}>
+                            {'>'}
+                        </Button>
+                        <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                            {'>>'}
+                        </Button>
+                    </ButtonGroup>
                 </Box>
-
-                <Box className={classes.tableFooterItem} sx={{ fontSize: '1.1rem' }}>{`第${pageIndex + 1}/${pageOptions.length}頁`}</Box>
-
-                <ButtonGroup variant="outlined" className={classes.tableFooterItem}>
-                    <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                        {'<<'}
-                    </Button>
-                    <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
-                        {'<'}
-                    </Button>
-                    <Button onClick={() => nextPage()} disabled={!canNextPage}>
-                        {'>'}
-                    </Button>
-                    <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-                        {'>>'}
-                    </Button>
-                </ButtonGroup>
             </Box>
         </Box>
     )

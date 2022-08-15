@@ -40,7 +40,7 @@ const CustomReportInput = ({ row, organ, input, mode }) => {
                     : dispatch(addCancer({ organ, name, type, value: true, mode }))
                 break
             case 'radio':
-                input?.value.includes(value)
+                input?.value.includes(value) || Boolean(!value?.length)
                     ? dispatch(removeCancer({ organ, name, mode }))
                     : dispatch(addCancer({ organ, name, type, value, mode }))
                 break

@@ -28,7 +28,7 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        userTrigger: (state, action) => ({ ...state, count: 0 }),
+        userTrigger: (state, action) => ({ ...state, count: -1 }),
     },
     extraReducers: {
         [fetchUser.fulfilled]: (state, action) => {

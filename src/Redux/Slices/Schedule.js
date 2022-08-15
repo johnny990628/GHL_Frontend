@@ -41,7 +41,6 @@ const initialState = { schedules: [], patients: [], count: 0 }
 const scheduleSlice = createSlice({
     name: 'schedule',
     initialState,
-
     extraReducers: {
         [fetchSchedule.fulfilled]: (state, action) => {
             return {

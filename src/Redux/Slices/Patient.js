@@ -7,9 +7,9 @@ import { logout } from './Auth'
 
 const initialState = { loading: false, data: [], count: 0, page: 1, error: '' }
 
-export const fetchPatients = createAsyncThunk('patients/fetchPatients', async ({ limit, offset, search, sort, desc }, thunkAPI) => {
+export const fetchPatients = createAsyncThunk('patients/fetchPatients', async ({ limit, offset, search, sort, desc, status }, thunkAPI) => {
     try {
-        const response = await apiGetPatients({ limit, offset, search, sort, desc })
+        const response = await apiGetPatients({ limit, offset, search, sort, desc, status })
         return { ...response.data, page: Math.ceil(response.data.count / limit) }
     } catch (e) {
         thunkAPI.dispatch(logout())
@@ -61,7 +61,7 @@ const patientsSlice = createSlice({
     name: 'patients',
     initialState,
     reducers: {
-        patientTrigger: (state, action) => ({ ...state, count: 0 }),
+        patientTrigger: (state, action) => ({ ...state, count: -1 }),
     },
     extraReducers: {
         [fetchPatients.pending]: (state, action) => {
