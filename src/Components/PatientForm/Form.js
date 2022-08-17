@@ -20,6 +20,7 @@ import DatePicker from "@mui/lab/DatePicker";
 import { zhTW } from "date-fns/locale"; //給DatePicker用的中文月份
 import QRCode from "qrcode.react";
 
+import SMdatepicker from "./SMdatepicker";
 import { verifyID } from "../../Utils/Verify";
 import { apiGetDepartments } from "../../Axios/Department";
 import { useFormat } from "./useFormat";
@@ -28,7 +29,7 @@ const Form = () => {
     //userData
     const [userData, setUserData] = useState({});
     //preset patient birthday time
-    const [value, setValue] = useState(new Date("2000-01-01"));
+    const [value, setValue] = useState(new Date());
     //Modal view open state
     const [showQRcodeDiv, setShowQRcodeDiv] = useState(false);
 
@@ -105,7 +106,7 @@ const Form = () => {
                                         }}
                                     >
                                         {f.label.map((label) =>
-                                        //判斷是否開啟active
+                                            //判斷是否開啟active
                                             label.active ? (
                                                 <MenuItem
                                                     value={label.name}
@@ -164,35 +165,14 @@ const Form = () => {
 
                     if (f.formtype === "Time") {
                         return (
-                            <div style={{ marginTop: "20px" }}>
-                                <LocalizationProvider
-                                    dateAdapter={AdapterDateFns}
-                                    locale={zhTW}
-                                >
-                                    <DatePicker
-                                        inputFormat="yyyy/MM/dd"
-                                        label={f.label}
-                                        openTo="year"
-                                        views={["year", "month", "day"]}
-                                        value={value}
-                                        onChange={(newValue) => {
-                                            console.log(newValue);
-                                            setValue(newValue);
-                                            setUserData({
-                                                ...userData,
-                                                [f.name]: `${newValue.getFullYear()}/${
-                                                    newValue.getMonth() + 1
-                                                }/${newValue.getDate()}`,
-                                            });
-                                        }}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                sx={{ width: "80%" }}
-                                            />
-                                        )}
-                                    />
-                                </LocalizationProvider>
+                            <div
+                                style={{
+                                    textAlign: "left",
+                                    width: "80%",
+                                    margin: " 20px auto",
+                                }}
+                            >
+                                <SMdatepicker f={f} value={value} setValue={setValue} />
                             </div>
                         );
                     }
@@ -201,7 +181,7 @@ const Form = () => {
         );
     };
 
-    //download QRcode function 
+    //download QRcode function
     const downloadQR = () => {
         const canvas = document.getElementById("QRCode");
         const pngUrl = canvas
@@ -214,7 +194,6 @@ const Form = () => {
         downloadLink.click();
         document.body.removeChild(downloadLink);
     };
-
 
     //QRcode view function
     const QRCodeDiv = () => {
@@ -269,7 +248,7 @@ const Form = () => {
                 </Button>
             </div>
         );
-    }
+    };
 
     //Button view function
     const ButtonDiv = () => {
@@ -282,13 +261,14 @@ const Form = () => {
                 }}
                 variant="contained"
                 onClick={(event) => {
+                    console.log(value.getMonth()+1)
+                    userData.birth=value.getFullYear()+"/"+(value.getMonth()+1)+"/"+value.getDate();
                     verify();
                     if (userData.id.substring(1, 2) === "1") {
                         userData.gender = "男";
                     } else {
                         userData.gender = "女";
                     }
-                    console.log(userData);
                 }}
             >
                 產生條碼
@@ -339,7 +319,6 @@ const Form = () => {
 
     return (
         <div style={style}>
-            
             {FormDiv()}
             {ButtonDiv()}
 
