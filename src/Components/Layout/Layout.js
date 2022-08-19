@@ -44,7 +44,7 @@ const Layout = () => {
         // <HashRouter basename={process.env.REACT_APP_ROUTE_BASENAME}>
         <HashRouter>
             <Routes>
-                <Route path="*" element={<Main />} />
+                <Route path="*" element={verify ? <Main /> : <Login />} />
                 <Route path="/patientform" element={<PatientForm />} />
             </Routes>
         </HashRouter>
