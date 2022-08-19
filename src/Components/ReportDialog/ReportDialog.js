@@ -63,7 +63,7 @@ const ReportDialog = ({ mode }) => {
             dispatch(
                 openAlert({
                     toastTitle: '報告修改成功',
-                    text: `${patient.name} ${patient.gender === '男' ? '先生' : '小姐'}`,
+                    text: `${patient.name} ${patient.gender === 'm' ? '先生' : '小姐'}`,
                 })
             )
             handleClose()
@@ -94,7 +94,9 @@ const ReportDialog = ({ mode }) => {
                     </IconButton>
                 )}
                 <ListItemText
-                    primary={`${patient.id} / ${patient.name} / ${patient.gender} (${user ? `${user.name}醫師` : '建立者已移除'})`}
+                    primary={`${
+                        patient ? `${patient.id} / ${patient.name} / ${patient.gender === 'm' ? '先生' : '小姐'}` : '無病人資料'
+                    } (${user ? `${user.name}醫師` : '無醫師資料'})`}
                     secondary={
                         <Box>
                             <Box>{`建立 : ${new Date(createdAt).toLocaleString()}`}</Box>

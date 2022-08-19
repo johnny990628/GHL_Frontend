@@ -70,15 +70,13 @@ const whiteTheme = createTheme({
 // store.dispatch(fetchPatients()) //Fetch Initial Data
 
 ReactDOM.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <StyledEngineProvider injectFirst>
-                <ThemeProvider theme={whiteTheme}>
-                    <CssBaseline />
-                    <App />
-                </ThemeProvider>
-            </StyledEngineProvider>
-        </Provider>
-    </React.StrictMode>,
+    <Provider store={store}>
+        <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={whiteTheme}>
+                <CssBaseline />
+                <App />
+            </ThemeProvider>
+        </StyledEngineProvider>
+    </Provider>,
     document.getElementById('root')
 )

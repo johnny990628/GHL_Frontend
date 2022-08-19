@@ -1,33 +1,56 @@
 import React, { useEffect, useState } from 'react'
-import { Box, FormControl, FormControlLabel, FormLabel, InputLabel, MenuItem, Radio, RadioGroup, Select, TextField } from '@mui/material'
+import { Box, FormControl, FormControlLabel, FormLabel, MenuItem, Popover, Radio, RadioGroup, TextField } from '@mui/material'
 import { useTheme } from '@mui/styles'
-import { LocalizationProvider, DatePicker } from '@mui/lab'
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import { zhTW } from 'date-fns/locale'
-
+import { DayPicker } from 'react-day-picker'
+import 'react-day-picker/dist/style.css'
 import useStyles from './Style'
 
 import { apiGetDepartments } from '../../Axios/Department'
+import { zhTW } from 'date-fns/locale'
 
 const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperText, error, mode, required }) => {
     const classes = useStyles()
     const theme = useTheme()
 
     const DatePickerCustomInput = ({ value, setValue, error }) => {
+        const [dateAnchorEl, setDateAnchorEl] = useState(null)
+        const handleDateClick = event => {
+            setDateAnchorEl(event.currentTarget)
+        }
+        const DatePickerPopover = () => {
+            const handleClose = () => {
+                setDateAnchorEl(null)
+            }
+            return (
+                <Popover
+                    open={Boolean(dateAnchorEl)}
+                    anchorEl={dateAnchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                >
+                    <DayPicker
+                        mode="single"
+                        selected={value}
+                        onDayClick={date => setValue(date)}
+                        fromYear={1930}
+                        toYear={new Date().getFullYear()}
+                        captionLayout="dropdown"
+                        locale={zhTW}
+                    />
+                </Popover>
+            )
+        }
         return (
-            <LocalizationProvider dateAdapter={AdapterDateFns} locale={zhTW}>
-                <DatePicker
-                    disableFuture
-                    inputFormat="yyyy/MM/dd"
+            <>
+                <TextField
+                    variant="standard"
+                    className={classes.textField}
                     label="生日"
                     required
-                    views={['year', 'day']}
-                    openTo="year"
-                    value={value}
-                    error={error}
-                    onChange={newValue => {
-                        setValue(new Date(newValue))
-                    }}
+                    value={new Date(value).toLocaleDateString()}
                     InputProps={{
                         style: {
                             fontSize: '1.3rem',
@@ -36,9 +59,11 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
                         readOnly: true,
                     }}
                     InputLabelProps={{ style: { fontSize: '1.3rem', color: theme.palette.primary.main } }}
-                    renderInput={params => <TextField variant="standard" className={classes.textField} {...params} />}
+                    onClick={handleDateClick}
                 />
-            </LocalizationProvider>
+                <DatePickerPopover />
+                <Box className={classes.textField} />
+            </>
         )
     }
 
@@ -71,23 +96,35 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
         }
 
         return (
-            <FormControl variant="standard" className={classes.textField}>
-                <InputLabel id="select-label" sx={{ fontsize: '1.3rem' }}>
-                    部門
-                </InputLabel>
-                <Select labelId="select-label" value={value} onChange={handleSelectOnChange} error={error}>
-                    {departments.length > 0 &&
-                        departments.map((department, index) => (
-                            <>
-                                {department.active && (
-                                    <MenuItem key={department._id} value={department.name}>
-                                        {department.name}
-                                    </MenuItem>
-                                )}
-                            </>
+            <TextField
+                variant="standard"
+                label="部門"
+                select
+                value={value}
+                onChange={handleSelectOnChange}
+                error={error}
+                className={classes.textField}
+                InputProps={{
+                    style: {
+                        fontSize: '1.3rem',
+                        color: theme.palette.primary.main,
+                    },
+                }}
+                InputLabelProps={{ style: { fontSize: '1.3rem', color: theme.palette.primary.main } }}
+            >
+                {departments.length > 0 &&
+                    departments
+                        .filter(department => department.active)
+                        .map(department => (
+                            <MenuItem
+                                key={department._id}
+                                value={department.name}
+                                sx={{ fontSize: '1.3rem', color: theme.palette.primary.main }}
+                            >
+                                {department.name}
+                            </MenuItem>
                         ))}
-                </Select>
-            </FormControl>
+            </TextField>
         )
     }
 

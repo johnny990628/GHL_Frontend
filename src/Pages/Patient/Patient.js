@@ -49,6 +49,7 @@ const Patient = () => {
                     const hasSchedule = row.row.original.schedule.length > 0
                     const hasReport = row.row.original.report.length > 0
                     const { id, name, gender } = row.row.original
+                    const mr = gender === 'm' ? '先生' : '小姐'
                     return (
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             {hasSchedule ? (
@@ -56,9 +57,9 @@ const Patient = () => {
                                     onClick={() => {
                                         dispatch(
                                             openAlert({
-                                                alertTitle: `確定要取消 ${name} ${gender === '男' ? '先生' : '小姐'}的排程?`,
+                                                alertTitle: `確定要取消 ${name} ${mr}的排程?`,
                                                 toastTitle: '取消排程',
-                                                text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                                                text: `${name} ${mr}`,
                                                 type: 'confirm',
                                                 event: () => dispatch(removeSchedule(id)).then(() => dispatch(patientTrigger())),
                                             })
@@ -74,7 +75,7 @@ const Patient = () => {
                                             openAlert({
                                                 alertTitle: '請輸入抽血編號',
                                                 toastTitle: '加入排程',
-                                                text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                                                text: `${name} ${mr}`,
                                                 type: 'input',
                                                 event: text =>
                                                     dispatch(addSchedule({ patientID: id, procedureCode: '19009C', blood: text })).then(
@@ -109,8 +110,13 @@ const Patient = () => {
 
             { accessor: 'id', Header: '身分證字號' },
             { accessor: 'name', Header: '姓名' },
-            { accessor: 'gender', Header: '性別' },
-
+            { accessor: 'gender', Header: '性別', Cell: row => (row.row.original.gender === 'm' ? '男' : '女') },
+            {
+                accessor: 'department',
+                Header: '部門',
+                Cell: row =>
+                    row.row.original.department.length > 6 ? row.row.original.department.slice(0, 6) + '...' : row.row.original.department,
+            },
             {
                 accessor: 'createdAt',
                 Header: '建立日期',
@@ -136,7 +142,7 @@ const Patient = () => {
                                         openAlert({
                                             alertTitle: '確定刪除該病患?將會刪除所有相關資料',
                                             toastTitle: '刪除成功',
-                                            text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                                            text: `${name} ${gender === 'm' ? '先生' : '小姐'}`,
                                             icon: 'success',
                                             type: 'confirm',
                                             event: () => dispatch(deletePatient({ patientID: id })),

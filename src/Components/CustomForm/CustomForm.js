@@ -15,21 +15,16 @@ import { apiCheckExists } from '../../Axios/Exists'
 
 const CustomForm = ({ title, row, mode, sendData }) => {
     const [id, setId] = useState('')
-    const [blood, setBlood] = useState('')
     const [name, setName] = useState('')
-    const [address, setAddress] = useState('')
     const [phone, setPhone] = useState('')
     const [department, setDepartment] = useState('')
-    const [birth, setBirth] = useState(null)
-    const [gender, setGender] = useState('男')
-    const [age, setAge] = useState(0)
+    const [birth, setBirth] = useState(new Date().toISOString())
     const [qrcode, setQrcode] = useState(null)
     const [errorField, setErrorField] = useState([])
     const [validID, setValidID] = useState(true)
     const [validPhone, setValidPhone] = useState(true)
     const [autoProcessSwitch, setAutoProcessSwitch] = useState(true)
     const [idUsed, setIdUsed] = useState(false)
-    const [bloodUsed, setBloodUsed] = useState(false)
 
     const classes = useStyles()
     const theme = useTheme()
@@ -38,36 +33,21 @@ const CustomForm = ({ title, row, mode, sendData }) => {
     useEffect(() => {
         if (row) {
             setId(row?.id)
-            setBlood(row?.blood)
             setName(row?.name)
-            setAddress(row?.address)
             setPhone(row?.phone)
             setDepartment(row?.department)
             setBirth(new Date(row.birth))
-            setGender(row?.gender)
-            setAge(row?.age)
         }
     }, [])
 
     useEffect(() => {
-        //計算年紀
-        if (birth) {
-            const today = new Date()
-            setAge(parseInt((today - birth) / 31557600000)) // 31557600000 是 24 * 3600 * 365.25 * 1000 = 一年
-        }
-    }, [birth])
-    useEffect(() => {
         if (qrcode) {
-            const { id, name, address, phone, department, birth, gender, age } = qrcode
+            const { id, name, phone, department, birth } = qrcode
             setId(id)
             setName(name)
-            setAddress(address)
             setPhone(phone)
             setDepartment(department)
-            setBirth(new Date(birth))
-            setGender(row?.gender)
-            setGender(gender)
-            setAge(age)
+            setBirth(new Date(birth).toISOString())
             dispatch(openAlert({ message: '掃描成功', icon: 'success' }))
         }
     }, [qrcode])
@@ -76,14 +56,10 @@ const CustomForm = ({ title, row, mode, sendData }) => {
 
     const handleDelete = () => {
         setId('')
-        setBlood('')
         setName('')
-        setAddress('')
         setPhone('')
         setDepartment('')
-        setBirth(null)
-        setGender('女')
-        setAge(0)
+        setBirth(new Date().toISOString())
     }
 
     const handleChange = useDebouncedCallback((value, name) => {
@@ -96,9 +72,6 @@ const CustomForm = ({ title, row, mode, sendData }) => {
             case 'phone':
                 setValidPhone(verifyPhone(value))
                 break
-            case 'blood':
-                checkExists({ type: 'blood', value }).then(exist => setBloodUsed(exist))
-                break
             default:
                 break
         }
@@ -110,8 +83,6 @@ const CustomForm = ({ title, row, mode, sendData }) => {
                 return validID ? idUsed && '此號碼已存在' : '不合法的格式'
             case 'phone':
                 return validPhone || '不合法的格式'
-            case 'blood':
-                return bloodUsed && '此編號已存在'
             default:
                 return ''
         }
@@ -128,7 +99,8 @@ const CustomForm = ({ title, row, mode, sendData }) => {
     const handleSubmit = async data => {
         try {
             if (hasEmptyField() || idUsed || !validID || !validPhone) return
-            await sendData(data)
+            const gender = data.id.substring(1, 2) === '1' ? 'm' : 'f'
+            await sendData({ ...data, gender })
             if (mode === 'create') {
                 dispatch(openAlert({ toastTitle: '新增成功', icon: 'success' }))
                 handleDelete()
@@ -138,7 +110,7 @@ const CustomForm = ({ title, row, mode, sendData }) => {
                 dispatch(
                     openAlert({
                         toastTitle: '修改成功',
-                        text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                        text: `${name} ${gender === 'm' ? '先生' : '小姐'}`,
                         icon: 'success',
                     })
                 )
@@ -154,7 +126,6 @@ const CustomForm = ({ title, row, mode, sendData }) => {
         { name: 'phone', label: '電話', value: phone, setValue: setPhone, required: true },
         { name: 'department', label: '部門', value: department, setValue: setDepartment, required: false },
         { name: 'birth', label: '生日', value: birth, setValue: setBirth, required: true },
-        { name: 'gender', label: '性別', value: gender, setValue: setGender, required: true },
     ]
 
     return (
@@ -195,11 +166,9 @@ const CustomForm = ({ title, row, mode, sendData }) => {
                                 handleSubmit({
                                     id,
                                     name,
-                                    address,
                                     phone,
                                     department,
                                     birth,
-                                    gender,
                                 })
                             }
                         >

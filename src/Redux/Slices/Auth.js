@@ -28,14 +28,14 @@ export const login = createAsyncThunk('auth/login', async ({ username, password,
     }
 })
 
-export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
+export const logout = createAsyncThunk('auth/logout', async (isTokenExpiration, thunkAPI) => {
     try {
         const response = await apiLogout()
         localStorage.removeItem('isLoggedIn')
         thunkAPI.dispatch(
             openAlert({
-                toastTitle: '登出成功',
-                icon: 'success',
+                toastTitle: isTokenExpiration ? '登入憑證到期，請重新登入' : '已登出',
+                icon: 'warning',
             })
         )
         return response.data

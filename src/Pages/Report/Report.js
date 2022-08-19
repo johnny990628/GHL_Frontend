@@ -89,12 +89,20 @@ const Report = () => {
                     </Box>
                 ),
             },
-            { accessor: 'patientID', Header: '身分證字號', Cell: row => row.row.original.patient.id },
-            { accessor: 'name', Header: '姓名', Cell: row => row.row.original.patient.name },
+            {
+                accessor: 'patientID',
+                Header: '身分證字號',
+                Cell: row => (row.row.original.patient ? row.row.original.patient.id : row.row.original.patientID),
+            },
+            { accessor: 'name', Header: '姓名', Cell: row => (row.row.original.patient ? row.row.original.patient.name : '無病人資料') },
             { accessor: 'version', Header: '報告版本', Cell: row => row.row.original.records.length || '無' },
             { accessor: 'procedureCode', Header: '病例代碼', Cell: row => row.row.original.procedureCode },
             { accessor: 'blood', Header: '抽血編號', Cell: row => row.row.original.blood },
-            { accessor: 'user', Header: '建立者', Cell: row => row.row.original.user?.name || '無' },
+            {
+                accessor: 'user',
+                Header: '完成者',
+                Cell: row => (row.row.original.user ? row.row.original.user.name : row.row.original.userID || '無'),
+            },
             { accessor: 'createdAt', Header: '完成時間', Cell: row => new Date(row.row.original.createdAt).toLocaleString() },
             {
                 accessor: 'actions',

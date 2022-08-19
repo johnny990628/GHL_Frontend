@@ -84,11 +84,12 @@ const CreateReport = () => {
                         onClick={() => {
                             const { id, name, gender } = params.row
                             setSelectTrigger(true)
+                            const mr = gender === 'm' ? '先生' : '小姐'
                             dispatch(
                                 openAlert({
-                                    alertTitle: `確定要取消 ${name} ${gender === '男' ? '先生' : '小姐'}的排程?`,
+                                    alertTitle: `確定要取消 ${name} ${mr}的排程?`,
                                     toastTitle: '取消排程',
-                                    text: `${name} ${gender === '男' ? '先生' : '小姐'}`,
+                                    text: `${name} ${mr}`,
                                     type: 'confirm',
                                     event: () => dispatch(removeSchedule(id)),
                                 })
@@ -103,7 +104,14 @@ const CreateReport = () => {
         { field: 'id', headerName: '身分證字號', flex: 2 },
         { field: 'blood', headerName: '抽血編號', flex: 1 },
         { field: 'name', headerName: '姓名', flex: 1 },
-        { field: 'gender', headerName: '性別', flex: 1 },
+        {
+            field: 'gender',
+            headerName: '性別',
+            flex: 1,
+            renderCell: params => {
+                return <div>{params.row.gender === 'm' ? '男' : '女'}</div>
+            },
+        },
         {
             field: 'birth',
             headerName: '生日',

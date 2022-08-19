@@ -147,25 +147,29 @@ const PatientForm = () => {
                 <td className={classes.table}>
                     <b>姓名</b>
                 </td>
-                <td className={classes.table}>{patient.name}</td>
+                {patient ? <td className={classes.table}>{patient?.name}</td> : <td className={classes.table}>&emsp;&emsp;&emsp;</td>}
                 <td className={classes.table}>
                     <b>性別</b>
                 </td>
                 <td className={classes.table}>
-                    <input type="checkbox" checked={patient.gender === '男'} readOnly />男
-                    <input type="checkbox" checked={patient.gender === '女'} readOnly />女
+                    <input type="checkbox" checked={patient?.gender === 'm'} readOnly />男
+                    <input type="checkbox" checked={patient?.gender === 'f'} readOnly />女
                 </td>
                 <td className={classes.table}>
                     <b>出生年月日</b>
                 </td>
-                <td className={classes.table}>{new Date(patient.birth).toLocaleDateString()}</td>
+                {patient ? (
+                    <td className={classes.table}>{new Date(patient?.birth).toLocaleDateString()}</td>
+                ) : (
+                    <td className={classes.table}>&emsp;&emsp;&emsp;</td>
+                )}
             </tr>
             <tr>
                 <td className={classes.table}>
                     <b>電話</b>
                 </td>
                 <td className={classes.table} colSpan="5">
-                    {patient.phone}
+                    {patient?.phone}
                 </td>
             </tr>
             <tr>
@@ -173,13 +177,13 @@ const PatientForm = () => {
                     <b>部門單位</b>
                 </td>
                 <td className={classes.table} colSpan="2">
-                    {patient.department}
+                    {patient?.department}
                 </td>
                 <td className={classes.table}>
                     <b>身份證字號</b>
                 </td>
                 <td className={classes.table} colSpan="2">
-                    {patient.id}
+                    {patient?.id}
                 </td>
             </tr>
         </table>

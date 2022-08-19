@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { apiGetReportByReportID } from '../../Axios/Report'
-import { logout } from './Auth'
+import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
 
 const initialState = {
     patient: { isOpen: false, row: {} },
@@ -12,7 +12,7 @@ export const fetchReportByReportID = createAsyncThunk('dialog/fetchReportByRepor
         const response = await apiGetReportByReportID(reportID)
         return response.data
     } catch (e) {
-        thunkAPI.dispatch(logout())
+        thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return e
     }
 })

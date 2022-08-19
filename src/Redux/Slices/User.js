@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 import { apiDeleteUser, apiGetUsers } from '../../Axios/User'
-import { logout } from './Auth'
+import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
 
 export const fetchUser = createAsyncThunk('user/fetchUser', async (params, thunkAPI) => {
     try {
@@ -9,7 +9,7 @@ export const fetchUser = createAsyncThunk('user/fetchUser', async (params, thunk
         const { results, count } = response.data
         return { results, count, page: Math.ceil(count / params.limit) }
     } catch (e) {
-        thunkAPI.dispatch(logout())
+        thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()
     }
 })
@@ -18,7 +18,7 @@ export const deleteUser = createAsyncThunk('user/deleteUser', async (userID, thu
         const response = await apiDeleteUser(userID)
         return response.data
     } catch (e) {
-        thunkAPI.dispatch(logout())
+        thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()
     }
 })

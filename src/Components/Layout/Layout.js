@@ -24,33 +24,27 @@ import { apiVerify } from '../../Axios/Auth'
 import Login from '../../Pages/Login/Login'
 
 const Layout = () => {
+    const { verify } = useSelector(state => state.auth)
+    const dispatch = useDispatch()
 
-    const { verify } = useSelector((state) => state.auth);
-    const dispatch = useDispatch();
-
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    const isLoggedIn = localStorage.getItem('isLoggedIn')
 
     useEffect(() => {
         if (isLoggedIn)
-            apiVerify().then((res) =>
+            apiVerify().then(res =>
                 dispatch(
                     fillAuthState({
                         user: res.data.user,
                         token: res.data.token,
                     })
                 )
-            );
+            )
     }, [])
     return (
         // <HashRouter basename={process.env.REACT_APP_ROUTE_BASENAME}>
         <HashRouter>
             <Routes>
-                <Route
-                    path="*"
-                    element={
-                        verify ? <Main/> : <Login />
-                    }
-                />
+                <Route path="*" element={verify ? <Main /> : <Login />} />
                 <Route path="/patientform" element={<PatientForm />} />
             </Routes>
         </HashRouter>

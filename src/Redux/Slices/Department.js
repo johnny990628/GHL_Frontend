@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { apiCreateDepartment, apiDeleteDepartment, apiGetDepartments, apiUpdateDepartment } from '../../Axios/Department'
 
 import { openAlert } from './Alert'
-import { logout } from './Auth'
+import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
 
 export const fetchDepartment = createAsyncThunk('department/fetchDepartment', async (params, thunkAPI) => {
     try {
@@ -10,7 +10,7 @@ export const fetchDepartment = createAsyncThunk('department/fetchDepartment', as
         const { results, count } = response.data
         return { results, count, page: Math.ceil(count / params.limit) }
     } catch (e) {
-        thunkAPI.dispatch(logout())
+        thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()
     }
 })
@@ -27,7 +27,7 @@ export const createDepartment = createAsyncThunk('department/createDepartment', 
         )
         return response.data
     } catch (e) {
-        thunkAPI.dispatch(logout())
+        thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()
     }
 })
@@ -36,7 +36,7 @@ export const deleteDepartment = createAsyncThunk('department/deleteDepartment', 
         const response = await apiDeleteDepartment(departmentID)
         return response.data
     } catch (e) {
-        thunkAPI.dispatch(logout())
+        thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()
     }
 })
@@ -46,7 +46,7 @@ export const activeDepartment = createAsyncThunk('department/activeDepartment', 
         const response = await apiUpdateDepartment(departmentID, { active })
         return response.data
     } catch (e) {
-        thunkAPI.dispatch(logout())
+        thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()
     }
 })
