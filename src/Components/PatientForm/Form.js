@@ -262,12 +262,12 @@ const Form = () => {
                 variant="contained"
                 onClick={(event) => {
                     console.log(value.getMonth()+1)
-                    userData.birth=value.getFullYear()+"/"+(value.getMonth()+1)+"/"+value.getDate();
+                    userData.birth=value //.getFullYear()+"/"+(value.getMonth()+1)+"/"+value.getDate();
                     verify();
                     if (userData.id.substring(1, 2) === "1") {
-                        userData.gender = "男";
+                        userData.gender = "M";
                     } else {
-                        userData.gender = "女";
+                        userData.gender = "F";
                     }
                 }}
             >
