@@ -265,9 +265,9 @@ const Form = () => {
                     userData.birth=value //.getFullYear()+"/"+(value.getMonth()+1)+"/"+value.getDate();
                     verify();
                     if (userData.id.substring(1, 2) === "1") {
-                        userData.gender = "M";
+                        userData.gender = "m";
                     } else {
-                        userData.gender = "F";
+                        userData.gender = "f";
                     }
                 }}
             >
