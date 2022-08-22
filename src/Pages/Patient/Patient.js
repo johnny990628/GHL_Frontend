@@ -73,7 +73,7 @@ const Patient = () => {
                                     onClick={() => {
                                         dispatch(
                                             openAlert({
-                                                alertTitle: '請輸入抽血編號',
+                                                alertTitle: `請輸入${name}的抽血編號`,
                                                 toastTitle: '加入排程',
                                                 text: `${name} ${mr}`,
                                                 type: 'input',
@@ -160,9 +160,13 @@ const Patient = () => {
         []
     )
 
-    const fetchData = useCallback(params => dispatch(fetchPatients(params)), [])
+    const fetchData = useCallback(params => {
+        dispatch(fetchPatients(params))
+        //如果搜尋，則顯示全部病人
+        if (params.search) setStatus('all')
+    }, [])
 
-    const sendData = useCallback(data => dispatch(createPatient(data), []))
+    const sendData = useCallback(data => dispatch(createPatient(data)), [])
 
     const StatusRadioGroup = () => {
         const handleOnChange = e => setStatus(e.target.value)

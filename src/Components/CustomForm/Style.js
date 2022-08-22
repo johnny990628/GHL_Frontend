@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     },
     button: {
         width: '100%',
-        fontSize: '1.5rem',
+        fontSize: '1.2rem',
         margin: '1rem',
     },
     qrcodeButton: {
