@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
         padding: '8px',
         marginRight: '.6rem',
         borderRadius: '1rem',
-        '&.processing': {
+        '&.admin': {
             backgroundColor: theme.palette.status.processing,
         },
     },

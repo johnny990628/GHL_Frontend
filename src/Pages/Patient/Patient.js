@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import {
     Box,
     Accordion,
@@ -25,15 +25,12 @@ import { openDialog } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
 import { apiCheckExists } from '../../Axios/Exists'
 import { addSchedule, removeSchedule } from '../../Redux/Slices/Schedule'
-import { useEffect } from 'react'
 
 const Patient = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
 
-    // const [status, setStatus] = useState('all')
-
-    const { data, count, page } = useSelector(state => state.patients)
+    const { data, count, page, loading } = useSelector(state => state.patients)
 
     const columns = useMemo(
         () => [
@@ -189,6 +186,7 @@ const Patient = () => {
                 columns={columns}
                 fetchData={fetchData}
                 data={data}
+                loading={loading}
                 totalPage={page}
                 totalCount={count}
                 StatusRadioGroup={StatusRadioGroup}

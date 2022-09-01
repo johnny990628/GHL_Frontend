@@ -15,6 +15,7 @@ import {
     FormControl,
     InputLabel,
     Grid,
+    CircularProgress,
 } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import { Search, ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
@@ -24,7 +25,7 @@ import useStyles from './Style'
 
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
-const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalCount, StatusRadioGroup, GlobalFilter }) => {
+const CustomTable = ({ columns, renderSubRow, fetchData, data, loading, totalPage, totalCount, StatusRadioGroup, GlobalFilter }) => {
     const [search, setSearch] = useState('')
     const [status, setStatus] = useState('all')
 
@@ -76,67 +77,73 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
     return (
         <Grid container direction="column" wrap="nowrap" className={classes.container}>
             <Grid container item xs={1}>
-                <Grid item xs={7} sx={{ display: 'flex', justifyContent: 'right' }}>
+                <Grid item xs={StatusRadioGroup ? 7 : 12} sx={{ display: 'flex', justifyContent: StatusRadioGroup ? 'right' : 'center' }}>
                     {GlobalFilter && <GlobalFilter setSearch={setSearch} search={search} totalCount={totalCount} />}
                 </Grid>
-                <Grid item xs={5} sx={{ display: 'flex', justifyContent: 'right' }}>
+                <Grid item xs={StatusRadioGroup ? 5 : 0} sx={{ display: 'flex', justifyContent: 'right' }}>
                     {StatusRadioGroup && <StatusRadioGroup status={status} setStatus={setStatus} />}
                 </Grid>
             </Grid>
             <Grid item xs={9} {...getTableProps()}>
-                <CustomScrollbar>
-                    <Table stickyHeader>
-                        <TableHead>
-                            {headerGroups.map(headerGroup => (
-                                <TableRow {...headerGroup.getHeaderGroupProps()}>
-                                    {headerGroup.headers.map(column => (
-                                        <TableCell
-                                            {...column.getHeaderProps(column.getSortByToggleProps())}
-                                            className={classes.tableHeader}
-                                        >
-                                            <Box sx={{ display: 'flex' }}>
-                                                {column.render('Header')}
-                                                <Box>
-                                                    {column.isSorted ? column.isSortedDesc ? <ArrowDropDown /> : <ArrowDropUp /> : ''}
+                {loading ? (
+                    <Box sx={{ display: 'flex', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                        <CircularProgress />
+                    </Box>
+                ) : (
+                    <CustomScrollbar>
+                        <Table stickyHeader>
+                            <TableHead>
+                                {headerGroups.map(headerGroup => (
+                                    <TableRow {...headerGroup.getHeaderGroupProps()}>
+                                        {headerGroup.headers.map(column => (
+                                            <TableCell
+                                                {...column.getHeaderProps(column.getSortByToggleProps())}
+                                                className={classes.tableHeader}
+                                            >
+                                                <Box sx={{ display: 'flex' }}>
+                                                    {column.render('Header')}
+                                                    <Box>
+                                                        {column.isSorted ? column.isSortedDesc ? <ArrowDropDown /> : <ArrowDropUp /> : ''}
+                                                    </Box>
                                                 </Box>
-                                            </Box>
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))}
-                        </TableHead>
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                ))}
+                            </TableHead>
 
-                        <TableBody {...getTableBodyProps()}>
-                            {page.map(row => {
-                                prepareRow(row)
-                                return (
-                                    <Fragment key={row.getRowProps().key}>
-                                        <TableRow {...row.getRowProps()}>
-                                            {row.cells.map(cell => (
-                                                <TableCell
-                                                    {...cell.getCellProps()}
-                                                    sx={{
-                                                        fontSize: '1rem',
-                                                        [theme.breakpoints.down('lg')]: {
-                                                            fontSize: '.9rem',
-                                                        },
-                                                    }}
-                                                >
-                                                    {cell.render('Cell')}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                        {row.isExpanded ? (
-                                            <TableRow>
-                                                <TableCell colSpan={visibleColumns.length}>{renderSubRow({ row })}</TableCell>
+                            <TableBody {...getTableBodyProps()}>
+                                {page.map(row => {
+                                    prepareRow(row)
+                                    return (
+                                        <Fragment key={row.getRowProps().key}>
+                                            <TableRow {...row.getRowProps()}>
+                                                {row.cells.map(cell => (
+                                                    <TableCell
+                                                        {...cell.getCellProps()}
+                                                        sx={{
+                                                            fontSize: '1rem',
+                                                            [theme.breakpoints.down('lg')]: {
+                                                                fontSize: '.9rem',
+                                                            },
+                                                        }}
+                                                    >
+                                                        {cell.render('Cell')}
+                                                    </TableCell>
+                                                ))}
                                             </TableRow>
-                                        ) : null}
-                                    </Fragment>
-                                )
-                            })}
-                        </TableBody>
-                    </Table>
-                </CustomScrollbar>
+                                            {row.isExpanded ? (
+                                                <TableRow>
+                                                    <TableCell colSpan={visibleColumns.length}>{renderSubRow({ row })}</TableCell>
+                                                </TableRow>
+                                            ) : null}
+                                        </Fragment>
+                                    )
+                                })}
+                            </TableBody>
+                        </Table>
+                    </CustomScrollbar>
+                )}
             </Grid>
             <Grid item xs={2} className={classes.tableFooter}>
                 {/* <Box className={classes.tableFooterItem}>

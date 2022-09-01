@@ -1,3 +1,4 @@
+import { ConstructionOutlined } from '@mui/icons-material'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { apiLogin, apiLogout, apiRegister } from '../../Axios/Auth'
 import { openAlert } from './Alert'
@@ -20,7 +21,7 @@ export const login = createAsyncThunk('auth/login', async ({ username, password,
         thunkAPI.dispatch(
             openAlert({
                 toastTitle: '登入失敗',
-                text: '查無使用者或密碼錯誤',
+                text: e.response.data.message,
                 icon: 'error',
             })
         )
@@ -47,6 +48,14 @@ export const logout = createAsyncThunk('auth/logout', async (isTokenExpiration, 
 export const register = createAsyncThunk('auth/register', async ({ username, password, name }, thunkAPI) => {
     try {
         const response = await apiRegister({ username, password, name })
+
+        thunkAPI.dispatch(
+            openAlert({
+                toastTitle: '註冊成功',
+                text: `請等待管理員認證`,
+                icon: 'success',
+            })
+        )
         return response.data
     } catch (e) {
         thunkAPI.dispatch(

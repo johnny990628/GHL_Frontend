@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
 
-const initialState = { loading: false, data: [], count: 0, page: 1, error: '' }
+const initialState = { loading: false, data: [], count: 0, page: 1 }
 
 export const fetchPatients = createAsyncThunk('patients/fetchPatients', async ({ limit, offset, search, sort, desc, status }, thunkAPI) => {
     try {
@@ -84,7 +84,6 @@ const patientsSlice = createSlice({
             return {
                 ...state,
                 loading: false,
-                error: action.payload,
             }
         },
         [createPatient.fulfilled]: (state, action) => {
@@ -107,22 +106,6 @@ const patientsSlice = createSlice({
                 loading: false,
                 count: state.count - 1,
             }
-        },
-
-        [fetchPatients.rejected]: (state, action) => {
-            return initialState
-        },
-        [fetchPatients.rejected]: (state, action) => {
-            return initialState
-        },
-        [createPatient.rejected]: (state, action) => {
-            return initialState
-        },
-        [updatePatient.rejected]: (state, action) => {
-            return initialState
-        },
-        [deletePatient.rejected]: (state, action) => {
-            return initialState
         },
     },
 })

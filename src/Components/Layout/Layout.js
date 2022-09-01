@@ -10,7 +10,7 @@ import useStyles from './Style'
 
 import Router from '../Router'
 import Sidebar from '../Sidebar/Sidebar'
-import SidebarItem from '../Sidebar/SidebarItem'
+import SidebarItem from '../Router.config'
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 import PatientForm from '../../Pages/PatientForm/index'
 import { reportTrigger } from '../../Redux/Slices/Report'
@@ -91,7 +91,7 @@ const Main = () => {
     ]
 
     useEffect(() => {
-        setPage(SidebarItem.find(item => item.route === pathName))
+        setPage(SidebarItem.find(item => item.path === pathName))
     }, [location.pathname])
 
     return (

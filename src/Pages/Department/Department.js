@@ -7,7 +7,7 @@ import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import CustomInput from '../../Components/CustomForm/CustomInput'
-import GlobalFilter from './../../Components/GlobalFilter/GlobalFilter';
+import GlobalFilter from './../../Components/GlobalFilter/GlobalFilter'
 import { ArrowDropDown, Delete } from '@mui/icons-material'
 import { useDispatch, useSelector } from 'react-redux'
 import { openAlert } from '../../Redux/Slices/Alert'
@@ -20,7 +20,7 @@ const Department = () => {
     const [errorField, setErrorField] = useState([])
     const dispatch = useDispatch()
     const classes = useStyles()
-    const { results, count, page } = useSelector(state => state.department)
+    const { results, count, page, loading } = useSelector(state => state.department)
 
     const fetchData = async params => {
         dispatch(fetchDepartment(params))
@@ -160,7 +160,15 @@ const Department = () => {
                 </AccordionDetails>
             </Accordion>
 
-            <CustomTable columns={columns} fetchData={fetchData} data={results} totalPage={page} totalCount={count} GlobalFilter={GlobalFilter} />
+            <CustomTable
+                columns={columns}
+                fetchData={fetchData}
+                data={results}
+                loading={loading}
+                totalPage={page}
+                totalCount={count}
+                GlobalFilter={GlobalFilter}
+            />
             <ReportDialog mode="edit" />
         </Box>
     )

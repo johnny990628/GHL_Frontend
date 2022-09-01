@@ -7,16 +7,18 @@ import useStyles from './Style'
 
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
-import GlobalFilter from './../../Components/GlobalFilter/GlobalFilter';
+import GlobalFilter from './../../Components/GlobalFilter/GlobalFilter'
 import { fetchReportByReportID } from '../../Redux/Slices/Dialog'
 import { deleteReport, fetchReport, reportTrigger } from '../../Redux/Slices/Report'
 import { openAlert } from '../../Redux/Slices/Alert'
+import Authorized from './../../Components/Authorized/Authorized'
 
 const Report = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
 
-    const { results, count, page } = useSelector(state => state.report)
+    const { results, count, page, loading } = useSelector(state => state.report)
+    const { user } = useSelector(state => state.auth)
     const { isOpen } = useSelector(state => state.dialog.report)
 
     useEffect(() => {
@@ -115,9 +117,11 @@ const Report = () => {
                                 <IconButton onClick={() => handlePreviewReport(row.row.original._id)}>
                                     <Visibility />
                                 </IconButton>
-                                <IconButton onClick={() => handleDeleteReport(row.row.original._id)}>
-                                    <Delete />
-                                </IconButton>
+                                <Authorized currentRole={user.role} authority={[3, 2]} noMatch={<></>}>
+                                    <IconButton onClick={() => handleDeleteReport(row.row.original._id)}>
+                                        <Delete />
+                                    </IconButton>
+                                </Authorized>
                             </>
                         )}
                     </Box>
@@ -129,7 +133,15 @@ const Report = () => {
 
     return (
         <Box className={classes.container}>
-            <CustomTable columns={columns} fetchData={fetchData} data={results} totalPage={page} totalCount={count} GlobalFilter={GlobalFilter} />
+            <CustomTable
+                columns={columns}
+                fetchData={fetchData}
+                data={results}
+                loading={loading}
+                totalPage={page}
+                totalCount={count}
+                GlobalFilter={GlobalFilter}
+            />
             <ReportDialog mode="edit" />
         </Box>
     )

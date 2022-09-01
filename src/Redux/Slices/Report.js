@@ -22,7 +22,7 @@ export const deleteReport = createAsyncThunk('report/deleteReport', async (repor
     }
 })
 
-const initialState = { results: [], count: 0, page: 1 }
+const initialState = { results: [], count: 0, page: 1, loading: false }
 
 const reportSlice = createSlice({
     name: 'report',
@@ -31,13 +31,23 @@ const reportSlice = createSlice({
         reportTrigger: (state, action) => ({ ...state, count: -1 }),
     },
     extraReducers: {
+        [fetchReport.pending]: (state, action) => {
+            return {
+                ...state,
+                loading: true,
+            }
+        },
         [fetchReport.fulfilled]: (state, action) => {
             return {
                 ...action.payload,
+                loading: false,
             }
         },
         [fetchReport.rejected]: (state, action) => {
-            return initialState
+            return {
+                ...state,
+                loading: false,
+            }
         },
         [deleteReport.fulfilled]: (state, action) => {
             return {

@@ -51,7 +51,7 @@ export const activeDepartment = createAsyncThunk('department/activeDepartment', 
     }
 })
 
-const initialState = { results: [], count: 0, page: 1 }
+const initialState = { results: [], count: 0, page: 1, loading: false }
 const departmentSlice = createSlice({
     name: 'department',
     initialState,
@@ -59,13 +59,23 @@ const departmentSlice = createSlice({
         departmentTrigger: (state, action) => ({ ...state, count: -1 }),
     },
     extraReducers: {
+        [fetchDepartment.pending]: (state, action) => {
+            return {
+                ...state,
+                loading: true,
+            }
+        },
         [fetchDepartment.fulfilled]: (state, action) => {
             return {
                 ...action.payload,
+                loading: false,
             }
         },
         [fetchDepartment.rejected]: (state, action) => {
-            return initialState
+            return {
+                ...state,
+                loading: false,
+            }
         },
         [createDepartment.fulfilled]: (state, action) => {
             return {

@@ -31,6 +31,7 @@ import ReportFormHtml, { ReportFormForPDF } from './ReportFormHtml'
 import { updateReport, fillReport, resetReport } from '../../Redux/Slices/ReportForm'
 import { openAlert } from '../../Redux/Slices/Alert'
 import { Box } from '@mui/system'
+import Authorized from './../Authorized/Authorized'
 
 const ReportDialog = ({ mode }) => {
     const classes = useStyles()
@@ -41,6 +42,7 @@ const ReportDialog = ({ mode }) => {
     } = useSelector(state => state.dialog.report)
 
     const report = useSelector(state => state.reportForm.edit)
+    const { user: currentUser } = useSelector(state => state.auth)
     const [version, setVersion] = useState('')
     const [isEditing, setIsEditing] = useState(false)
 
@@ -138,14 +140,14 @@ const ReportDialog = ({ mode }) => {
             </DialogContent>
             <DialogActions sx={{ padding: '1rem' }}>
                 {mode === 'edit' && (
-                    <>
+                    <Authorized currentRole={currentUser.role} authority={[3, 2]} noMatch={<></>}>
                         <Button variant="contained" className={classes.actionButton} onClick={handleEdit}>
                             {isEditing ? '儲存' : '修改'}
                         </Button>
                         <Button variant="text" className={classes.actionButton} onClick={handleClose}>
                             取消
                         </Button>
-                    </>
+                    </Authorized>
                 )}
             </DialogActions>
         </Dialog>
