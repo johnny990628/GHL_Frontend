@@ -14,10 +14,7 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
-    FormLabel,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
+    Grid,
 } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import { Search, ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
@@ -27,52 +24,9 @@ import useStyles from './Style'
 
 import CustomScrollbar from '../CustomScrollbar/CustomScrollbar'
 
-const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalCount, StatusRadioGroup, status }) => {
+const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalCount, StatusRadioGroup, GlobalFilter }) => {
     const [search, setSearch] = useState('')
-
-    const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) => {
-        const [value, setValue] = useState('')
-
-        return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
-                <Search sx={{ mr: 1 }} />
-                <TextField
-                    variant="standard"
-                    value={value}
-                    onChange={e => {
-                        setValue(e.target.value)
-                    }}
-                    onKeyPress={e => {
-                        e.key === 'Enter' && setSearch(value)
-                    }}
-                    placeholder={`${search && `${search}...`}${totalCount}筆資料`}
-                    sx={{
-                        marginRight: '1rem',
-                    }}
-                />
-                <Button
-                    variant="contained"
-                    onClick={() => {
-                        setSearch(value)
-                    }}
-                    sx={{ fontSize: '1.1rem ', padding: '.1rem', marginRight: '.5rem' }}
-                >
-                    搜尋
-                </Button>
-                <Button
-                    variant="contained"
-                    onClick={() => {
-                        setValue('')
-                        setSearch('')
-                    }}
-                    sx={{ fontSize: '1.1rem ', padding: '.1rem' }}
-                    className={classes.clearButton}
-                >
-                    清除
-                </Button>
-            </Box>
-        )
-    }
+    const [status, setStatus] = useState('all')
 
     const classes = useStyles()
     const theme = useTheme()
@@ -83,9 +37,8 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
         headerGroups,
         page,
         prepareRow,
-        preGlobalFilteredRows,
-        setGlobalFilter,
-        state: { pageIndex, pageSize, globalFilter, sortBy },
+
+        state: { pageIndex, pageSize, sortBy },
         canPreviousPage,
         canNextPage,
         pageOptions,
@@ -116,14 +69,21 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
     )
 
     useEffect(() => {
+        if (search) setStatus('all')
         fetchData({ limit: pageSize, offset: pageIndex, search, status, sort: sortBy[0]?.id, desc: sortBy[0]?.desc ? -1 : 1 })
-    }, [pageIndex, pageSize, sortBy, search, totalCount])
+    }, [pageIndex, pageSize, sortBy, search, totalCount, status])
 
     return (
-        <Box className={classes.container}>
-            <GlobalFilter preGlobalFilteredRows={preGlobalFilteredRows} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
-
-            <TableContainer {...getTableProps()} sx={{ height: '78%' }}>
+        <Grid container direction="column" wrap="nowrap" className={classes.container}>
+            <Grid container item xs={1}>
+                <Grid item xs={7} sx={{ display: 'flex', justifyContent: 'right' }}>
+                    {GlobalFilter && <GlobalFilter setSearch={setSearch} search={search} totalCount={totalCount} />}
+                </Grid>
+                <Grid item xs={5} sx={{ display: 'flex', justifyContent: 'right' }}>
+                    {StatusRadioGroup && <StatusRadioGroup status={status} setStatus={setStatus} />}
+                </Grid>
+            </Grid>
+            <Grid item xs={9} {...getTableProps()}>
                 <CustomScrollbar>
                     <Table stickyHeader>
                         <TableHead>
@@ -177,10 +137,23 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
                         </TableBody>
                     </Table>
                 </CustomScrollbar>
-            </TableContainer>
+            </Grid>
+            <Grid item xs={2} className={classes.tableFooter}>
+                {/* <Box className={classes.tableFooterItem}>
+                    <TextField
+                        type="number"
+                        variant="standard"
+                        label="頁數"
+                        defaultValue={pageIndex + 1}
+                        value={pageIndex + 1}
+                        onChange={e => {
+                            const page = e.target.value ? Number(e.target.value) - 1 : 0
+                            gotoPage(page)
+                        }}
+                        style={{ width: '100px' }}
+                    />
+                </Box> */}
 
-            <Box className={classes.tableFooter}>
-                <Box>{StatusRadioGroup}</Box>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
                         <InputLabel id="rows">列數</InputLabel>
@@ -200,25 +173,10 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
                             ))}
                         </Select>
                     </FormControl>
-
-                    <Box className={classes.tableFooterItem}>
-                        <TextField
-                            type="number"
-                            variant="standard"
-                            label="頁數"
-                            defaultValue={pageIndex + 1}
-                            value={pageIndex + 1}
-                            onChange={e => {
-                                const page = e.target.value ? Number(e.target.value) - 1 : 0
-                                gotoPage(page)
-                            }}
-                            style={{ width: '100px' }}
-                        />
+                    <Box className={classes.tableFooterItem} sx={{ fontSize: '1.1rem' }}>{`總共${totalCount}筆資料`}</Box>
+                    <Box className={classes.tableFooterItem} sx={{ fontSize: '1.1rem' }}>
+                        {`第${pageIndex + 1}/${pageOptions.length}頁`}
                     </Box>
-
-                    <Box className={classes.tableFooterItem} sx={{ fontSize: '1.1rem' }}>{`第${pageIndex + 1}/${
-                        pageOptions.length
-                    }頁`}</Box>
 
                     <ButtonGroup variant="outlined" className={classes.tableFooterItem}>
                         <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
@@ -235,8 +193,8 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, totalPage, totalC
                         </Button>
                     </ButtonGroup>
                 </Box>
-            </Box>
-        </Box>
+            </Grid>
+        </Grid>
     )
 }
 

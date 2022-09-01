@@ -7,6 +7,7 @@ import useStyles from './Style'
 
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
+import GlobalFilter from './../../Components/GlobalFilter/GlobalFilter';
 import { fetchReportByReportID } from '../../Redux/Slices/Dialog'
 import { deleteReport, fetchReport, reportTrigger } from '../../Redux/Slices/Report'
 import { openAlert } from '../../Redux/Slices/Alert'
@@ -128,7 +129,7 @@ const Report = () => {
 
     return (
         <Box className={classes.container}>
-            <CustomTable columns={columns} fetchData={fetchData} data={results} totalPage={page} totalCount={count} />
+            <CustomTable columns={columns} fetchData={fetchData} data={results} totalPage={page} totalCount={count} GlobalFilter={GlobalFilter} />
             <ReportDialog mode="edit" />
         </Box>
     )

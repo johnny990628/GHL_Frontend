@@ -17,6 +17,7 @@ import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import CustomForm from '../../Components/CustomForm/CustomForm'
 import EditDialog from './EditDialog'
+import GlobalFilter from '../../Components/GlobalFilter/GlobalFilter'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { deletePatient, createPatient, fetchPatients, patientTrigger } from '../../Redux/Slices/Patient'
@@ -30,13 +31,9 @@ const Patient = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
 
-    const [status, setStatus] = useState('all')
+    // const [status, setStatus] = useState('all')
 
     const { data, count, page } = useSelector(state => state.patients)
-
-    useEffect(() => {
-        dispatch(patientTrigger())
-    }, [status])
 
     const columns = useMemo(
         () => [
@@ -160,15 +157,11 @@ const Patient = () => {
         []
     )
 
-    const fetchData = useCallback(params => {
-        dispatch(fetchPatients(params))
-        //如果搜尋，則顯示全部病人
-        if (params.search) setStatus('all')
-    }, [])
+    const fetchData = useCallback(params => dispatch(fetchPatients(params)), [])
 
     const sendData = useCallback(data => dispatch(createPatient(data)), [])
 
-    const StatusRadioGroup = () => {
+    const StatusRadioGroup = ({ status, setStatus }) => {
         const handleOnChange = e => setStatus(e.target.value)
         return (
             <FormControl>
@@ -198,8 +191,8 @@ const Patient = () => {
                 data={data}
                 totalPage={page}
                 totalCount={count}
-                StatusRadioGroup={<StatusRadioGroup />}
-                status={status}
+                StatusRadioGroup={StatusRadioGroup}
+                GlobalFilter={GlobalFilter}
             />
             <EditDialog />
         </Box>

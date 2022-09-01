@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     },
     tableFooter: {
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'right',
         alignItems: 'center',
         paddingInline: '1rem',
         height: '10%',
