@@ -10,6 +10,7 @@ import scheduleReducer from './Slices/Schedule'
 import departmentReducer from './Slices/Department'
 import userReducer from './Slices/User'
 import DashboardReducer from './Slices/Dashboard'
+import StatisticReducer from './Slices/Statistic'
 
 export default configureStore({
     reducer: {
@@ -24,5 +25,6 @@ export default configureStore({
         department: departmentReducer,
         user: userReducer,
         dashboard: DashboardReducer,
+        statistic: StatisticReducer,
     },
 })

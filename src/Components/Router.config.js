@@ -11,7 +11,9 @@ import {
     CreateNewFolderOutlined,
     PersonOutlined,
     AccountBalanceOutlined,
+    InsertChartOutlined,
 } from '@mui/icons-material'
+import Statistic from '../Pages/Statistic/Statistic'
 
 const routerList = [
     {
@@ -58,6 +60,14 @@ const routerList = [
         path: '/department',
         Component: Department,
         authority: [3, 1],
+    },
+    {
+        display_name: '數據中心',
+        name: 'statistic',
+        icon: <InsertChartOutlined />,
+        path: '/statistic',
+        Component: Statistic,
+        authority: [3],
     },
 ]
 
