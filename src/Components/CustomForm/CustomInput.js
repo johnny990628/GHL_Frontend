@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Box, FormControl, FormControlLabel, FormLabel, MenuItem, Popover, Radio, RadioGroup, TextField } from '@mui/material'
 import { useTheme } from '@mui/styles'
 import { DayPicker } from 'react-day-picker'
-import 'react-day-picker/dist/style.css'
+
 import useStyles from './Style'
 
 import { apiGetDepartments } from '../../Axios/Department'

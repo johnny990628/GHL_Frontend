@@ -5,13 +5,18 @@ import {
     Card,
     CardContent,
     Typography,
-    Popover,
+    Dialog,
     FormControl,
     InputLabel,
     Select,
     MenuItem,
     ToggleButton,
     ToggleButtonGroup,
+    TextField,
+    DialogTitle,
+    DialogContent,
+    Button,
+    DialogActions,
 } from '@mui/material'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -34,165 +39,245 @@ import {
     PieChart,
     Pie,
     Sector,
+    Label,
 } from 'recharts'
 import { useTheme } from '@mui/material/styles'
 import { fetchStatistic } from '../../Redux/Slices/Statistic'
 import CustomScrollbar from './../../Components/CustomScrollbar/CustomScrollbar'
+import { DayPicker } from 'react-day-picker'
+import { zhTW } from 'date-fns/locale'
+import { format, parse, isValid, isAfter, isBefore } from 'date-fns'
+import { fetchDepartment } from './../../Redux/Slices/Statistic'
 
 const Statistic = () => {
     const [selectDepartment, setSelectDepartment] = useState('all')
     const [chartType, setChartType] = useState('bar')
     const [organActiveName, setOrganActiveName] = useState('')
-    const [pieActiveIndex, setPieActiveIndex] = useState(0)
+    const [open, setOpen] = useState(false)
+    const [pickerMode, setPickerMode] = useState('all')
+    const [date, setDate] = useState(new Date())
+    const [rangeDateFrom, setRangeDateFrom] = useState('')
+    const [rangeDateTo, setRangeDateTo] = useState('')
 
     const classes = useStyles()
     const dispatch = useDispatch()
     const theme = useTheme()
-    const { departments } = useSelector(state => state.statistic)
+    const { departments, numsOfPeople, numsOfReport } = useSelector(state => state.statistic)
 
     useEffect(() => {
         if (selectDepartment === 'all') {
+            dispatch(fetchStatistic())
+        } else {
+            dispatch(fetchStatistic(selectDepartment))
         }
     }, [selectDepartment])
+
     useEffect(() => {
-        dispatch(fetchStatistic())
+        if (organActiveName) setChartType('bar')
+    }, [organActiveName])
+
+    useEffect(() => {
+        dispatch(fetchDepartment())
     }, [])
 
-    const numsOfPeople = [
-        {
-            name: '超音波檢查總人數',
-            label: '超音波檢查總人數',
-            amount: 4000,
-        },
-        {
-            name: '預約總人數',
-            label: '預約總人數',
-            amount: 3000,
-        },
-        {
-            name: '未報到人數',
-            label: '未報到人數',
-            amount: 1000,
-        },
-    ]
+    // const numsOfPeople = [
+    //     {
+    //         name: '超音波檢查總次數',
+    //         label: '超音波檢查總次數',
+    //         amount: 4000,
+    //     },
+    //     {
+    //         name: '預約總人數',
+    //         label: '預約總人數',
+    //         amount: 3000,
+    //     },
+    //     {
+    //         name: '未報到人數',
+    //         label: '未報到人數',
+    //         amount: 1000,
+    //     },
+    // ]
 
-    const numsOfReport = [
-        {
-            name: '肝臟異常',
-            label: '肝臟異常',
-            amount: 2780,
-        },
-        {
-            name: '膽囊異常',
-            label: '膽囊異常',
-            amount: 1894,
-        },
-        {
-            name: '腎臟異常',
-            label: '腎臟異常',
-            amount: 1894,
-        },
-        {
-            name: '胰臟異常',
-            label: '胰臟異常',
-            amount: 432,
-        },
-        {
-            name: '脾臟異常',
-            label: '脾臟異常',
-            amount: 542,
-        },
-        {
-            name: '需進一步檢查',
-            label: '需進一步檢查',
-            amount: 1072,
-        },
-    ]
+    // const numsOfReport = [
+    //     {
+    //         name: 'liver',
+    //         label: '肝臟異常',
+    //         amount: 2780,
+    //         FLD: {
+    //             name: 'FLD',
+    //             label: '脂肪肝',
+    //             value: 275,
+    //         },
+    //         SLPL: {
+    //             name: 'SLPL',
+    //             label: '疑似肝實質病變',
+    //             value: 275,
+    //         },
+    //         LPL: { name: 'LPL', label: '肝實質病變', value: 200 },
+    //         LC: {
+    //             name: 'LC',
+    //             label: '肝硬化',
+    //             value: 231,
+    //         },
+    //         PLD: {
+    //             name: 'PLD',
+    //             label: '肝囊腫',
+    //             value: 400,
+    //         },
+    //         HEM: {
+    //             name: 'HEM',
+    //             label: '血管瘤',
+    //             value: 275,
+    //         },
+    //         IC: {
+    //             name: 'IC',
+    //             label: '肝內鈣化點',
+    //             value: 275,
+    //         },
+    //         HEP: {
+    //             name: 'HEP',
+    //             label: '肝腫瘤(疑似肝癌)',
+    //             value: 736,
+    //         },
+    //         HEPU: {
+    //             name: 'HEPU',
+    //             label: '肝腫瘤(性質不明)',
+    //             value: 345,
+    //         },
+    //     },
+    //     {
+    //         name: 'gallbladder',
+    //         label: '膽囊異常',
+    //         amount: 1894,
+    //         CL: {
+    //             name: 'CL',
+    //             label: '膽結石',
+    //             value: 432,
+    //         },
+    //         GP: {
+    //             name: 'GP',
+    //             label: '膽息肉',
+    //             value: 542,
+    //         },
+    //     },
+    //     {
+    //         name: 'kidney',
+    //         label: '腎臟異常',
+    //         amount: 1894,
+    //         KS: {
+    //             name: 'KS',
+    //             label: '腎結石',
+    //             value: 388,
+    //         },
+    //     },
+    //     {
+    //         name: 'pancreas',
+    //         label: '胰臟異常',
+    //         amount: 432,
+    //         other: {
+    //             name: 'other',
+    //             label: '其他',
+    //             value: 388,
+    //         },
+    //     },
+    //     {
+    //         name: 'spleen',
+    //         label: '脾臟異常',
+    //         amount: 542,
+    //         ES: {
+    //             name: 'ES',
+    //             label: '脾臟腫大',
+    //             value: 223,
+    //         },
+    //     },
+    //     {
+    //         name: 'suggestion',
+    //         label: '需進一步檢查',
+    //         amount: 1072,
+    //     },
+    // ]
 
-    const numsOfCancer = [
-        {
-            name: '肝硬化',
-            label: '肝硬化',
-            value: 40,
-        },
-        {
-            name: '肝病變',
-            label: '肝病變',
-            value: 20,
-        },
-        {
-            name: '肝囊腫',
-            label: '肝囊腫',
-            value: 40,
-        },
-    ]
-
-    const renderActiveShape = ({
-        cx,
-        cy,
-        midAngle,
-        innerRadius,
-        outerRadius,
-        startAngle,
-        endAngle,
-        fill,
-        payload,
-        percent,
-        value,
-        name,
-    }) => {
-        const RADIAN = Math.PI / 180
-        const sin = Math.sin(-RADIAN * midAngle)
-        const cos = Math.cos(-RADIAN * midAngle)
-        const sx = cx + (outerRadius + 10) * cos
-        const sy = cy + (outerRadius + 10) * sin
-        const mx = cx + (outerRadius + 30) * cos
-        const my = cy + (outerRadius + 30) * sin
-        const ex = mx + (cos >= 0 ? 1 : -1) * 22
-        const ey = my
-        const textAnchor = cos >= 0 ? 'start' : 'end'
-
-        return (
-            <g>
-                <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
-                    {payload.name}
-                </text>
-                <Sector
-                    cx={cx}
-                    cy={cy}
-                    innerRadius={innerRadius}
-                    outerRadius={outerRadius}
-                    startAngle={startAngle}
-                    endAngle={endAngle}
-                    fill={fill}
-                />
-                <Sector
-                    cx={cx}
-                    cy={cy}
-                    startAngle={startAngle}
-                    endAngle={endAngle}
-                    innerRadius={outerRadius + 6}
-                    outerRadius={outerRadius + 10}
-                    fill={fill}
-                />
-                <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
-                <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-                <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#333">
-                    {`${name} ${value}人`}
-                </text>
-                <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
-                    {`(${(percent * 100).toFixed(2)}%)`}
-                </text>
-            </g>
-        )
-    }
-
+    const COLORS = ['#F896D8', '#CEA2AC', '#CA7DF9', '#724CF9', '#ED7D3A', '#52D1DC', '#475B5A', '#A3A9AA', '#8CD867', '#F1AB86']
     const handleSelectDepartment = e => {
         setSelectDepartment(e.target.value)
     }
 
     const handleCardClick = name => {
-        setOrganActiveName(name)
+        organActiveName === name ? setOrganActiveName('') : setOrganActiveName(name)
+    }
+
+    const handleDateSelect = range => {
+        setDate(range)
+        if (range?.from) {
+            setRangeDateFrom(format(range.from, 'y-MM-dd'))
+        } else {
+            setRangeDateFrom('')
+        }
+        if (range?.to) {
+            setRangeDateTo(format(range.to, 'y-MM-dd'))
+        } else {
+            setRangeDateTo('')
+        }
+    }
+
+    const handleFromChange = e => {
+        setRangeDateFrom(e.target.value)
+        const today = parse(e.target.value, 'y-MM-dd', new Date())
+        if (!isValid(date)) {
+            return setDate({ from: undefined, to: undefined })
+        }
+        if (date?.to && isAfter(today, date.to)) {
+            setDate({ from: date.to, to: date })
+        } else {
+            setDate({ from: today, to: date?.to })
+        }
+    }
+
+    const handleToChange = e => {
+        setRangeDateTo(e.target.value)
+        const today = parse(e.target.value, 'y-MM-dd', new Date())
+
+        if (!isValid(date)) {
+            return setDate({ from: date?.from, to: undefined })
+        }
+        if (date?.from && isBefore(today, date.from)) {
+            setDate({ from: today, to: date.from })
+        } else {
+            setDate({ from: date?.from, to: today })
+        }
+    }
+
+    const resetDateState = () => {
+        setDate(new Date())
+        setRangeDateFrom('')
+        setRangeDateTo('')
+    }
+
+    const handlePickerMode = e => {
+        resetDateState()
+        setPickerMode(e.target.value)
+    }
+
+    const handleDialogClose = () => {
+        setOpen(false)
+        // resetDateState()
+    }
+
+    const inputDateValue = () => {
+        switch (pickerMode) {
+            case 'all':
+                return ''
+            case 'single':
+                return isValid(date) && format(date, 'y-MM-dd')
+            case 'range':
+                if (rangeDateFrom && rangeDateTo) {
+                    return `${rangeDateFrom} 到 ${rangeDateTo}`
+                } else {
+                    return isValid(date) ? format(date, 'y-MM-dd') : ''
+                }
+            default:
+                return ''
+        }
     }
 
     return (
@@ -202,72 +287,43 @@ const Statistic = () => {
                     <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>
                         統計數據
                     </Typography>
-                    <FormControl variant="standard" sx={{ minWidth: 120 }}>
-                        <InputLabel id="department">部門選擇</InputLabel>
-                        <Select labelId="department" value={selectDepartment} onChange={handleSelectDepartment}>
-                            <MenuItem value={'all'}>全部</MenuItem>
-                            {departments &&
-                                departments.map(department => (
-                                    <MenuItem key={department._id} value={department._id}>
-                                        {department.name}
-                                    </MenuItem>
-                                ))}
-                        </Select>
-                    </FormControl>
-                </Box>
-
-                <Grid container sx={{ width: '96%', height: '50%' }}>
-                    {[numsOfPeople, numsOfReport].map(data => {
-                        return (
-                            <Grid item xs={6}>
-                                {chartType === 'bar' && (
-                                    <ResponsiveContainer>
-                                        <BarChart
-                                            data={data}
-                                            margin={{
-                                                top: 60,
-                                                right: 50,
-                                                left: 40,
-                                                bottom: 20,
-                                            }}
-                                            barSize={40}
-                                        >
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="name" />
-                                            <YAxis />
-                                            <Tooltip />
-                                            <Bar dataKey="amount" fill={theme.palette.primary.light_secondary} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
-                                )}
-                                {chartType === 'radar' && (
-                                    <ResponsiveContainer>
-                                        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
-                                            <PolarGrid />
-                                            <PolarAngleAxis dataKey="name" />
-                                            <PolarRadiusAxis />
-                                            <Radar
-                                                name="Mike"
-                                                dataKey="amount"
-                                                stroke={theme.palette.primary.main}
-                                                fill={theme.palette.primary.light_secondary}
-                                                fillOpacity={0.6}
-                                            />
-                                        </RadarChart>
-                                    </ResponsiveContainer>
-                                )}
-                            </Grid>
-                        )
-                    })}
-                </Grid>
-
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, mr: 3 }}>
-                    <FormControl value={chartType} onChange={e => console.log(e.target.value)}>
-                        <ToggleButtonGroup color="primary" exclusive value={chartType} onChange={e => setChartType(e.target.value)}>
-                            <ToggleButton value="bar">長條圖</ToggleButton>
-                            <ToggleButton value="radar">雷達圖</ToggleButton>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                        <ToggleButtonGroup color="primary" value={pickerMode} onChange={handlePickerMode} sx={{ mr: 2 }}>
+                            <ToggleButton value="all" key="all">
+                                全部
+                            </ToggleButton>
+                            <ToggleButton value="single" key="single">
+                                單日
+                            </ToggleButton>
+                            <ToggleButton value="range" key="range">
+                                範圍
+                            </ToggleButton>
                         </ToggleButtonGroup>
-                    </FormControl>
+                        {pickerMode !== 'all' && (
+                            <TextField
+                                variant="standard"
+                                placeholder="請選擇日期"
+                                value={inputDateValue()}
+                                sx={{ minWidth: 220, mr: 2 }}
+                                onClick={() => setOpen(true)}
+                            >
+                                選擇日期
+                            </TextField>
+                        )}
+
+                        <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                            <InputLabel id="department">部門選擇</InputLabel>
+                            <Select labelId="department" value={selectDepartment} onChange={handleSelectDepartment}>
+                                <MenuItem value={'all'}>全部</MenuItem>
+                                {departments &&
+                                    departments.map(department => (
+                                        <MenuItem key={department._id} value={department._id}>
+                                            {department.name}
+                                        </MenuItem>
+                                    ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
                 </Box>
 
                 <Grid container wrap="nowrap">
@@ -302,25 +358,136 @@ const Statistic = () => {
                                 </Card>
                             </Grid>
                         ))}
-                        {organActiveName && (
-                            <PieChart width={700} height={400}>
-                                <Pie
-                                    activeIndex={pieActiveIndex}
-                                    activeShape={renderActiveShape}
-                                    data={numsOfCancer}
-                                    cx="50%"
-                                    cy="50%"
-                                    innerRadius={60}
-                                    outerRadius={80}
-                                    fill={theme.palette.primary.main}
-                                    dataKey="value"
-                                    onMouseEnter={(_, index) => setPieActiveIndex(index)}
-                                />
-                            </PieChart>
-                        )}
                     </Grid>
                 </Grid>
+
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, mr: 3 }}>
+                    <ToggleButtonGroup color="primary" exclusive value={chartType} onChange={e => setChartType(e.target.value)}>
+                        <ToggleButton value="bar">長條圖</ToggleButton>
+                        <ToggleButton value="radar">雷達圖</ToggleButton>
+                    </ToggleButtonGroup>
+                </Box>
+
+                <Grid container sx={{ width: '96%', height: '40%' }}>
+                    {[numsOfPeople, numsOfReport].map((data, index) => {
+                        return (
+                            <Grid item xs={6}>
+                                {chartType === 'bar' && (
+                                    <ResponsiveContainer>
+                                        <BarChart
+                                            data={data}
+                                            margin={{
+                                                top: 30,
+                                                right: 50,
+                                                left: 40,
+                                                bottom: 40,
+                                            }}
+                                            barSize={40}
+                                        >
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="label" />
+
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Bar dataKey="amount" fill={theme.palette.primary.light_secondary} />
+                                            {organActiveName &&
+                                                index === 1 &&
+                                                Object.values(numsOfReport.find(d => d.name === organActiveName))
+                                                    .filter(value => typeof value === 'object')
+                                                    .map((child, index) => (
+                                                        <Bar
+                                                            key={child.name}
+                                                            dataKey={`${child.name}.value`}
+                                                            // stackId="a"
+                                                            name={child.label}
+                                                            fill={COLORS[index % COLORS.length]}
+                                                        />
+                                                    ))}
+
+                                            <Legend />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                )}
+                                {chartType === 'radar' && (
+                                    <ResponsiveContainer>
+                                        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+                                            <PolarGrid />
+                                            <PolarAngleAxis dataKey="label" />
+                                            <PolarRadiusAxis />
+                                            <Radar
+                                                name="Mike"
+                                                dataKey="amount"
+                                                stroke={theme.palette.primary.main}
+                                                fill={theme.palette.primary.light_secondary}
+                                                fillOpacity={0.6}
+                                            />
+                                        </RadarChart>
+                                    </ResponsiveContainer>
+                                )}
+                            </Grid>
+                        )
+                    })}
+                </Grid>
             </CustomScrollbar>
+
+            <Dialog open={open} onClose={handleDialogClose}>
+                <DialogContent>
+                    <DayPicker
+                        mode={pickerMode}
+                        selected={date}
+                        onSelect={handleDateSelect}
+                        fromYear={1930}
+                        toYear={new Date().getFullYear()}
+                        captionLayout="dropdown"
+                        locale={zhTW}
+                        footer={
+                            <>
+                                {pickerMode === 'single' ? (
+                                    <TextField
+                                        fullWidth
+                                        value={format(date, 'y-MM-dd')}
+                                        onChange={handleDateSelect}
+                                        sx={{ mt: 2 }}
+                                        InputProps={{
+                                            readOnly: true,
+                                        }}
+                                    />
+                                ) : (
+                                    <Box>
+                                        <TextField
+                                            fullWidth
+                                            placeholder="開始"
+                                            value={rangeDateFrom}
+                                            onChange={handleFromChange}
+                                            sx={{ mb: 2, mt: 2 }}
+                                            InputProps={{
+                                                readOnly: true,
+                                            }}
+                                        />
+                                        <TextField
+                                            fullWidth
+                                            placeholder="結束"
+                                            value={rangeDateTo}
+                                            onChange={handleToChange}
+                                            InputProps={{
+                                                readOnly: true,
+                                            }}
+                                        />
+                                    </Box>
+                                )}
+                            </>
+                        }
+                    />
+                </DialogContent>
+                {/* <DialogActions>
+                    <Button autoFocus onClick={handleDialogClose}>
+                        儲存
+                    </Button>
+                    <Button onClick={handleDialogClose} autoFocus>
+                        取消
+                    </Button>
+                </DialogActions> */}
+            </Dialog>
         </Box>
     )
 }

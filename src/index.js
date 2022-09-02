@@ -5,6 +5,7 @@ import { CssBaseline } from '@mui/material'
 import { createTheme, ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 
 import './Assets/Css/index.css'
+import 'react-day-picker/dist/style.css'
 
 import store from './Redux/store'
 import { Provider } from 'react-redux'
