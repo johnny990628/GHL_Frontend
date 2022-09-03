@@ -8,19 +8,49 @@ const initialState = {
     departments: [],
     numsOfPeople: [
         {
-            name: '超音波檢查總次數',
+            name: 'total',
             label: '超音波檢查總次數',
             amount: 0,
+            totalFemale: {
+                name: 'totalFemale',
+                label: '女',
+                value: 0,
+            },
+            totalMale: {
+                name: 'totalMale',
+                label: '男',
+                value: 0,
+            },
         },
         {
-            name: '預約總人數',
+            name: 'reserve',
             label: '預約總人數',
             amount: 0,
+            reserveFemale: {
+                name: 'reserveFemale',
+                label: '女',
+                value: 0,
+            },
+            reserveMale: {
+                name: 'reserveMale',
+                label: '男',
+                value: 0,
+            },
         },
         {
-            name: '未報到人數',
+            name: 'absent',
             label: '未報到人數',
             amount: 0,
+            absentFemale: {
+                name: 'absentFemale',
+                label: '女',
+                value: 0,
+            },
+            absentMale: {
+                name: 'absentMale',
+                label: '男',
+                value: 0,
+            },
         },
     ],
     numsOfReport: [
@@ -148,9 +178,9 @@ export const fetchDepartment = createAsyncThunk('statistic/fetchDepartment', asy
         return thunkAPI.rejectWithValue()
     }
 })
-export const fetchStatistic = createAsyncThunk('statistic/fetchStatistic', async (departmentID, thunkAPI) => {
+export const fetchStatistic = createAsyncThunk('statistic/fetchStatistic', async ({ departmentID, params }, thunkAPI) => {
     try {
-        const stats = departmentID ? await apiGetStatsByDepartmentID(departmentID) : await apiGetStats()
+        const stats = departmentID ? await apiGetStatsByDepartmentID(departmentID, params) : await apiGetStats(params)
         return { numsOfPeople: stats.data.numsOfPeople, numsOfReport: stats.data.numsOfReport }
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))

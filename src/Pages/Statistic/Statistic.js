@@ -46,13 +46,14 @@ import { fetchStatistic } from '../../Redux/Slices/Statistic'
 import CustomScrollbar from './../../Components/CustomScrollbar/CustomScrollbar'
 import { DayPicker } from 'react-day-picker'
 import { zhTW } from 'date-fns/locale'
-import { format, parse, isValid, isAfter, isBefore } from 'date-fns'
+import { format, parse, isValid, isAfter, isBefore, addDays, isMatch } from 'date-fns'
 import { fetchDepartment } from './../../Redux/Slices/Statistic'
 
 const Statistic = () => {
     const [selectDepartment, setSelectDepartment] = useState('all')
     const [chartType, setChartType] = useState('bar')
     const [organActiveName, setOrganActiveName] = useState('')
+    const [peopleActiveName, setPeopleActiveName] = useState('')
     const [open, setOpen] = useState(false)
     const [pickerMode, setPickerMode] = useState('all')
     const [date, setDate] = useState(new Date())
@@ -65,12 +66,37 @@ const Statistic = () => {
     const { departments, numsOfPeople, numsOfReport } = useSelector(state => state.statistic)
 
     useEffect(() => {
-        if (selectDepartment === 'all') {
-            dispatch(fetchStatistic())
-        } else {
-            dispatch(fetchStatistic(selectDepartment))
+        const departmentID = selectDepartment === 'all' ? null : selectDepartment
+
+        const formatDate = () => {
+            let dateFrom = ''
+            let dateTo = ''
+            if (pickerMode === 'all') {
+                dateFrom = new Date('1900-01-01').toLocaleDateString()
+                dateTo = new Date(addDays(new Date(), 1)).toLocaleDateString()
+            }
+            if (pickerMode === 'single') {
+                dateFrom = new Date(date).toLocaleDateString()
+                dateTo = new Date(addDays(date, 1)).toLocaleDateString()
+            }
+            if (pickerMode === 'range' && rangeDateFrom && rangeDateTo) {
+                if (isMatch(rangeDateFrom, rangeDateTo)) {
+                    const sameDate = new Date(rangeDateFrom)
+                    dateFrom = sameDate.toLocaleDateString()
+                    dateTo = new Date(addDays(sameDate, 1)).toLocaleDateString()
+                } else {
+                    dateFrom = rangeDateFrom
+                    dateTo = rangeDateTo
+                }
+            }
+
+            return { dateFrom, dateTo }
         }
-    }, [selectDepartment])
+
+        const params = formatDate()
+
+        dispatch(fetchStatistic({ departmentID, params }))
+    }, [selectDepartment, pickerMode, date])
 
     useEffect(() => {
         if (organActiveName) setChartType('bar')
@@ -197,13 +223,19 @@ const Statistic = () => {
     //     },
     // ]
 
-    const COLORS = ['#F896D8', '#CEA2AC', '#CA7DF9', '#724CF9', '#ED7D3A', '#52D1DC', '#475B5A', '#A3A9AA', '#8CD867', '#F1AB86']
+    const COLORS = ['#C7B8EA', '#F896D8', '#CEA2AC', '#CA7DF9', '#52D1DC', '#FF8552', '#73A6AD', '#A3A9AA', '#8CD867', '#F1AB86']
     const handleSelectDepartment = e => {
         setSelectDepartment(e.target.value)
     }
 
-    const handleCardClick = name => {
-        organActiveName === name ? setOrganActiveName('') : setOrganActiveName(name)
+    const handleCardClick = (type, name) => {
+        type === 'organ'
+            ? organActiveName === name
+                ? setOrganActiveName('')
+                : setOrganActiveName(name)
+            : peopleActiveName === name
+            ? setPeopleActiveName('')
+            : setPeopleActiveName(name)
     }
 
     const handleDateSelect = range => {
@@ -330,7 +362,10 @@ const Statistic = () => {
                     <Grid container item xs={6} spacing={2} sx={{ m: 2 }}>
                         {numsOfPeople.map(d => (
                             <Grid item xs={4} key={d.name}>
-                                <Card className={classes.card}>
+                                <Card
+                                    className={`${classes.card} ${d.name === peopleActiveName && 'active'}`}
+                                    onClick={() => handleCardClick('people', d.name)}
+                                >
                                     <CardContent>
                                         <Typography fontSize={{ xs: 20, md: 24 }} color="text.secondary" gutterBottom>
                                             {d.label}
@@ -346,7 +381,7 @@ const Statistic = () => {
                             <Grid item xs={4} key={d.name}>
                                 <Card
                                     className={`${classes.card} ${d.name === organActiveName && 'active'}`}
-                                    onClick={() => handleCardClick(d.name)}
+                                    onClick={() => handleCardClick('organ', d.name)}
                                 >
                                     <CardContent>
                                         <Typography fontSize={{ xs: 20, md: 24 }} color="text.secondary" gutterBottom>
@@ -390,15 +425,31 @@ const Statistic = () => {
                                             <YAxis />
                                             <Tooltip />
                                             <Bar dataKey="amount" fill={theme.palette.primary.light_secondary} />
+
                                             {organActiveName &&
                                                 index === 1 &&
                                                 Object.values(numsOfReport.find(d => d.name === organActiveName))
                                                     .filter(value => typeof value === 'object')
+                                                    .sort((a, b) => b.value - a.value)
                                                     .map((child, index) => (
                                                         <Bar
                                                             key={child.name}
                                                             dataKey={`${child.name}.value`}
                                                             // stackId="a"
+                                                            name={child.label}
+                                                            fill={COLORS[index % COLORS.length]}
+                                                        />
+                                                    ))}
+                                            {peopleActiveName &&
+                                                index === 0 &&
+                                                Object.values(numsOfPeople.find(d => d.name === peopleActiveName))
+                                                    .filter(value => typeof value === 'object')
+                                                    .sort((a, b) => b.value - a.value)
+                                                    .map((child, index) => (
+                                                        <Bar
+                                                            key={child.name}
+                                                            dataKey={`${child.name}.value`}
+                                                            stackId="a"
                                                             name={child.label}
                                                             fill={COLORS[index % COLORS.length]}
                                                         />
