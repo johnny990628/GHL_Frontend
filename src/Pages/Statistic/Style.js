@@ -20,6 +20,9 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: theme.palette.primary.light,
         },
     },
+    menu: {
+        maxHeight: 250,
+    },
 }))
 
 export default useStyles

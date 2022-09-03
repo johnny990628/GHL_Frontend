@@ -2,7 +2,7 @@ import React from 'react'
 import { DataGrid } from '@mui/x-data-grid'
 import useStyles from './Style'
 
-const CustomDataGrid = ({ data, columns, selection, setSelection }) => {
+const CustomDataGrid = ({ data, columns, selection, setSelection, getRowId, Toolbar }) => {
     const classes = useStyles()
 
     return (
@@ -16,6 +16,8 @@ const CustomDataGrid = ({ data, columns, selection, setSelection }) => {
             autoPageSize
             hideFooter
             className={classes.table}
+            getRowId={getRowId}
+            components={{ Toolbar }}
         />
     )
 }

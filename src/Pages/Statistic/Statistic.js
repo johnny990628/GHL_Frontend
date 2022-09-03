@@ -19,6 +19,14 @@ import {
     DialogActions,
 } from '@mui/material'
 
+import {
+    GridToolbarContainer,
+    GridToolbarColumnsButton,
+    GridToolbarFilterButton,
+    GridToolbarDensitySelector,
+    GridToolbarExport,
+} from '@mui/x-data-grid'
+
 import { useDispatch, useSelector } from 'react-redux'
 
 import useStyles from './Style'
@@ -45,9 +53,10 @@ import { useTheme } from '@mui/material/styles'
 import { fetchStatistic } from '../../Redux/Slices/Statistic'
 import CustomScrollbar from './../../Components/CustomScrollbar/CustomScrollbar'
 import { DayPicker } from 'react-day-picker'
-import { zhTW } from 'date-fns/locale'
+import { id, zhTW } from 'date-fns/locale'
 import { format, parse, isValid, isAfter, isBefore, addDays, isMatch } from 'date-fns'
 import { fetchDepartment } from './../../Redux/Slices/Statistic'
+import CustomDataGrid from './../../Components/CustomDataGrid/CustomDataGrid'
 
 const Statistic = () => {
     const [selectDepartment, setSelectDepartment] = useState('all')
@@ -59,6 +68,13 @@ const Statistic = () => {
     const [date, setDate] = useState(new Date())
     const [rangeDateFrom, setRangeDateFrom] = useState('')
     const [rangeDateTo, setRangeDateTo] = useState('')
+    const [time, setTime] = useState('')
+
+    const TIMELIST = [...Array(24).keys()].flatMap((_, i) => [
+        [`${('0' + i).slice(-2)}:00`, `${('0' + i).slice(-2)}:30`],
+        [`${('0' + i).slice(-2)}:30`, `${('0' + (i + 1)).slice(-2)}:00`],
+    ])
+    const COLORS = ['#C7B8EA', '#F896D8', '#CEA2AC', '#CA7DF9', '#52D1DC', '#FF8552', '#73A6AD', '#A3A9AA', '#8CD867', '#F1AB86']
 
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -76,8 +92,17 @@ const Statistic = () => {
                 dateTo = new Date(addDays(new Date(), 1)).toLocaleDateString()
             }
             if (pickerMode === 'single') {
-                dateFrom = new Date(date).toLocaleDateString()
-                dateTo = new Date(addDays(date, 1)).toLocaleDateString()
+                if (time && time !== 'all') {
+                    let [timeFrom, timeTo] = time.split(',')
+                    timeFrom = timeFrom + ':00'
+                    timeTo = timeTo + ':00'
+                    const day = new Date(`${date}`).toLocaleDateString()
+                    dateFrom = new Date(`${day} ${timeFrom}`)
+                    dateTo = new Date(`${day} ${timeTo}`)
+                } else {
+                    dateFrom = new Date(date).toLocaleDateString()
+                    dateTo = new Date(addDays(date, 1)).toLocaleDateString()
+                }
             }
             if (pickerMode === 'range' && rangeDateFrom && rangeDateTo) {
                 if (isMatch(rangeDateFrom, rangeDateTo)) {
@@ -96,7 +121,7 @@ const Statistic = () => {
         const params = formatDate()
 
         dispatch(fetchStatistic({ departmentID, params }))
-    }, [selectDepartment, pickerMode, date])
+    }, [selectDepartment, pickerMode, date, time])
 
     useEffect(() => {
         if (organActiveName) setChartType('bar')
@@ -106,124 +131,6 @@ const Statistic = () => {
         dispatch(fetchDepartment())
     }, [])
 
-    // const numsOfPeople = [
-    //     {
-    //         name: '超音波檢查總次數',
-    //         label: '超音波檢查總次數',
-    //         amount: 4000,
-    //     },
-    //     {
-    //         name: '預約總人數',
-    //         label: '預約總人數',
-    //         amount: 3000,
-    //     },
-    //     {
-    //         name: '未報到人數',
-    //         label: '未報到人數',
-    //         amount: 1000,
-    //     },
-    // ]
-
-    // const numsOfReport = [
-    //     {
-    //         name: 'liver',
-    //         label: '肝臟異常',
-    //         amount: 2780,
-    //         FLD: {
-    //             name: 'FLD',
-    //             label: '脂肪肝',
-    //             value: 275,
-    //         },
-    //         SLPL: {
-    //             name: 'SLPL',
-    //             label: '疑似肝實質病變',
-    //             value: 275,
-    //         },
-    //         LPL: { name: 'LPL', label: '肝實質病變', value: 200 },
-    //         LC: {
-    //             name: 'LC',
-    //             label: '肝硬化',
-    //             value: 231,
-    //         },
-    //         PLD: {
-    //             name: 'PLD',
-    //             label: '肝囊腫',
-    //             value: 400,
-    //         },
-    //         HEM: {
-    //             name: 'HEM',
-    //             label: '血管瘤',
-    //             value: 275,
-    //         },
-    //         IC: {
-    //             name: 'IC',
-    //             label: '肝內鈣化點',
-    //             value: 275,
-    //         },
-    //         HEP: {
-    //             name: 'HEP',
-    //             label: '肝腫瘤(疑似肝癌)',
-    //             value: 736,
-    //         },
-    //         HEPU: {
-    //             name: 'HEPU',
-    //             label: '肝腫瘤(性質不明)',
-    //             value: 345,
-    //         },
-    //     },
-    //     {
-    //         name: 'gallbladder',
-    //         label: '膽囊異常',
-    //         amount: 1894,
-    //         CL: {
-    //             name: 'CL',
-    //             label: '膽結石',
-    //             value: 432,
-    //         },
-    //         GP: {
-    //             name: 'GP',
-    //             label: '膽息肉',
-    //             value: 542,
-    //         },
-    //     },
-    //     {
-    //         name: 'kidney',
-    //         label: '腎臟異常',
-    //         amount: 1894,
-    //         KS: {
-    //             name: 'KS',
-    //             label: '腎結石',
-    //             value: 388,
-    //         },
-    //     },
-    //     {
-    //         name: 'pancreas',
-    //         label: '胰臟異常',
-    //         amount: 432,
-    //         other: {
-    //             name: 'other',
-    //             label: '其他',
-    //             value: 388,
-    //         },
-    //     },
-    //     {
-    //         name: 'spleen',
-    //         label: '脾臟異常',
-    //         amount: 542,
-    //         ES: {
-    //             name: 'ES',
-    //             label: '脾臟腫大',
-    //             value: 223,
-    //         },
-    //     },
-    //     {
-    //         name: 'suggestion',
-    //         label: '需進一步檢查',
-    //         amount: 1072,
-    //     },
-    // ]
-
-    const COLORS = ['#C7B8EA', '#F896D8', '#CEA2AC', '#CA7DF9', '#52D1DC', '#FF8552', '#73A6AD', '#A3A9AA', '#8CD867', '#F1AB86']
     const handleSelectDepartment = e => {
         setSelectDepartment(e.target.value)
     }
@@ -292,7 +199,6 @@ const Statistic = () => {
 
     const handleDialogClose = () => {
         setOpen(false)
-        // resetDateState()
     }
 
     const inputDateValue = () => {
@@ -310,6 +216,25 @@ const Statistic = () => {
             default:
                 return ''
         }
+    }
+
+    const columns = [
+        { field: 'label', headerName: '部位異常', flex: 1 },
+        { field: 'amount', headerName: '數量', flex: 1 },
+    ]
+
+    const CustomToolbar = () => {
+        return (
+            <GridToolbarContainer>
+                <GridToolbarColumnsButton />
+                <GridToolbarFilterButton />
+                <GridToolbarDensitySelector />
+                <GridToolbarExport
+                    csvOptions={{ fileName: `${new Date(date).toLocaleDateString()}好心肝報告統計資料`, utf8WithBom: true }}
+                    printOptions={{ hideToolbar: true, hideFooter: true }}
+                />
+            </GridToolbarContainer>
+        )
     }
 
     return (
@@ -341,6 +266,24 @@ const Statistic = () => {
                             >
                                 選擇日期
                             </TextField>
+                        )}
+                        {pickerMode === 'single' && (
+                            <FormControl variant="standard" sx={{ minWidth: 120, mr: 2 }}>
+                                <InputLabel id="time">時段選擇</InputLabel>
+                                <Select
+                                    labelId="time"
+                                    value={time}
+                                    onChange={e => setTime(e.target.value)}
+                                    MenuProps={{ classes: { paper: classes.menu } }}
+                                >
+                                    <MenuItem value={'all'}>整天</MenuItem>
+                                    {TIMELIST.map(item => (
+                                        <MenuItem key={item[0]} value={item.toString()}>
+                                            {`${item[0]} - ${item[1]}`}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         )}
 
                         <FormControl variant="standard" sx={{ minWidth: 120 }}>
@@ -479,6 +422,14 @@ const Statistic = () => {
                         )
                     })}
                 </Grid>
+                <Grid container sx={{ height: '70%', mt: 4 }} spacing={8}>
+                    <Grid item xs={6}>
+                        <CustomDataGrid data={numsOfPeople} columns={columns} getRowId={row => row.name} Toolbar={CustomToolbar} />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <CustomDataGrid data={numsOfReport} columns={columns} getRowId={row => row.name} Toolbar={CustomToolbar} />
+                    </Grid>
+                </Grid>
             </CustomScrollbar>
 
             <Dialog open={open} onClose={handleDialogClose}>
@@ -530,14 +481,6 @@ const Statistic = () => {
                         }
                     />
                 </DialogContent>
-                {/* <DialogActions>
-                    <Button autoFocus onClick={handleDialogClose}>
-                        儲存
-                    </Button>
-                    <Button onClick={handleDialogClose} autoFocus>
-                        取消
-                    </Button>
-                </DialogActions> */}
             </Dialog>
         </Box>
     )
