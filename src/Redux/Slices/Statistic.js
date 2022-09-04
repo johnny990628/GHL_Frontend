@@ -181,7 +181,7 @@ export const fetchDepartment = createAsyncThunk('statistic/fetchDepartment', asy
 export const fetchStatistic = createAsyncThunk('statistic/fetchStatistic', async ({ departmentID, params }, thunkAPI) => {
     try {
         const stats = departmentID ? await apiGetStatsByDepartmentID(departmentID, params) : await apiGetStats(params)
-        return { numsOfPeople: stats.data.numsOfPeople, numsOfReport: stats.data.numsOfReport }
+        return stats.data
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()

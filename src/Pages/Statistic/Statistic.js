@@ -17,6 +17,7 @@ import {
     DialogContent,
     Button,
     DialogActions,
+    Stack,
 } from '@mui/material'
 
 import {
@@ -49,14 +50,16 @@ import {
     Sector,
     Label,
 } from 'recharts'
+import ExcelJs from 'exceljs'
 import { useTheme } from '@mui/material/styles'
 import { fetchStatistic } from '../../Redux/Slices/Statistic'
 import CustomScrollbar from './../../Components/CustomScrollbar/CustomScrollbar'
 import { DayPicker } from 'react-day-picker'
 import { id, zhTW } from 'date-fns/locale'
-import { format, parse, isValid, isAfter, isBefore, addDays, isMatch } from 'date-fns'
+import { format, parse, isValid, isAfter, isBefore, addDays, isMatch, parseISO } from 'date-fns'
 import { fetchDepartment } from './../../Redux/Slices/Statistic'
 import CustomDataGrid from './../../Components/CustomDataGrid/CustomDataGrid'
+import { openAlert } from '../../Redux/Slices/Alert'
 
 const Statistic = () => {
     const [selectDepartment, setSelectDepartment] = useState('all')
@@ -79,7 +82,9 @@ const Statistic = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const theme = useTheme()
-    const { departments, numsOfPeople, numsOfReport } = useSelector(state => state.statistic)
+    const { departments, numsOfPeople, numsOfReport, numsOfPeopleGroupByDay, numsOfOrganGroupByDay, numsOfCancerGroupByDay } = useSelector(
+        state => state.statistic
+    )
 
     useEffect(() => {
         const departmentID = selectDepartment === 'all' ? null : selectDepartment
@@ -88,8 +93,8 @@ const Statistic = () => {
             let dateFrom = ''
             let dateTo = ''
             if (pickerMode === 'all') {
-                dateFrom = new Date('1900-01-01').toLocaleDateString()
-                dateTo = new Date(addDays(new Date(), 1)).toLocaleDateString()
+                dateFrom = parseISO('1900-01-01')
+                dateTo = addDays(new Date(), 1)
             }
             if (pickerMode === 'single') {
                 if (time && time !== 'all') {
@@ -100,8 +105,8 @@ const Statistic = () => {
                     dateFrom = new Date(`${day} ${timeFrom}`)
                     dateTo = new Date(`${day} ${timeTo}`)
                 } else {
-                    dateFrom = new Date(date).toLocaleDateString()
-                    dateTo = new Date(addDays(date, 1)).toLocaleDateString()
+                    dateFrom = date
+                    dateTo = addDays(date, 1)
                 }
             }
             if (pickerMode === 'range' && rangeDateFrom && rangeDateTo) {
@@ -110,8 +115,8 @@ const Statistic = () => {
                     dateFrom = sameDate.toLocaleDateString()
                     dateTo = new Date(addDays(sameDate, 1)).toLocaleDateString()
                 } else {
-                    dateFrom = rangeDateFrom
-                    dateTo = rangeDateTo
+                    dateFrom = parseISO(rangeDateFrom)
+                    dateTo = addDays(parseISO(rangeDateTo), 1)
                 }
             }
 
@@ -201,6 +206,145 @@ const Statistic = () => {
         setOpen(false)
     }
 
+    const handleExcelClick = () => {
+        if (numsOfPeopleGroupByDay && numsOfOrganGroupByDay && numsOfCancerGroupByDay) {
+            const workbook = new ExcelJs.Workbook()
+            const peopleSheet = workbook.addWorksheet('性別與人數統計')
+            const organSheet = workbook.addWorksheet('器官異常統計')
+            const cancerSheet = workbook.addWorksheet('異常病況分類統計')
+
+            peopleSheet.addTable({
+                name: 'people',
+                ref: 'A1',
+                columns: [{ name: '日期' }, { name: '男' }, { name: '女' }, { name: '總數' }],
+                rows: numsOfPeopleGroupByDay.map(people => [people.date, people.male.value, people.female.value, people.total.value]),
+            })
+            organSheet.addTable({
+                name: 'organ',
+                ref: 'A1',
+                columns: [
+                    { name: '日期' },
+                    { name: '肝臟異常' },
+                    { name: '膽囊異常' },
+                    { name: '腎臟異常' },
+                    { name: '胰臟異常' },
+                    { name: '脾臟異常' },
+                    { name: '需進一步檢查' },
+                ],
+                rows: numsOfOrganGroupByDay.map(organ => [
+                    organ.date,
+                    organ.liver.amount,
+                    organ.gallbladder.amount,
+                    organ.kidney.amount,
+                    organ.pancreas.amount,
+                    organ.spleen.amount,
+                    organ.suggestion.amount,
+                ]),
+            })
+            cancerSheet.addTable({
+                name: 'cancer',
+                ref: 'A1',
+                columns: [
+                    { name: '日期' },
+                    {
+                        name: '脂肪肝',
+                    },
+                    {
+                        name: '疑似肝實質病變',
+                    },
+                    { name: '肝實質病變' },
+                    {
+                        name: '肝硬化',
+                    },
+                    {
+                        name: '肝囊腫',
+                    },
+                    {
+                        name: '血管瘤',
+                    },
+                    {
+                        name: '肝內鈣化點',
+                    },
+                    {
+                        name: '肝腫瘤(疑似肝癌)',
+                    },
+                    {
+                        name: '肝腫瘤(性質不明)',
+                    },
+                    {
+                        name: '膽結石',
+                    },
+                    {
+                        name: '膽息肉',
+                    },
+                    {
+                        name: '腎結石',
+                    },
+                    {
+                        name: '腎囊腫',
+                    },
+                    {
+                        name: '腎腫瘤',
+                    },
+                    {
+                        name: '脾臟腫大',
+                    },
+                    {
+                        name: '請每隔幾年幾月定期追蹤一次',
+                    },
+                    {
+                        name: '請至各大醫院近一步詳細檢查',
+                    },
+                ],
+                rows: numsOfCancerGroupByDay.map(cancer => [
+                    cancer.date,
+                    cancer?.FLD?.value || 0,
+                    cancer?.SLPL?.value || 0,
+                    cancer?.LPL?.value || 0,
+                    cancer?.LC?.value || 0,
+                    cancer?.PLD?.value || 0,
+                    cancer?.HEM?.value || 0,
+                    cancer?.IC?.value || 0,
+                    cancer?.HEP?.value || 0,
+                    cancer?.HEPU?.value || 0,
+                    cancer?.CL?.value || 0,
+                    cancer?.GP?.value || 0,
+                    cancer?.KS?.value || 0,
+                    cancer?.RC?.value || 0,
+                    cancer?.KC?.value || 0,
+                    cancer?.ES?.value || 0,
+                    cancer?.datetime?.value || 0,
+                    cancer?.examination?.value || 0,
+                ]),
+            })
+
+            const title =
+                pickerMode === 'all'
+                    ? '好心肝超音波檢查報告統計總表'
+                    : rangeDateTo
+                    ? `${rangeDateTo.replaceAll('-', '')}-${rangeDateTo.replaceAll('-', '')}好心肝超音波檢查報告統計總表`
+                    : `${format(date, 'y-MM-dd').replaceAll('-', '')}好心肝超音波檢查報告統計總表`
+
+            workbook.xlsx.writeBuffer().then(content => {
+                const link = document.createElement('a')
+                const blobData = new Blob([content], {
+                    type: 'application/vnd.ms-excel;charset=utf-8;',
+                })
+                link.download = `${title}.xlsx`
+                link.href = URL.createObjectURL(blobData)
+                link.click()
+            })
+        } else {
+            dispatch(
+                openAlert({
+                    toastTitle: '發生錯誤',
+                    text: '無統計資料',
+                    icon: 'error',
+                })
+            )
+        }
+    }
+
     const inputDateValue = () => {
         switch (pickerMode) {
             case 'all':
@@ -244,6 +388,7 @@ const Statistic = () => {
                     <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>
                         統計數據
                     </Typography>
+
                     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
                         <ToggleButtonGroup color="primary" value={pickerMode} onChange={handlePickerMode} sx={{ mr: 2 }}>
                             <ToggleButton value="all" key="all">
@@ -319,7 +464,7 @@ const Statistic = () => {
                             </Grid>
                         ))}
                     </Grid>
-                    <Grid container item xs={5} spacing={2} sx={{ m: 2 }}>
+                    <Grid container item xs={6} spacing={2} sx={{ m: 2 }}>
                         {numsOfReport.map(d => (
                             <Grid item xs={4} key={d.name}>
                                 <Card
@@ -343,10 +488,14 @@ const Statistic = () => {
                     <ToggleButtonGroup color="primary" exclusive value={chartType} onChange={e => setChartType(e.target.value)}>
                         <ToggleButton value="bar">長條圖</ToggleButton>
                         <ToggleButton value="radar">雷達圖</ToggleButton>
+                        <ToggleButton value="table">表格</ToggleButton>
                     </ToggleButtonGroup>
+                    <Button variant="contained" onClick={handleExcelClick} sx={{ ml: 2 }}>
+                        下載Excel
+                    </Button>
                 </Box>
 
-                <Grid container sx={{ width: '96%', height: '40%' }}>
+                <Grid container sx={{ width: '100%', height: '46%' }} spacing={3} wrap="nowrap">
                     {[numsOfPeople, numsOfReport].map((data, index) => {
                         return (
                             <Grid item xs={6}>
@@ -418,17 +567,14 @@ const Statistic = () => {
                                         </RadarChart>
                                     </ResponsiveContainer>
                                 )}
+                                {chartType === 'table' && (
+                                    <ResponsiveContainer>
+                                        <CustomDataGrid data={data} columns={columns} getRowId={row => row.name} Toolbar={CustomToolbar} />
+                                    </ResponsiveContainer>
+                                )}
                             </Grid>
                         )
                     })}
-                </Grid>
-                <Grid container sx={{ height: '70%', mt: 4 }} spacing={8}>
-                    <Grid item xs={6}>
-                        <CustomDataGrid data={numsOfPeople} columns={columns} getRowId={row => row.name} Toolbar={CustomToolbar} />
-                    </Grid>
-                    <Grid item xs={6}>
-                        <CustomDataGrid data={numsOfReport} columns={columns} getRowId={row => row.name} Toolbar={CustomToolbar} />
-                    </Grid>
                 </Grid>
             </CustomScrollbar>
 
