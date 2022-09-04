@@ -52,6 +52,8 @@ import {
 } from 'recharts'
 import ExcelJs from 'exceljs'
 import { useTheme } from '@mui/material/styles'
+import { Print } from '@mui/icons-material'
+
 import { fetchStatistic } from '../../Redux/Slices/Statistic'
 import CustomScrollbar from './../../Components/CustomScrollbar/CustomScrollbar'
 import { DayPicker } from 'react-day-picker'
@@ -120,7 +122,7 @@ const Statistic = () => {
                 }
             }
 
-            return { dateFrom, dateTo }
+            return { dateFrom, dateTo, type: pickerMode }
         }
 
         const params = formatDate()
@@ -212,125 +214,244 @@ const Statistic = () => {
             const peopleSheet = workbook.addWorksheet('性別與人數統計')
             const organSheet = workbook.addWorksheet('器官異常統計')
             const cancerSheet = workbook.addWorksheet('異常病況分類統計')
+            if (pickerMode === 'single') {
+                peopleSheet.addTable({
+                    name: 'people',
+                    ref: 'A1',
+                    columns: [{ name: '日期' }, { name: '時間' }, { name: '男' }, { name: '女' }, { name: '總數' }],
+                    rows: numsOfPeopleGroupByDay.map(people => [
+                        people.date,
+                        people.time,
+                        people.male.value,
+                        people.female.value,
+                        people.total.value,
+                    ]),
+                })
+                organSheet.addTable({
+                    name: 'organ',
+                    ref: 'A1',
+                    columns: [
+                        { name: '日期' },
+                        { name: '時間' },
+                        { name: '肝臟異常' },
+                        { name: '膽囊異常' },
+                        { name: '腎臟異常' },
+                        { name: '胰臟異常' },
+                        { name: '脾臟異常' },
+                        { name: '需進一步檢查' },
+                    ],
+                    rows: numsOfOrganGroupByDay.map(organ => [
+                        organ.date,
+                        organ.time,
+                        organ.liver.amount,
+                        organ.gallbladder.amount,
+                        organ.kidney.amount,
+                        organ.pancreas.amount,
+                        organ.spleen.amount,
+                        organ.suggestion.amount,
+                    ]),
+                })
+                cancerSheet.addTable({
+                    name: 'cancer',
+                    ref: 'A1',
+                    columns: [
+                        { name: '日期' },
+                        { name: '時間' },
+                        {
+                            name: '脂肪肝',
+                        },
+                        {
+                            name: '疑似肝實質病變',
+                        },
+                        { name: '肝實質病變' },
+                        {
+                            name: '肝硬化',
+                        },
+                        {
+                            name: '肝囊腫',
+                        },
+                        {
+                            name: '血管瘤',
+                        },
+                        {
+                            name: '肝內鈣化點',
+                        },
+                        {
+                            name: '肝腫瘤(疑似肝癌)',
+                        },
+                        {
+                            name: '肝腫瘤(性質不明)',
+                        },
+                        {
+                            name: '膽結石',
+                        },
+                        {
+                            name: '膽息肉',
+                        },
+                        {
+                            name: '腎結石',
+                        },
+                        {
+                            name: '腎囊腫',
+                        },
+                        {
+                            name: '腎腫瘤',
+                        },
+                        {
+                            name: '脾臟腫大',
+                        },
+                        {
+                            name: '請每隔幾年幾月定期追蹤一次',
+                        },
+                        {
+                            name: '請至各大醫院近一步詳細檢查',
+                        },
+                    ],
+                    rows: numsOfCancerGroupByDay.map(cancer => [
+                        cancer.date,
+                        cancer.time,
+                        cancer?.FLD?.value || 0,
+                        cancer?.SLPL?.value || 0,
+                        cancer?.LPL?.value || 0,
+                        cancer?.LC?.value || 0,
+                        cancer?.PLD?.value || 0,
+                        cancer?.HEM?.value || 0,
+                        cancer?.IC?.value || 0,
+                        cancer?.HEP?.value || 0,
+                        cancer?.HEPU?.value || 0,
+                        cancer?.CL?.value || 0,
+                        cancer?.GP?.value || 0,
+                        cancer?.KS?.value || 0,
+                        cancer?.RC?.value || 0,
+                        cancer?.KC?.value || 0,
+                        cancer?.ES?.value || 0,
+                        cancer?.datetime?.value || 0,
+                        cancer?.examination?.value || 0,
+                    ]),
+                })
+            } else {
+                peopleSheet.addTable({
+                    name: 'people',
+                    ref: 'A1',
+                    columns: [{ name: '日期' }, { name: '男' }, { name: '女' }, { name: '總數' }],
+                    rows: numsOfPeopleGroupByDay.map(people => [people.date, people.male.value, people.female.value, people.total.value]),
+                })
+                organSheet.addTable({
+                    name: 'organ',
+                    ref: 'A1',
+                    columns: [
+                        { name: '日期' },
+                        { name: '肝臟異常' },
+                        { name: '膽囊異常' },
+                        { name: '腎臟異常' },
+                        { name: '胰臟異常' },
+                        { name: '脾臟異常' },
+                        { name: '需進一步檢查' },
+                    ],
+                    rows: numsOfOrganGroupByDay.map(organ => [
+                        organ.date,
+                        organ.liver.amount,
+                        organ.gallbladder.amount,
+                        organ.kidney.amount,
+                        organ.pancreas.amount,
+                        organ.spleen.amount,
+                        organ.suggestion.amount,
+                    ]),
+                })
+                cancerSheet.addTable({
+                    name: 'cancer',
+                    ref: 'A1',
+                    columns: [
+                        { name: '日期' },
+                        {
+                            name: '脂肪肝',
+                        },
+                        {
+                            name: '疑似肝實質病變',
+                        },
+                        { name: '肝實質病變' },
+                        {
+                            name: '肝硬化',
+                        },
+                        {
+                            name: '肝囊腫',
+                        },
+                        {
+                            name: '血管瘤',
+                        },
+                        {
+                            name: '肝內鈣化點',
+                        },
+                        {
+                            name: '肝腫瘤(疑似肝癌)',
+                        },
+                        {
+                            name: '肝腫瘤(性質不明)',
+                        },
+                        {
+                            name: '膽結石',
+                        },
+                        {
+                            name: '膽息肉',
+                        },
+                        {
+                            name: '腎結石',
+                        },
+                        {
+                            name: '腎囊腫',
+                        },
+                        {
+                            name: '腎腫瘤',
+                        },
+                        {
+                            name: '脾臟腫大',
+                        },
+                        {
+                            name: '請每隔幾年幾月定期追蹤一次',
+                        },
+                        {
+                            name: '請至各大醫院近一步詳細檢查',
+                        },
+                    ],
+                    rows: numsOfCancerGroupByDay.map(cancer => [
+                        cancer.date,
+                        cancer?.FLD?.value || 0,
+                        cancer?.SLPL?.value || 0,
+                        cancer?.LPL?.value || 0,
+                        cancer?.LC?.value || 0,
+                        cancer?.PLD?.value || 0,
+                        cancer?.HEM?.value || 0,
+                        cancer?.IC?.value || 0,
+                        cancer?.HEP?.value || 0,
+                        cancer?.HEPU?.value || 0,
+                        cancer?.CL?.value || 0,
+                        cancer?.GP?.value || 0,
+                        cancer?.KS?.value || 0,
+                        cancer?.RC?.value || 0,
+                        cancer?.KC?.value || 0,
+                        cancer?.ES?.value || 0,
+                        cancer?.datetime?.value || 0,
+                        cancer?.examination?.value || 0,
+                    ]),
+                })
+            }
 
-            peopleSheet.addTable({
-                name: 'people',
-                ref: 'A1',
-                columns: [{ name: '日期' }, { name: '男' }, { name: '女' }, { name: '總數' }],
-                rows: numsOfPeopleGroupByDay.map(people => [people.date, people.male.value, people.female.value, people.total.value]),
-            })
-            organSheet.addTable({
-                name: 'organ',
-                ref: 'A1',
-                columns: [
-                    { name: '日期' },
-                    { name: '肝臟異常' },
-                    { name: '膽囊異常' },
-                    { name: '腎臟異常' },
-                    { name: '胰臟異常' },
-                    { name: '脾臟異常' },
-                    { name: '需進一步檢查' },
-                ],
-                rows: numsOfOrganGroupByDay.map(organ => [
-                    organ.date,
-                    organ.liver.amount,
-                    organ.gallbladder.amount,
-                    organ.kidney.amount,
-                    organ.pancreas.amount,
-                    organ.spleen.amount,
-                    organ.suggestion.amount,
-                ]),
-            })
-            cancerSheet.addTable({
-                name: 'cancer',
-                ref: 'A1',
-                columns: [
-                    { name: '日期' },
-                    {
-                        name: '脂肪肝',
-                    },
-                    {
-                        name: '疑似肝實質病變',
-                    },
-                    { name: '肝實質病變' },
-                    {
-                        name: '肝硬化',
-                    },
-                    {
-                        name: '肝囊腫',
-                    },
-                    {
-                        name: '血管瘤',
-                    },
-                    {
-                        name: '肝內鈣化點',
-                    },
-                    {
-                        name: '肝腫瘤(疑似肝癌)',
-                    },
-                    {
-                        name: '肝腫瘤(性質不明)',
-                    },
-                    {
-                        name: '膽結石',
-                    },
-                    {
-                        name: '膽息肉',
-                    },
-                    {
-                        name: '腎結石',
-                    },
-                    {
-                        name: '腎囊腫',
-                    },
-                    {
-                        name: '腎腫瘤',
-                    },
-                    {
-                        name: '脾臟腫大',
-                    },
-                    {
-                        name: '請每隔幾年幾月定期追蹤一次',
-                    },
-                    {
-                        name: '請至各大醫院近一步詳細檢查',
-                    },
-                ],
-                rows: numsOfCancerGroupByDay.map(cancer => [
-                    cancer.date,
-                    cancer?.FLD?.value || 0,
-                    cancer?.SLPL?.value || 0,
-                    cancer?.LPL?.value || 0,
-                    cancer?.LC?.value || 0,
-                    cancer?.PLD?.value || 0,
-                    cancer?.HEM?.value || 0,
-                    cancer?.IC?.value || 0,
-                    cancer?.HEP?.value || 0,
-                    cancer?.HEPU?.value || 0,
-                    cancer?.CL?.value || 0,
-                    cancer?.GP?.value || 0,
-                    cancer?.KS?.value || 0,
-                    cancer?.RC?.value || 0,
-                    cancer?.KC?.value || 0,
-                    cancer?.ES?.value || 0,
-                    cancer?.datetime?.value || 0,
-                    cancer?.examination?.value || 0,
-                ]),
-            })
+            const genTitle = () => {
+                const titleDate =
+                    rangeDateTo && pickerMode !== 'all'
+                        ? `${rangeDateTo.replaceAll('-', '')}-${rangeDateTo.replaceAll('-', '')}`
+                        : format(date, 'y-MM-dd').replaceAll('-', '')
+                const titleDepartment = selectDepartment !== 'all' ? `(${departments.find(d => d._id === selectDepartment).name})` : ''
 
-            const title =
-                pickerMode === 'all'
-                    ? '好心肝超音波檢查報告統計總表'
-                    : rangeDateTo
-                    ? `${rangeDateTo.replaceAll('-', '')}-${rangeDateTo.replaceAll('-', '')}好心肝超音波檢查報告統計總表`
-                    : `${format(date, 'y-MM-dd').replaceAll('-', '')}好心肝超音波檢查報告統計總表`
+                return titleDate + '好心肝超音波檢查報告統計報表' + titleDepartment
+            }
 
             workbook.xlsx.writeBuffer().then(content => {
                 const link = document.createElement('a')
                 const blobData = new Blob([content], {
                     type: 'application/vnd.ms-excel;charset=utf-8;',
                 })
-                link.download = `${title}.xlsx`
+                link.download = `${genTitle()}.xlsx`
                 link.href = URL.createObjectURL(blobData)
                 link.click()
             })
@@ -490,8 +611,8 @@ const Statistic = () => {
                         <ToggleButton value="radar">雷達圖</ToggleButton>
                         <ToggleButton value="table">表格</ToggleButton>
                     </ToggleButtonGroup>
-                    <Button variant="contained" onClick={handleExcelClick} sx={{ ml: 2 }}>
-                        下載Excel
+                    <Button variant="text" onClick={handleExcelClick} sx={{ ml: 2 }} startIcon={<Print />}>
+                        Excel
                     </Button>
                 </Box>
 
