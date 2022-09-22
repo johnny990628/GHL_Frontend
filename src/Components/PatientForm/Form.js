@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
     Select,
     MenuItem,
@@ -6,7 +6,6 @@ import {
     Box,
     Button,
     TextField,
-    Typography,
     Modal,
     FormControl,
     Radio,
@@ -14,16 +13,12 @@ import {
     FormControlLabel,
     FormLabel,
 } from "@mui/material";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DatePicker from "@mui/lab/DatePicker";
-import { zhTW } from "date-fns/locale"; //給DatePicker用的中文月份
 import QRCode from "qrcode.react";
 
 import SMdatepicker from "./SMdatepicker";
 import { verifyID } from "../../Utils/Verify";
-import { apiGetDepartments } from "../../Axios/Department";
 import { useFormat } from "./useFormat";
+import { apiCheckExists } from "../../Axios/Exists";
 
 const Form = () => {
     //userData
@@ -32,6 +27,8 @@ const Form = () => {
     const [value, setValue] = useState(new Date());
     //Modal view open state
     const [showQRcodeDiv, setShowQRcodeDiv] = useState(false);
+
+    const [exists, setExists] = useState(false);
 
     const style = {
         textAlign: "center",
@@ -172,7 +169,11 @@ const Form = () => {
                                     margin: " 20px auto",
                                 }}
                             >
-                                <SMdatepicker f={f} value={value} setValue={setValue} />
+                                <SMdatepicker
+                                    f={f}
+                                    value={value}
+                                    setValue={setValue}
+                                />
                             </div>
                         );
                     }
@@ -261,8 +262,7 @@ const Form = () => {
                 }}
                 variant="contained"
                 onClick={(event) => {
-                    console.log(value.getMonth()+1)
-                    userData.birth=value //.getFullYear()+"/"+(value.getMonth()+1)+"/"+value.getDate();
+                    userData.birth = value; //.getFullYear()+"/"+(value.getMonth()+1)+"/"+value.getDate();
                     verify();
                     if (userData.id.substring(1, 2) === "1") {
                         userData.gender = "m";
@@ -277,7 +277,7 @@ const Form = () => {
     };
 
     //verify patientID and patient phone number function
-    const verify = () => {
+    async function verify() {
         var nullErrorMessage = "";
         var verifyErrorMessage = "";
 
@@ -313,9 +313,18 @@ const Form = () => {
         } else if (verifyErrorMessage) {
             alert("格式錯誤" + verifyErrorMessage);
         } else {
+            const existsPatient = await apiCheckExists({
+                type: "patient",
+                value: userData.id,
+            });
+            if (existsPatient.data) {
+                setExists(true);
+            } else {
+                setExists(false);
+            }
             setShowQRcodeDiv(true);
         }
-    };
+    }
 
     return (
         <div style={style}>
@@ -344,7 +353,40 @@ const Form = () => {
                         textAlign: "center",
                     }}
                 >
-                    {QRCodeDiv()}
+                    {exists ? (
+                        <>
+                            <h2>
+                                系統中已有資料
+                                <br />
+                                報到時請告知工作人員
+                            </h2>
+                            <Box
+                                sx={{
+                                    border: "2px solid",
+                                    marginBottom: "20px",
+                                }}
+                            >
+                                <h3>ID：{userData.id}</h3>
+                            </Box>
+
+                            <Button
+                                sx={{
+                                    width: "80%",
+                                    fontSize: "20px",
+                                    marginBottom: "20px",
+                                }}
+                                variant="outlined"
+                                color="error"
+                                onClick={() => {
+                                    setShowQRcodeDiv(false);
+                                }}
+                            >
+                                關閉視窗
+                            </Button>
+                        </>
+                    ) : (
+                        QRCodeDiv()
+                    )}
                 </Box>
             </Modal>
         </div>
