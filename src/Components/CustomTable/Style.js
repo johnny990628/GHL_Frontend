@@ -20,10 +20,9 @@ const useStyles = makeStyles(theme => ({
     },
     tableFooter: {
         display: 'flex',
-        justifyContent: 'right',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         paddingInline: '1rem',
-        height: '10%',
     },
     tableFooterItem: {
         marginRight: '1rem',
