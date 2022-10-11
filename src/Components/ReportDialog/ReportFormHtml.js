@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react'
 
 import useStyles from './Style'
+import './print.css'
 
 import Gallbladder from '../../Assets/OrganJson/gallbladder.json'
 import Kidney from '../../Assets/OrganJson/kidney.json'
@@ -12,7 +13,7 @@ import { useSelector } from 'react-redux'
 
 export const ReportFormForPDF = React.forwardRef((_, ref) => {
     return (
-        <div style={{ width: '100%', padding: '3rem' }} ref={ref}>
+        <div style={{ width: '100%' }} ref={ref}>
             <FormHeader />
             <PatientForm />
             <ReportFormHtml print={true} />

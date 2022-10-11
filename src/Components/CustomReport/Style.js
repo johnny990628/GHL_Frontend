@@ -1,7 +1,7 @@
 import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(theme => ({
-    container: { display: 'flex', alignItems: 'center', height: '86%', width: '100%' },
+    container: { display: 'flex', alignItems: 'center', height: '86%', width: '100%', padding: '2rem 0' },
     scrollspy: { marginRight: '1rem', padding: '.3rem' },
     scrollspyButton: {
         fontSize: '1.5rem',

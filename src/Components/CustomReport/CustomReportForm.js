@@ -212,7 +212,11 @@ const CustomReportForm = ({ lists, patient, mode }) => {
     return (
         <>
             {mode === 'create' && (
-                <Stack direction="row" spacing={1} sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', m: 1 }}>
+                <Stack
+                    direction="row"
+                    spacing={1}
+                    sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', m: 1, height: '5%' }}
+                >
                     <Box className={classes.patientInfo}>
                         <Chip
                             label={`${patient.id} / ${patient.name} / ${patient.gender === 'm' ? '男' : '女'}`}

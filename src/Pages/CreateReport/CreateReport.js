@@ -175,11 +175,11 @@ const CreateReport = () => {
                                 patient={patient}
                                 mode="create"
                             />
-                            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
+                            <Box sx={{ width: '100%', height: '5%', display: 'flex', justifyContent: 'end' }}>
                                 <Button
                                     variant="contained"
                                     startIcon={<Check />}
-                                    sx={{ borderRadius: '2rem', height: 'auto', marginRight: '1rem' }}
+                                    sx={{ borderRadius: '2rem', height: '2.4rem', marginRight: '1rem' }}
                                     onClick={() => setCurrentStep(2)}
                                 >
                                     完成報告
@@ -187,7 +187,7 @@ const CreateReport = () => {
                                 <Button
                                     variant="outlined"
                                     startIcon={<Close />}
-                                    sx={{ borderRadius: '2rem', height: 'auto' }}
+                                    sx={{ borderRadius: '2rem', height: '2.4em' }}
                                     onClick={() => setCurrentStep(0)}
                                 >
                                     取消
