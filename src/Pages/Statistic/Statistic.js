@@ -153,7 +153,9 @@ const Statistic = () => {
     }
 
     const handleDateSelect = range => {
-        setDate(range)
+        if (isValid(range)) {
+            setDate(range)
+        }
         if (range?.from) {
             setRangeDateFrom(format(range.from, 'y-MM-dd'))
         } else {
