@@ -73,7 +73,7 @@ const Statistic = () => {
     const [date, setDate] = useState(new Date())
     const [rangeDateFrom, setRangeDateFrom] = useState('')
     const [rangeDateTo, setRangeDateTo] = useState('')
-    const [time, setTime] = useState('')
+    const [time, setTime] = useState('all')
 
     const TIMELIST = [...Array(24).keys()].flatMap((_, i) => [
         [`${('0' + i).slice(-2)}:00`, `${('0' + i).slice(-2)}:30`],
