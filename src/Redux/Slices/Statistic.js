@@ -9,7 +9,7 @@ const initialState = {
     numsOfPeople: [
         {
             name: 'total',
-            label: '超音波檢查總次數',
+            label: '超音波檢查次數',
             amount: 0,
             totalFemale: {
                 name: 'totalFemale',
