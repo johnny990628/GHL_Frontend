@@ -9,7 +9,7 @@ const useStyles = makeStyles(theme => ({
         '&.close': {
             width: 'var(--sidebar-close-width)',
         },
-        boxShadow: '6px 6px 10px rgba(0,0,0,0.1)',
+        // boxShadow: '6px 6px 10px rgba(0,0,0,0.1)',
     },
     list: {
         height: '100%',
