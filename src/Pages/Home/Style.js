@@ -10,6 +10,15 @@ const useStyles = makeStyles(theme => ({
         // boxShadow: '6px 6px 10px rgba(0,0,0,0.2)',
         border: `1px solid ${theme.palette.border.main}`,
     },
+    navbar: {
+        // display: 'flex',
+        // justifyContent: 'flex-end',
+        // marginBottom: theme.spacing(2),
+        // backgroundColor: theme.palette.secondary.main,
+        // borderRadius: '.8rem',
+        // padding: theme.spacing(2),
+        // border: `1px solid ${theme.palette.border.main}`,
+    },
     cardContainer: {
         display: 'flex',
         flexDirection: 'column',

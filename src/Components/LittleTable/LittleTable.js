@@ -16,7 +16,7 @@ const LittleTable = ({ title, rows, cols, route }) => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            {cols.map(col => (
+                            {cols?.map(col => (
                                 <TableCell key={col.accessor} className={classes.tableCell}>
                                     {col.Header}
                                 </TableCell>
@@ -24,7 +24,7 @@ const LittleTable = ({ title, rows, cols, route }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map(row => (
+                        {rows?.map(row => (
                             <TableRow key={row.id} className={[classes.tableRow, classes.link]} component={Link} to={route}>
                                 {cols.map(col => (
                                     <TableCell key={col.accessor} component="th" scope="row" className={classes.tableCell}>
