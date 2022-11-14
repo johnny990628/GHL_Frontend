@@ -23,7 +23,13 @@ const useStyles = makeStyles(theme => ({
         marginLeft: '.8rem',
         borderRadius: '1rem',
         width: '6rem',
-        '&.processing': {
+        '&.yet': {
+            backgroundColor: theme.palette.status.yet,
+        },
+        '&.blood': {
+            backgroundColor: theme.palette.status.blood,
+        },
+        '&.examination': {
             backgroundColor: theme.palette.status.processing,
         },
         '&.finish': {

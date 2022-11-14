@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import {
     Box,
+    Button,
     Accordion,
     AccordionSummary,
     AccordionDetails,
@@ -10,8 +11,9 @@ import {
     RadioGroup,
     FormControlLabel,
     Radio,
+    CircularProgress,
 } from '@mui/material'
-import { CalendarToday, ArrowDropDown, Delete, Edit, Cancel } from '@mui/icons-material'
+import { CalendarToday, ArrowDropDown, Delete, Edit, Cancel, Check, DesignServices } from '@mui/icons-material'
 
 import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
@@ -24,7 +26,7 @@ import { deletePatient, createPatient, fetchPatients, patientTrigger } from '../
 import { openDialog } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
 import { apiCheckExists } from '../../Axios/Exists'
-import { addSchedule, removeSchedule } from '../../Redux/Slices/Schedule'
+import { addSchedule, removeSchedule, updateSchedule } from '../../Redux/Slices/Schedule'
 
 const Patient = () => {
     const classes = useStyles()
@@ -35,34 +37,32 @@ const Patient = () => {
     const columns = useMemo(
         () => [
             {
-                accessor: row => {
-                    return row.schedule.length > 0 ? 1 : 0
-                },
+                accessor: 'schedule',
                 Header: '排程狀態',
                 Cell: row => {
-                    const hasSchedule = row.row.original.schedule.length > 0
-                    const hasReport = row.row.original.report.length > 0
+                    // const hasReport = row.row.original.report.length > 0
                     const { id, name, gender } = row.row.original
                     const mr = gender === 'm' ? '先生' : '小姐'
+
+                    const scheduleStatus = () => {
+                        switch (row.row.original?.schedule?.status) {
+                            case 'yet':
+                                return { status: 'yet', class: 'yet', text: '等待排程' }
+                            case 'wait-blood':
+                                return { status: 'wait-blood', class: 'blood', text: '等待抽血' }
+                            case 'wait-examination':
+                                return { status: 'wait-examination', class: 'examination', text: '完成抽血' }
+                            case 'finish':
+                                return { status: 'finish', class: 'finish', text: '完成報告' }
+                            default:
+                                return { status: 'yet', class: 'yet', text: '等待排程' }
+                        }
+                    }
+                    const status = scheduleStatus()
+
                     return (
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            {hasSchedule ? (
-                                <IconButton
-                                    onClick={() => {
-                                        dispatch(
-                                            openAlert({
-                                                alertTitle: `確定要取消 ${name} ${mr}的排程?`,
-                                                toastTitle: '取消排程',
-                                                text: `${name} ${mr}`,
-                                                type: 'confirm',
-                                                event: () => dispatch(removeSchedule(id)).then(() => dispatch(patientTrigger())),
-                                            })
-                                        )
-                                    }}
-                                >
-                                    <Cancel />
-                                </IconButton>
-                            ) : (
+                            {status.status === 'yet' ? (
                                 <IconButton
                                     onClick={() => {
                                         dispatch(
@@ -92,25 +92,92 @@ const Patient = () => {
                                 >
                                     <CalendarToday />
                                 </IconButton>
+                            ) : (
+                                <IconButton
+                                    onClick={() => {
+                                        dispatch(
+                                            openAlert({
+                                                alertTitle: `確定要取消 ${name} ${mr}的排程?`,
+                                                toastTitle: '取消排程',
+                                                text: `${name} ${mr}`,
+                                                type: 'confirm',
+                                                event: () => dispatch(removeSchedule(id)).then(() => dispatch(patientTrigger())),
+                                            })
+                                        )
+                                    }}
+                                >
+                                    <Cancel />
+                                </IconButton>
                             )}
 
-                            <Box className={`${classes.status} ${hasSchedule ? 'processing' : hasReport ? 'finish' : ''} `}>
-                                <Box className={classes.statusBox}>{hasSchedule ? '排程中' : hasReport ? '已完成' : '未排程'}</Box>
+                            <Box className={`${classes.status} ${status.class} `}>
+                                <Box className={classes.statusBox}>{status.text}</Box>
                             </Box>
                         </Box>
                     )
                 },
             },
-
-            { accessor: 'id', Header: '身分證字號' },
-            { accessor: 'name', Header: '姓名' },
-            { accessor: 'gender', Header: '性別', Cell: row => (row.row.original.gender === 'm' ? '男' : '女') },
             {
-                accessor: 'department',
-                Header: '部門',
-                Cell: row =>
-                    row.row.original.department.length > 6 ? row.row.original.department.slice(0, 6) + '...' : row.row.original.department,
+                accessor: 'blood',
+                Header: '抽血編號',
+                Cell: row => {
+                    const text = row.row.original?.blood?.number ? row.row.original.blood.number : '無'
+                    const status = row.row.original?.schedule?.status ? row.row.original.schedule.status : 'yet'
+                    return (
+                        <>
+                            {status === 'yet' && '無'}
+                            {status === 'wait-blood' && (
+                                <Button
+                                    variant="outlined"
+                                    startIcon={<DesignServices size={18} />}
+                                    onClick={() =>
+                                        dispatch(
+                                            updateSchedule({
+                                                scheduleID: row.row.original.schedule._id,
+                                                data: { status: 'wait-examination' },
+                                            })
+                                        ).then(() => dispatch(patientTrigger()))
+                                    }
+                                >
+                                    {text}
+                                </Button>
+                            )}
+                            {status === 'wait-examination' && (
+                                <Button
+                                    variant="outlined"
+                                    startIcon={<Check />}
+                                    onClick={() =>
+                                        dispatch(
+                                            updateSchedule({
+                                                scheduleID: row.row.original.schedule._id,
+                                                data: { status: 'wait-blood' },
+                                            })
+                                        ).then(() => dispatch(patientTrigger()))
+                                    }
+                                >
+                                    {text}
+                                </Button>
+                            )}
+                            {status === 'finish' && '已完成'}
+                        </>
+                    )
+                },
             },
+            { accessor: 'name', Header: '姓名' },
+            { accessor: 'id', Header: '身分證字號' },
+            { accessor: 'birth', Header: '生日', Cell: row => new Date(row.row.original.birth).toLocaleDateString() },
+            {
+                accessor: 'creator',
+                Header: '建立者',
+                Cell: row => (row.row.original?.creator?.name ? row.row.original.creator.name : '無'),
+            },
+            // { accessor: 'gender', Header: '性別', Cell: row => (row.row.original.gender === 'm' ? '男' : '女') },
+            // {
+            //     accessor: 'department',
+            //     Header: '部門',
+            //     Cell: row =>
+            //         row.row.original.department.length > 6 ? row.row.original.department.slice(0, 6) + '...' : row.row.original.department,
+            // },
             {
                 accessor: 'createdAt',
                 Header: '建立日期',
@@ -165,9 +232,9 @@ const Patient = () => {
                 <FormLabel id="demo-radio-buttons-group-label">狀態</FormLabel>
                 <RadioGroup row aria-labelledby="demo-radio-buttons-group-label" value={status} onChange={handleOnChange}>
                     <FormControlLabel value="all" control={<Radio />} label="全部" />
-                    <FormControlLabel value="yet" control={<Radio />} label="未排程" />
-                    <FormControlLabel value="processing" control={<Radio />} label="排程中" />
-                    <FormControlLabel value="finish" control={<Radio />} label="已完成" />
+                    <FormControlLabel value="wait-blood" control={<Radio />} label="等待抽血" />
+                    <FormControlLabel value="wait-examination" control={<Radio />} label="完成抽血" />
+                    <FormControlLabel value="finish" control={<Radio />} label="完成報告" />
                 </RadioGroup>
             </FormControl>
         )

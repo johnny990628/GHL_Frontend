@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { apiAddBlood } from '../../Axios/Blood'
 import { apiCreateReport } from '../../Axios/Report'
-import { apiAddSchedule, apiDeleteScheduleAndBloodAndReport, apiGetSchdules } from '../../Axios/Schedule'
+import { apiAddSchedule, apiDeleteScheduleAndBloodAndReport, apiGetSchdules, apiUpdateSchedule } from '../../Axios/Schedule'
 import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
 
 export const fetchSchedule = createAsyncThunk('schedule/fetchSchedule', async (_, thunkAPI) => {
@@ -19,8 +19,17 @@ export const addSchedule = createAsyncThunk('schedule/addSchedule', async ({ pat
     try {
         const reportResponse = await apiCreateReport({ patientID, procedureCode, blood })
         const reportID = reportResponse.data._id
-        await apiAddSchedule({ patientID, reportID, procedureCode })
+        await apiAddSchedule({ patientID, reportID, procedureCode, status: 'wait-blood' })
         await apiAddBlood({ patientID, number: blood })
+    } catch (e) {
+        thunkAPI.dispatch(tokenExpirationHandler(e.response))
+        return thunkAPI.rejectWithValue()
+    }
+})
+
+export const updateSchedule = createAsyncThunk('schedule/updateSchedule', async ({ scheduleID, data }, thunkAPI) => {
+    try {
+        await apiUpdateSchedule(scheduleID, data)
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()

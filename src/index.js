@@ -59,6 +59,7 @@ const whiteTheme = createTheme({
         },
         status: {
             processing: 'rgba(163, 64, 89,.2)',
+            blood: 'rgb(242, 231, 213,.6)',
             finish: 'rgba(46, 67, 114,.2)',
             yet: 'rgba(64, 127, 127,.2)',
         },

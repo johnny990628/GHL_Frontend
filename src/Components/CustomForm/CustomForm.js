@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Button, FormControlLabel, FormGroup, Switch } from '@mui/material'
 import { useTheme } from '@mui/styles'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useDebouncedCallback } from 'use-debounce'
 
 import useStyles from './Style'
@@ -31,6 +31,7 @@ const CustomForm = ({ title, row, mode, sendData }) => {
     const classes = useStyles()
     const theme = useTheme()
     const dispatch = useDispatch()
+    const { user } = useSelector(state => state.auth)
 
     useEffect(() => {
         if (row) {
@@ -105,7 +106,7 @@ const CustomForm = ({ title, row, mode, sendData }) => {
             //身份證字號判斷性別
             const gender = data.id.substring(1, 2) === '1' ? 'm' : 'f'
             const mr = gender === 'm' ? '先生' : '小姐'
-            await sendData({ ...data, gender })
+            await sendData({ ...data, gender, creator: user._id })
 
             if (autoProcessSwitch) {
                 dispatch(
