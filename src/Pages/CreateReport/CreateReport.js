@@ -21,14 +21,16 @@ import { createReport, resetReport } from '../../Redux/Slices/ReportForm'
 import ReportDialog from '../../Components/ReportDialog/ReportDialog'
 import { fetchReportByReportID } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
-import { fetchSchedule, removeSchedule } from '../../Redux/Slices/Schedule'
+import { changeScheduleStatus, fetchSchedule, removeSchedule } from '../../Redux/Slices/Schedule'
 import success from '../../Assets/Animation/success.json'
+import { apiUpdateScheduleStatus } from '../../Axios/Schedule'
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
     const [selection, setSelection] = useState([])
     const [selectTrigger, setSelectTrigger] = useState(false)
     const [patient, setPatient] = useState({})
+    const [scheduleID, setScheduleID] = useState('')
     const [reportDialogMode, setReportDialogMode] = useState('create')
 
     const { schedules, patients, count } = useSelector(state => state.schedule)
@@ -41,10 +43,12 @@ const CreateReport = () => {
 
     useEffect(() => {
         if (selection.length > 0) {
-            const { patient, reportID, reports } = schedules.find(s => s.patientID === selection[0])
+            const { _id, patient, reportID, reports } = schedules.find(s => s.patientID === selection[0])
             setPatient({ ...patient, reportID, reports })
+            setScheduleID(_id)
             if (!selectTrigger) setCurrentStep(1)
             setSelectTrigger(false)
+            dispatch(changeScheduleStatus({ scheduleID: _id, status: 'on-call' }))
         }
     }, [selection])
 
@@ -61,14 +65,20 @@ const CreateReport = () => {
     }, [currentStep])
 
     useEffect(() => {
-        return () => dispatch(resetReport({ mode: 'create' }))
+        return () => {
+            dispatch(resetReport({ mode: 'create' }))
+        }
     }, [])
+    useEffect(() => {
+        dispatch(changeScheduleStatus({ scheduleID, status: 'wait-examination' }))
+    }, [scheduleID])
 
     const handleReportSubmit = () => {
         dispatch(
             createReport({
                 patientID: patient.id,
                 reportID: patient.reportID,
+                scheduleID,
                 data: { report: { ...report, id: v4() }, userID: user._id, status: 'finished' },
             })
         )

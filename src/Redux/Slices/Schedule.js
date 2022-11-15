@@ -1,14 +1,25 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { apiAddBlood } from '../../Axios/Blood'
 import { apiCreateReport } from '../../Axios/Report'
-import { apiAddSchedule, apiDeleteScheduleAndBloodAndReport, apiGetSchdules, apiUpdateSchedule } from '../../Axios/Schedule'
+import {
+    apiAddSchedule,
+    apiDeleteScheduleAndBloodAndReport,
+    apiGetSchdules,
+    apiUpdateSchedule,
+    apiUpdateScheduleStatus,
+} from '../../Axios/Schedule'
 import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
 
 export const fetchSchedule = createAsyncThunk('schedule/fetchSchedule', async (_, thunkAPI) => {
     try {
         const response = await apiGetSchdules({ procedureCode: '19009C' })
         const { results, count } = response.data
-        return { schedules: results, patients: results.map(({ patient, blood }) => ({ ...patient, blood: blood.number })), count }
+        const scheduleList = results.filter(r => r.status === 'wait-examination')
+        return {
+            schedules: scheduleList,
+            patients: scheduleList.map(({ patient, blood }) => ({ ...patient, blood: blood.number })),
+            count,
+        }
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()
@@ -30,6 +41,15 @@ export const addSchedule = createAsyncThunk('schedule/addSchedule', async ({ pat
 export const updateSchedule = createAsyncThunk('schedule/updateSchedule', async ({ scheduleID, data }, thunkAPI) => {
     try {
         await apiUpdateSchedule(scheduleID, data)
+    } catch (e) {
+        thunkAPI.dispatch(tokenExpirationHandler(e.response))
+        return thunkAPI.rejectWithValue()
+    }
+})
+
+export const changeScheduleStatus = createAsyncThunk('schedule/changeScheduleStatus', async ({ scheduleID, status }, thunkAPI) => {
+    try {
+        await apiUpdateScheduleStatus({ scheduleID, status })
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()

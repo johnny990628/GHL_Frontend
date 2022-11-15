@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { apiUpdateReport } from '../../Axios/Report'
-import { apiDeleteScheduleAndBloodAndReport } from '../../Axios/Schedule'
+import { apiDeleteScheduleAndBloodAndReport, apiUpdateScheduleStatus } from '../../Axios/Schedule'
+import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
 
 const initialState = {
     create: {
@@ -21,22 +22,25 @@ const initialState = {
     },
 }
 
-export const createReport = createAsyncThunk('reportForm/createReport', async ({ patientID, reportID, data }) => {
+export const createReport = createAsyncThunk('reportForm/createReport', async ({ patientID, scheduleID, reportID, data }, thunkAPI) => {
     try {
         const response = await apiUpdateReport({ reportID, data })
-        await apiDeleteScheduleAndBloodAndReport(patientID)
+        // await apiDeleteScheduleAndBloodAndReport(patientID)
+        await apiUpdateScheduleStatus({ patientID, scheduleID, status: 'finish' })
         return response.data
     } catch (e) {
-        return e
+        thunkAPI.dispatch(tokenExpirationHandler(e.response))
+        return thunkAPI.rejectWithValue()
     }
 })
 
-export const updateReport = createAsyncThunk('reportForm/updateReport', async ({ reportID, data }) => {
+export const updateReport = createAsyncThunk('reportForm/updateReport', async ({ reportID, data }, thunkAPI) => {
     try {
         const response = await apiUpdateReport({ reportID, data })
         return response.data
     } catch (e) {
-        return e
+        thunkAPI.dispatch(tokenExpirationHandler(e.response))
+        return thunkAPI.rejectWithValue()
     }
 })
 
