@@ -63,6 +63,10 @@ const CreateReport = () => {
         if (currentStep === 2) {
             setReportDialogMode('edit')
             handleReportSubmit()
+            if (scheduleID) {
+                dispatch(changeScheduleStatus({ scheduleID, status: 'finish' }))
+                setScheduleID('')
+            }
         }
     }, [currentStep])
 

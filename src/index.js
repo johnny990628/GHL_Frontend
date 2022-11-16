@@ -58,10 +58,11 @@ const whiteTheme = createTheme({
             dark: 'rgba(64, 127, 127)',
         },
         status: {
-            processing: 'rgba(163, 64, 89,.2)',
-            blood: 'rgb(242, 231, 213,.6)',
+            call: 'rgba(163, 64, 89,.3)',
+            blood: 'rgb(244, 157, 26,.2)',
             finish: 'rgba(46, 67, 114,.2)',
             yet: 'rgba(64, 127, 127,.2)',
+            processing: 'rgb(235, 100, 64,.3)',
         },
     },
     typography: {

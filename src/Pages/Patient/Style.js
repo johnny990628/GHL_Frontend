@@ -35,6 +35,9 @@ const useStyles = makeStyles(theme => ({
         '&.finish': {
             backgroundColor: theme.palette.status.finish,
         },
+        '&.call': {
+            backgroundColor: theme.palette.status.call,
+        },
     },
     statusBox: {
         display: 'flex',

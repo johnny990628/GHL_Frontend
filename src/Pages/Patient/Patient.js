@@ -52,6 +52,8 @@ const Patient = () => {
                                 return { status: 'wait-blood', class: 'blood', text: '等待抽血' }
                             case 'wait-examination':
                                 return { status: 'wait-examination', class: 'examination', text: '完成抽血' }
+                            case 'on-call':
+                                return { status: 'on-call', class: 'call', text: '檢查中' }
                             case 'finish':
                                 return { status: 'finish', class: 'finish', text: '完成報告' }
                             default:
@@ -62,7 +64,24 @@ const Patient = () => {
 
                     return (
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            {status.status === 'yet' ? (
+                            {(status.status === 'wait-blood' || status.status === 'wait-examination') && (
+                                <IconButton
+                                    onClick={() => {
+                                        dispatch(
+                                            openAlert({
+                                                alertTitle: `確定要取消 ${name} ${mr}的排程?`,
+                                                toastTitle: '取消排程',
+                                                text: `${name} ${mr}`,
+                                                type: 'confirm',
+                                                event: () => dispatch(removeSchedule(id)).then(() => dispatch(patientTrigger())),
+                                            })
+                                        )
+                                    }}
+                                >
+                                    <Cancel />
+                                </IconButton>
+                            )}
+                            {status.status === 'yet' && (
                                 <IconButton
                                     onClick={() => {
                                         dispatch(
@@ -91,22 +110,6 @@ const Patient = () => {
                                     }}
                                 >
                                     <CalendarToday />
-                                </IconButton>
-                            ) : (
-                                <IconButton
-                                    onClick={() => {
-                                        dispatch(
-                                            openAlert({
-                                                alertTitle: `確定要取消 ${name} ${mr}的排程?`,
-                                                toastTitle: '取消排程',
-                                                text: `${name} ${mr}`,
-                                                type: 'confirm',
-                                                event: () => dispatch(removeSchedule(id)).then(() => dispatch(patientTrigger())),
-                                            })
-                                        )
-                                    }}
-                                >
-                                    <Cancel />
                                 </IconButton>
                             )}
 
@@ -155,6 +158,11 @@ const Patient = () => {
                                         ).then(() => dispatch(patientTrigger()))
                                     }
                                 >
+                                    {text}
+                                </Button>
+                            )}
+                            {status === 'on-call' && (
+                                <Button variant="outlined" startIcon={<Check />}>
                                     {text}
                                 </Button>
                             )}

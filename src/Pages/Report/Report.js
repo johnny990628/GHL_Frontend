@@ -83,7 +83,7 @@ const Report = () => {
                 accessor: 'status',
                 Header: '狀態',
                 Cell: row => (
-                    <Box className={`${classes.status} ${row.row.original.status === 'pending' && 'processing'}`}>
+                    <Box className={`${classes.status} ${row.row.original.status === 'pending' ? 'processing' : 'finish'}`}>
                         {row.row.original.status === 'pending' ? (
                             <Box className={classes.statusBox}>未完成</Box>
                         ) : (

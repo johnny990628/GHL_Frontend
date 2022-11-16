@@ -14,7 +14,10 @@ const useStyles = makeStyles(theme => ({
         marginRight: '.6rem',
         borderRadius: '1rem',
         '&.processing': {
-            backgroundColor: theme.palette.status.processing,
+            backgroundColor: theme.palette.status.call,
+        },
+        '&.finish': {
+            backgroundColor: theme.palette.status.finish,
         },
     },
     statusBox: {
