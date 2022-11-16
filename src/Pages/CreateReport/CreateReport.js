@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Box, Stepper, Step, StepLabel, IconButton, Button } from '@mui/material'
-import { ArrowBack, ArrowForward, CheckCircleOutline, Cancel, Check, Close } from '@mui/icons-material'
+import { ArrowBack, ArrowForward, CheckCircleOutline, Cancel, Check, Close, ContactlessOutlined } from '@mui/icons-material'
 import { useTheme } from '@mui/styles'
 import useStyles from './Style'
 
@@ -40,6 +40,7 @@ const CreateReport = () => {
     const dispatch = useDispatch()
     const classes = useStyles()
     const theme = useTheme()
+    const scheduleIDRef = useRef(scheduleID)
 
     useEffect(() => {
         if (selection.length > 0) {
@@ -55,6 +56,7 @@ const CreateReport = () => {
     useEffect(() => {
         if (currentStep === 0) {
             setReportDialogMode('create')
+            if (scheduleID) dispatch(changeScheduleStatus({ scheduleID, status: 'wait-examination' }))
             dispatch(fetchSchedule())
             dispatch(resetReport({ mode: 'create' }))
         }
@@ -67,10 +69,11 @@ const CreateReport = () => {
     useEffect(() => {
         return () => {
             dispatch(resetReport({ mode: 'create' }))
+            if (scheduleIDRef.current) dispatch(changeScheduleStatus({ scheduleID: scheduleIDRef.current, status: 'wait-examination' }))
         }
     }, [])
     useEffect(() => {
-        dispatch(changeScheduleStatus({ scheduleID, status: 'wait-examination' }))
+        scheduleIDRef.current = scheduleID
     }, [scheduleID])
 
     const handleReportSubmit = () => {
