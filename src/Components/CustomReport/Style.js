@@ -31,7 +31,10 @@ const useStyles = makeStyles(theme => ({
     inputLabel: {
         fontSize: '1.3rem',
         padding: '.3rem',
-
+        color: theme.palette.text.primary,
+        '&.select': {
+            color: theme.palette.text.secondary,
+        },
         [theme.breakpoints.down('lg')]: {
             fontSize: '1rem',
         },
@@ -67,6 +70,7 @@ const useStyles = makeStyles(theme => ({
     },
     optionToggleButton: {
         padding: '.5rem',
+        color: theme.palette.text.primary,
     },
     popover: {
         padding: '.5rem',

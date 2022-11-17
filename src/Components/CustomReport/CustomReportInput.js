@@ -113,9 +113,8 @@ const CustomReportInput = ({ row, organ, input, mode }) => {
                     selected={input?.value}
                     onChange={handleChange}
                     className={classes.toggleButton}
-                    sx={{ color: input?.value && theme.palette.text.secondary }}
                 >
-                    <Box className={classes.inputLabel}>{label}</Box>
+                    <Box className={`${classes.inputLabel} ${input?.value && 'select'}`}>{label}</Box>
                 </ToggleButton>
             )}
             {type === 'radio' && (
@@ -130,7 +129,7 @@ const CustomReportInput = ({ row, organ, input, mode }) => {
                         className={classes.toggleButton}
                         sx={{ color: input?.value && theme.palette.text.secondary }}
                     >
-                        <Box className={classes.inputLabel}>{label}</Box>
+                        <Box className={`${classes.inputLabel} ${input?.value && 'select'}`}>{label}</Box>
                     </ToggleButton>
 
                     <ToggleButtonGroup value={input?.value} onChange={handleChange}>
