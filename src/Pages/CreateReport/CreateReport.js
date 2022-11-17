@@ -80,6 +80,18 @@ const CreateReport = () => {
         scheduleIDRef.current = scheduleID
     }, [scheduleID])
 
+    useEffect(() => {
+        window.addEventListener('beforeunload', alertUser)
+        return () => {
+            window.removeEventListener('beforeunload', alertUser)
+        }
+    })
+
+    const alertUser = event => {
+        event.preventDefault()
+        dispatch(changeScheduleStatus({ scheduleID: scheduleIDRef.current, status: 'wait-examination' }))
+    }
+
     const handleReportSubmit = () => {
         dispatch(
             createReport({
