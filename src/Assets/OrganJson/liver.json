@@ -37,6 +37,11 @@
             ]
         },
         {
+            "name": "PLD_TEXT",
+            "label": "肝囊腫大小",
+            "type": "text"
+        },
+        {
             "name": "HEM",
             "label": "血管瘤",
             "type": "radio",
@@ -44,6 +49,11 @@
                 { "label": "左葉", "value": "left" },
                 { "label": "右葉", "value": "right" }
             ]
+        },
+        {
+            "name": "HEM_TEXT",
+            "label": "血管瘤大小",
+            "type": "text"
         },
         {
             "name": "IC",
@@ -64,6 +74,11 @@
             ]
         },
         {
+            "name": "HEP_TEXT",
+            "label": "肝腫瘤(疑似肝癌)大小",
+            "type": "text"
+        },
+        {
             "name": "HEPU",
             "label": "肝腫瘤(性質不明)",
             "type": "radio",
@@ -71,6 +86,11 @@
                 { "label": "左葉", "value": "left" },
                 { "label": "右葉", "value": "right" }
             ]
+        },
+        {
+            "name": "HEPU_TEXT",
+            "label": "肝腫瘤(性質不明)大小",
+            "type": "text"
         },
         {
             "name": "other",

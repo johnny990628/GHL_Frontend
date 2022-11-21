@@ -148,7 +148,16 @@ const CustomReportInput = ({ row, organ, input, mode }) => {
                     </ToggleButtonGroup>
                 </Box>
             )}
-            {type === 'text' && <TextField fullWidth label={label} variant="standard" value={text} onChange={handleChange} />}
+            {type === 'text' && (
+                <TextField
+                    fullWidth
+                    label={label}
+                    variant="standard"
+                    value={text}
+                    onChange={handleChange}
+                    sx={{ margin: ' 0 0 2rem 1.4rem' }}
+                />
+            )}
             {type === 'select' && (
                 <FormControlLabel
                     control={<Checkbox checked={input?.value.length > 0} onChange={() => dispatch(removeCancer({ organ, name, mode }))} />}

@@ -112,7 +112,11 @@ const Patient = () => {
                                     <CalendarToday />
                                 </IconButton>
                             )}
-
+                            {status.status === 'finish' && (
+                                <IconButton>
+                                    <Check />
+                                </IconButton>
+                            )}
                             <Box className={`${classes.status} ${status.class} `}>
                                 <Box className={classes.statusBox}>{status.text}</Box>
                             </Box>

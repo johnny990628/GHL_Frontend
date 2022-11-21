@@ -21,6 +21,11 @@
             ]
         },
         {
+            "name": "RC_TEXT",
+            "label": "腎囊腫大小",
+            "type": "text"
+        },
+        {
             "name": "KC",
             "label": "腎腫瘤",
             "type": "radio",
@@ -28,6 +33,11 @@
                 { "label": "左腎", "value": "left" },
                 { "label": "右腎", "value": "right" }
             ]
+        },
+        {
+            "name": "KC_TEXT",
+            "label": "腎腫瘤大小",
+            "type": "text"
         },
         {
             "name": "other",
