@@ -13,7 +13,7 @@ import {
     Radio,
     CircularProgress,
 } from '@mui/material'
-import { CalendarToday, ArrowDropDown, Delete, Edit, Cancel, Check, DesignServices } from '@mui/icons-material'
+import { CalendarToday, ArrowDropDown, Delete, Edit, Cancel, Check, DesignServices, AccessTime } from '@mui/icons-material'
 
 import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
@@ -26,7 +26,7 @@ import { deletePatient, createPatient, fetchPatients, patientTrigger } from '../
 import { openDialog } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
 import { apiCheckExists } from '../../Axios/Exists'
-import { addSchedule, removeSchedule, updateSchedule } from '../../Redux/Slices/Schedule'
+import { addSchedule, changeScheduleStatus, removeSchedule, updateSchedule } from '../../Redux/Slices/Schedule'
 
 const Patient = () => {
     const classes = useStyles()
@@ -110,6 +110,29 @@ const Patient = () => {
                                     }}
                                 >
                                     <CalendarToday />
+                                </IconButton>
+                            )}
+                            {status.status === 'on-call' && (
+                                <IconButton
+                                    onClick={() =>
+                                        dispatch(
+                                            openAlert({
+                                                alertTitle: `確定要取消 ${name} ${mr}的檢查狀態(非管理員請勿操作)`,
+                                                toastTitle: '取消檢查狀態',
+                                                text: `${name} ${mr}`,
+                                                type: 'confirm',
+                                                event: () =>
+                                                    dispatch(
+                                                        changeScheduleStatus({
+                                                            scheduleID: row.row.original?.schedule?._id,
+                                                            status: 'wait-examination',
+                                                        })
+                                                    ).then(() => dispatch(patientTrigger())),
+                                            })
+                                        )
+                                    }
+                                >
+                                    <AccessTime />
                                 </IconButton>
                             )}
                             {status.status === 'finish' && (

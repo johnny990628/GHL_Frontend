@@ -47,15 +47,15 @@ export const deletePatient = createAsyncThunk('patients/deletePatient', async ({
     }
 })
 
-export const removeProcessing = createAsyncThunk('patients/removeProcessing', async (patientID, thunkAPI) => {
-    try {
-        const response = await apiDeleteScheduleAndBloodAndReport(patientID)
-        return response.data
-    } catch (e) {
-        thunkAPI.dispatch(tokenExpirationHandler(e.response))
-        return thunkAPI.rejectWithValue()
-    }
-})
+// export const removeProcessing = createAsyncThunk('patients/removeProcessing', async (patientID, thunkAPI) => {
+//     try {
+//         const response = await apiDeleteScheduleAndBloodAndReport(patientID)
+//         return response.data
+//     } catch (e) {
+//         thunkAPI.dispatch(tokenExpirationHandler(e.response))
+//         return thunkAPI.rejectWithValue()
+//     }
+// })
 
 const patientsSlice = createSlice({
     name: 'patients',

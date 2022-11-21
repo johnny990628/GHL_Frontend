@@ -15,6 +15,7 @@ export const fetchSchedule = createAsyncThunk('schedule/fetchSchedule', async (_
         const response = await apiGetSchdules({ procedureCode: '19009C' })
         const { results, count } = response.data
         const scheduleList = results.filter(r => r.status === 'wait-examination')
+
         return {
             schedules: scheduleList,
             patients: scheduleList.map(({ patient, blood }) => ({ ...patient, blood: blood.number })),
