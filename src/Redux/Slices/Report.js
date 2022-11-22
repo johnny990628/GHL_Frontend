@@ -15,6 +15,7 @@ export const fetchReport = createAsyncThunk('report/fetchReport', async (params,
 export const deleteReport = createAsyncThunk('report/deleteReport', async (reportID, thunkAPI) => {
     try {
         const response = await apiDeleteReport(reportID)
+
         return response.data
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))

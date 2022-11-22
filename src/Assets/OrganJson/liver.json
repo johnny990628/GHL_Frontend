@@ -39,7 +39,7 @@
         {
             "name": "PLD_TEXT",
             "label": "肝囊腫大小",
-            "type": "text"
+            "type": "text_size"
         },
         {
             "name": "HEM",
@@ -53,7 +53,7 @@
         {
             "name": "HEM_TEXT",
             "label": "血管瘤大小",
-            "type": "text"
+            "type": "text_size"
         },
         {
             "name": "IC",
@@ -76,7 +76,7 @@
         {
             "name": "HEP_TEXT",
             "label": "肝腫瘤(疑似肝癌)大小",
-            "type": "text"
+            "type": "text_size"
         },
         {
             "name": "HEPU",
@@ -90,7 +90,7 @@
         {
             "name": "HEPU_TEXT",
             "label": "肝腫瘤(性質不明)大小",
-            "type": "text"
+            "type": "text_size"
         },
         {
             "name": "other",

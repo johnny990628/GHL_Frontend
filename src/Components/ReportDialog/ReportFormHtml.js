@@ -96,6 +96,7 @@ const FormSection = ({ list }) => {
                                             {option.label}
                                         </>
                                     ))}
+                                    {cancerArr?.find(c => c.name.includes(col.name) && c.name.includes('_'))?.value}
                                 </td>
                             </tr>
                         )}
@@ -128,6 +129,7 @@ const FormSection = ({ list }) => {
                                 </td>
                             </tr>
                         )}
+                        {col.type === 'text_size' && <tr></tr>}
                     </Fragment>
                 )
             })}

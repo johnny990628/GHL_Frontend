@@ -23,7 +23,7 @@
         {
             "name": "RC_TEXT",
             "label": "腎囊腫大小",
-            "type": "text"
+            "type": "text_size"
         },
         {
             "name": "KC",
@@ -37,7 +37,7 @@
         {
             "name": "KC_TEXT",
             "label": "腎腫瘤大小",
-            "type": "text"
+            "type": "text_size"
         },
         {
             "name": "other",

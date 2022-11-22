@@ -47,6 +47,9 @@ const CustomReportInput = ({ row, organ, input, mode }) => {
             case 'text':
                 Boolean(value) ? dispatch(addCancer({ organ, name, type, value, mode })) : dispatch(removeCancer({ organ, name, mode }))
                 break
+            case 'text_size':
+                Boolean(value) ? dispatch(addCancer({ organ, name, type, value, mode })) : dispatch(removeCancer({ organ, name, mode }))
+                break
             case 'select':
                 dispatch(addCancer({ organ, name, type, value, mode }))
             default:
@@ -64,6 +67,10 @@ const CustomReportInput = ({ row, organ, input, mode }) => {
                 handleDispatch(alignment)
                 break
             case 'text':
+                setText(e.target.value)
+                handleDispatch(e.target.value)
+                break
+            case 'text_size':
                 setText(e.target.value)
                 handleDispatch(e.target.value)
                 break
@@ -149,6 +156,16 @@ const CustomReportInput = ({ row, organ, input, mode }) => {
                 </Box>
             )}
             {type === 'text' && (
+                <TextField
+                    fullWidth
+                    label={label}
+                    variant="standard"
+                    value={text}
+                    onChange={handleChange}
+                    sx={{ margin: ' 0 0 2rem 1.4rem' }}
+                />
+            )}
+            {type === 'text_size' && (
                 <TextField
                     fullWidth
                     label={label}
