@@ -5,6 +5,10 @@ GHL is a responsive React app interface for manangerment medical reports built o
 ![](https://github.com/johnny990628/GHL_Frontend/blob/master/public/ghl.gif)
 <img src="./public/logo.png" width="20%" />
 
+## TODO List
+- [ ] Write Dockerfile to pack as docker image
+- [ ] Write docker-compose to bind [GHL_Backend](https://github.com/johnny990628/GHL_backend)
+
 ## Requirements
 - [Node.js](https://nodejs.org/zh-tw/download/) > 16
 - [GHL_Backend](https://github.com/johnny990628/GHL_backend)
