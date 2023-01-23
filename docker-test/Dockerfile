@@ -18,8 +18,8 @@ COPY ./build ./htdocs
 # ------------------------------------
 # 把image發佈到Docker Hub上的操作紀錄
 # 先把local端的image用remote端命名並加上tag
-# docker image tag ghl_backend:latest kiwiteam/glc:ghl_backend_latest
-# docker image tag ghl_backend:latest kiwiteam/glc:ghl_backend_v1.0.0
+# docker image tag ghl_frontend:latest kiwiteam/glc:ghl_frontend_latest
+# docker image tag ghl_frontend:latest kiwiteam/glc:ghl_frontend_v1.0.0
 # 最後把標上remote tag 的images push 到Docker Hub上
 # docker image push --all-tags kiwiteam/glc
 # ------------------------------------
