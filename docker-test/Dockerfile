@@ -8,7 +8,8 @@ MAINTAINER luckypig3400
 WORKDIR /usr/local/apache2
 
 # install app
-COPY ./build ./
+RUN rm -rf /usr/local/apache2/htdocs
+COPY ./build ./htdocs
 
 # final configuration
 # httpd已提供EXPOSE 80port並自動啟動服務的設定
