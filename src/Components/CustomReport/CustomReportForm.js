@@ -202,7 +202,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
     const DicomPopper = () => {
         return (
             <Popper open={Boolean(dicomAnchorEl)} anchorEl={dicomAnchorEl}>
-                <iframe src={process.env.REACT_APP_BLUELIGHT_URL} style={{ height: '70vh', width: '45vw' }} />
+                <iframe src={`${process.env.REACT_APP_BLUELIGHT_URL}?PatientID=${patient.id}`} style={{ height: '70vh', width: '45vw' }} />
             </Popper>
         )
     }
