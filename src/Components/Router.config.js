@@ -4,6 +4,7 @@ import Patient from '../Pages/Patient/Patient'
 import Department from '../Pages/Department/Department'
 import Report from '../Pages/Report/Report'
 import User from '../Pages/User/User'
+import Image from '../Pages/Image/Image'
 import {
     HomeOutlined,
     EventAvailableOutlined,
@@ -12,6 +13,7 @@ import {
     PersonOutlined,
     AccountBalanceOutlined,
     InsertChartOutlined,
+    InsertPhotoOutlined,
 } from '@mui/icons-material'
 import Statistic from '../Pages/Statistic/Statistic'
 
@@ -59,6 +61,14 @@ const routerList = [
         icon: <AccountBalanceOutlined />,
         path: '/department',
         Component: Department,
+        authority: [3, 1],
+    },
+    {
+        display_name: '影像管理',
+        name: 'image',
+        icon: <InsertPhotoOutlined />,
+        path: '/image',
+        Component: Image,
         authority: [3, 1],
     },
     {
