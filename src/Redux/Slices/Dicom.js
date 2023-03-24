@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import { openAlert } from './Alert'
 import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
+import { apiGetDicom } from './../../Axios/Dicom'
 
 export const fetchDicom = createAsyncThunk('dicom/fetchDicom', async (params, thunkAPI) => {
     try {
-        const response = await apiGetDepartments(params)
+        const response = await apiGetDicom(params)
         const { results, count } = response.data
         return { results, count, page: Math.ceil(count / params.limit) }
     } catch (e) {

@@ -11,6 +11,7 @@ import departmentReducer from './Slices/Department'
 import userReducer from './Slices/User'
 import DashboardReducer from './Slices/Dashboard'
 import StatisticReducer from './Slices/Statistic'
+import dicomReducer from './Slices/Dicom'
 
 export default configureStore({
     reducer: {
@@ -26,5 +27,6 @@ export default configureStore({
         user: userReducer,
         dashboard: DashboardReducer,
         statistic: StatisticReducer,
+        dicom: dicomReducer,
     },
 })
