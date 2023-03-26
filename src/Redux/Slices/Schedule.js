@@ -71,23 +71,11 @@ const initialState = { schedules: [], patients: [], count: 0 }
 const scheduleSlice = createSlice({
     name: 'schedule',
     initialState,
+
     extraReducers: {
         [fetchSchedule.fulfilled]: (state, action) => {
             return {
                 ...action.payload,
-            }
-        },
-        [addSchedule.fulfilled]: (state, action) => {
-            return {
-                ...state,
-            }
-        },
-        [removeSchedule.fulfilled]: (state, action) => {
-            const { patientID } = action.payload
-            return {
-                schedules: state.schedules.filter(schedule => schedule.patientID !== patientID),
-                patients: state.patients.filter(patient => patient.id !== patientID),
-                count: state.count - 1,
             }
         },
     },

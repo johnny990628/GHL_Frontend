@@ -86,27 +86,6 @@ const patientsSlice = createSlice({
                 loading: false,
             }
         },
-        [createPatient.fulfilled]: (state, action) => {
-            return {
-                ...state,
-                loading: false,
-                count: state.count + 1,
-            }
-        },
-        [updatePatient.fulfilled]: (state, action) => {
-            return {
-                ...state,
-                loading: false,
-                count: 0,
-            }
-        },
-        [deletePatient.fulfilled]: (state, action) => {
-            return {
-                ...state,
-                loading: false,
-                count: state.count - 1,
-            }
-        },
     },
 })
 

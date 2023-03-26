@@ -85,65 +85,59 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, loading, totalPag
                 </Grid>
             </Grid>
             <Grid item xs={9} {...getTableProps()}>
-                {loading ? (
-                    <Box sx={{ display: 'flex', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
-                        <CircularProgress />
-                    </Box>
-                ) : (
-                    <CustomScrollbar>
-                        <Table stickyHeader>
-                            <TableHead>
-                                {headerGroups.map(headerGroup => (
-                                    <TableRow {...headerGroup.getHeaderGroupProps()}>
-                                        {headerGroup.headers.map(column => (
-                                            <TableCell
-                                                {...column.getHeaderProps(column.getSortByToggleProps())}
-                                                className={classes.tableHeader}
-                                            >
-                                                <Box sx={{ display: 'flex' }}>
-                                                    {column.render('Header')}
-                                                    <Box>
-                                                        {column.isSorted ? column.isSortedDesc ? <ArrowDropDown /> : <ArrowDropUp /> : ''}
-                                                    </Box>
+                <CustomScrollbar>
+                    <Table stickyHeader>
+                        <TableHead>
+                            {headerGroups.map(headerGroup => (
+                                <TableRow {...headerGroup.getHeaderGroupProps()}>
+                                    {headerGroup.headers.map(column => (
+                                        <TableCell
+                                            {...column.getHeaderProps(column.getSortByToggleProps())}
+                                            className={classes.tableHeader}
+                                        >
+                                            <Box sx={{ display: 'flex' }}>
+                                                {column.render('Header')}
+                                                <Box>
+                                                    {column.isSorted ? column.isSortedDesc ? <ArrowDropDown /> : <ArrowDropUp /> : ''}
                                                 </Box>
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))}
-                            </TableHead>
+                                            </Box>
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))}
+                        </TableHead>
 
-                            <TableBody {...getTableBodyProps()}>
-                                {page.map(row => {
-                                    prepareRow(row)
-                                    return (
-                                        <Fragment key={row.getRowProps().key}>
-                                            <TableRow {...row.getRowProps()}>
-                                                {row.cells.map(cell => (
-                                                    <TableCell
-                                                        {...cell.getCellProps()}
-                                                        sx={{
-                                                            fontSize: '1rem',
-                                                            [theme.breakpoints.down('lg')]: {
-                                                                fontSize: '.9rem',
-                                                            },
-                                                        }}
-                                                    >
-                                                        {cell.render('Cell')}
-                                                    </TableCell>
-                                                ))}
+                        <TableBody {...getTableBodyProps()}>
+                            {page.map(row => {
+                                prepareRow(row)
+                                return (
+                                    <Fragment key={row.getRowProps().key}>
+                                        <TableRow {...row.getRowProps()}>
+                                            {row.cells.map(cell => (
+                                                <TableCell
+                                                    {...cell.getCellProps()}
+                                                    sx={{
+                                                        fontSize: '1rem',
+                                                        [theme.breakpoints.down('lg')]: {
+                                                            fontSize: '.9rem',
+                                                        },
+                                                    }}
+                                                >
+                                                    {cell.render('Cell')}
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                        {row.isExpanded ? (
+                                            <TableRow>
+                                                <TableCell colSpan={visibleColumns.length}>{renderSubRow({ row })}</TableCell>
                                             </TableRow>
-                                            {row.isExpanded ? (
-                                                <TableRow>
-                                                    <TableCell colSpan={visibleColumns.length}>{renderSubRow({ row })}</TableCell>
-                                                </TableRow>
-                                            ) : null}
-                                        </Fragment>
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
-                    </CustomScrollbar>
-                )}
+                                        ) : null}
+                                    </Fragment>
+                                )
+                            })}
+                        </TableBody>
+                    </Table>
+                </CustomScrollbar>
             </Grid>
             <Grid item xs={2} className={classes.tableFooter}>
                 {/* <Box className={classes.tableFooterItem}>

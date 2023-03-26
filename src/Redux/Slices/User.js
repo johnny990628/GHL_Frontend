@@ -59,18 +59,18 @@ const userSlice = createSlice({
                 loading: false,
             }
         },
-        [updateUser.fulfilled]: (state, action) => {
-            return {
-                ...state,
-                count: -1,
-            }
-        },
-        [deleteUser.fulfilled]: (state, action) => {
-            return {
-                ...state,
-                count: state.count - 1,
-            }
-        },
+        // [updateUser.fulfilled]: (state, action) => {
+        //     return {
+        //         ...state,
+        //         count: -1,
+        //     }
+        // },
+        // [deleteUser.fulfilled]: (state, action) => {
+        //     return {
+        //         ...state,
+        //         count: state.count - 1,
+        //     }
+        // },
     },
 })
 export const { userTrigger } = userSlice.actions
