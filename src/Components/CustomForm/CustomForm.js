@@ -115,10 +115,7 @@ const CustomForm = ({ title, row, mode, sendData }) => {
                         toastTitle: '加入排程',
                         text: `${name} ${mr}`,
                         type: 'input',
-                        event: text =>
-                            dispatch(addSchedule({ patientID: id, procedureCode: '19009C', blood: text })).then(() =>
-                                dispatch(patientTrigger())
-                            ),
+                        event: text => dispatch(addSchedule({ patientID: id, procedureCode: '19009C', blood: text })),
                         preConfirm: async text => {
                             const { data: blood } = await apiCheckExists({ type: 'blood', value: text })
                             const { data: schedule } = await apiCheckExists({ type: 'schedule', value: id })

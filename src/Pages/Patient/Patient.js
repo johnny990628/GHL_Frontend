@@ -73,7 +73,7 @@ const Patient = () => {
                                                 toastTitle: '取消排程',
                                                 text: `${name} ${mr}`,
                                                 type: 'confirm',
-                                                event: () => dispatch(removeSchedule(id)).then(() => dispatch(patientTrigger())),
+                                                event: () => dispatch(removeSchedule(id)),
                                             })
                                         )
                                     }}
@@ -91,9 +91,7 @@ const Patient = () => {
                                                 text: `${name} ${mr}`,
                                                 type: 'input',
                                                 event: text =>
-                                                    dispatch(addSchedule({ patientID: id, procedureCode: '19009C', blood: text })).then(
-                                                        () => dispatch(patientTrigger())
-                                                    ),
+                                                    dispatch(addSchedule({ patientID: id, procedureCode: '19009C', blood: text })),
                                                 preConfirm: async text => {
                                                     const { data: blood } = await apiCheckExists({ type: 'blood', value: text })
                                                     const { data: schedule } = await apiCheckExists({ type: 'schedule', value: id })
@@ -127,7 +125,7 @@ const Patient = () => {
                                                             scheduleID: row.row.original?.schedule?._id,
                                                             status: 'wait-examination',
                                                         })
-                                                    ).then(() => dispatch(patientTrigger())),
+                                                    ),
                                             })
                                         )
                                     }
@@ -166,7 +164,7 @@ const Patient = () => {
                                                 scheduleID: row.row.original.schedule._id,
                                                 data: { status: 'wait-examination' },
                                             })
-                                        ).then(() => dispatch(patientTrigger()))
+                                        )
                                     }
                                 >
                                     {text}
@@ -182,7 +180,7 @@ const Patient = () => {
                                                 scheduleID: row.row.original.schedule._id,
                                                 data: { status: 'wait-blood' },
                                             })
-                                        ).then(() => dispatch(patientTrigger()))
+                                        )
                                     }
                                 >
                                     {text}
