@@ -77,24 +77,6 @@ const departmentSlice = createSlice({
                 loading: false,
             }
         },
-        [createDepartment.fulfilled]: (state, action) => {
-            return {
-                ...state,
-                count: state.count + 1,
-            }
-        },
-        [deleteDepartment.fulfilled]: (state, action) => {
-            return {
-                ...state,
-                count: state.count - 1,
-            }
-        },
-        [activeDepartment.fulfilled]: (state, action) => {
-            return {
-                ...state,
-                count: state.count - 1,
-            }
-        },
     },
 })
 export const { departmentTrigger } = departmentSlice.actions
