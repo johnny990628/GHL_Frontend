@@ -71,9 +71,18 @@ const CreateReport = () => {
     }, [currentStep])
 
     useEffect(() => {
+        const handleBeforeUnload = e => {
+            e.preventDefault()
+            dispatch(resetReport({ mode: 'create' }))
+            if (scheduleIDRef.current) dispatch(changeScheduleStatus({ scheduleID: scheduleIDRef.current, status: 'wait-examination' }))
+            return ''
+        }
+
+        window.addEventListener('beforeunload', handleBeforeUnload)
         return () => {
             dispatch(resetReport({ mode: 'create' }))
             if (scheduleIDRef.current) dispatch(changeScheduleStatus({ scheduleID: scheduleIDRef.current, status: 'wait-examination' }))
+            window.removeEventListener('beforeunload', handleBeforeUnload)
         }
     }, [])
     useEffect(() => {
