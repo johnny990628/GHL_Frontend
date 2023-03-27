@@ -49,9 +49,9 @@ const CreateReport = () => {
             setScheduleID(_id)
             if (!selectTrigger){
                 setCurrentStep(1)
-                setSelectTrigger(false)
                 dispatch(changeScheduleStatus({ scheduleID: _id, status: 'on-call' }))
             } 
+            setSelectTrigger(false)
         }
     }, [selection])
 
