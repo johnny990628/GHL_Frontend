@@ -51,9 +51,11 @@ const CreateReport = () => {
             const { _id, patient, reportID, reports } = schedules.find(s => s.patientID === selection[0])
             setPatient({ ...patient, reportID, reports })
             setScheduleID(_id)
-            if (!selectTrigger) setCurrentStep(1)
+            if (!selectTrigger){
+                setCurrentStep(1)
+                dispatch(changeScheduleStatus({ scheduleID: _id, status: 'on-call' }))
+            } 
             setSelectTrigger(false)
-            dispatch(changeScheduleStatus({ scheduleID: _id, status: 'on-call' }))
         }
     }, [selection])
 
