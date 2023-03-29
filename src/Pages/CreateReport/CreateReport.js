@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Box, Stepper, Step, StepLabel, IconButton, Button } from '@mui/material'
 import { ArrowBack, ArrowForward, CheckCircleOutline, Cancel, Check, Close, ContactlessOutlined } from '@mui/icons-material'
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera'
 import { useTheme } from '@mui/styles'
 import useStyles from './Style'
+
 
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 } from 'uuid'
@@ -24,6 +26,8 @@ import { openAlert } from '../../Redux/Slices/Alert'
 import { changeScheduleStatus, fetchSchedule, removeSchedule } from '../../Redux/Slices/Schedule'
 import success from '../../Assets/Animation/success.json'
 import { apiUpdateScheduleStatus } from '../../Axios/Schedule'
+import { apiAddWorklist } from '../../Axios/WorkList'
+
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
@@ -125,6 +129,40 @@ const CreateReport = () => {
                         }}
                     >
                         <Cancel />
+                    </IconButton>
+                )
+            },
+        },
+        {
+            field: 'workList',
+            headerName: '超音波開單',
+            renderCell: (params) => {
+                return (
+                    <IconButton
+                        onClick={() => {
+                            apiAddWorklist(params.row.id)
+                                .then((res) =>
+                                    dispatch(
+                                        openAlert({
+                                            toastTitle: '開單成功',
+                                            text: `新增workList ${res.data.name}`,
+                                            icon: 'success',
+                                        })
+                                    )
+                                )
+                                .catch((err) =>
+                                    dispatch(
+                                        openAlert({
+                                            toastTitle: '開單失敗',
+                                            text: err.response.data.message,
+                                            icon: 'error',
+                                        })
+                                    )
+                                )
+                            setSelectTrigger(true)
+                        }}
+                    >
+                        <PhotoCameraIcon />
                     </IconButton>
                 )
             },
