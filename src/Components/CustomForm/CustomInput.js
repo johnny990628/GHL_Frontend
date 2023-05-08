@@ -118,7 +118,7 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
                         .map(department => (
                             <MenuItem
                                 key={department._id}
-                                value={department.name}
+                                value={department._id}
                                 sx={{ fontSize: '1.3rem', color: theme.palette.primary.main }}
                             >
                                 {department.name}

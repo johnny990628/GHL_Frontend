@@ -79,19 +79,19 @@ const Report = () => {
             //     ),
             //     Cell: ({ row }) => <span {...row.getToggleRowExpandedProps()}>{row.isExpanded ? <ArrowDropDown /> : <ArrowRight />}</span>,
             // },
-            {
-                accessor: 'status',
-                Header: '狀態',
-                Cell: row => (
-                    <Box className={`${classes.status} ${row.row.original.status === 'pending' ? 'processing' : 'finish'}`}>
-                        {row.row.original.status === 'pending' ? (
-                            <Box className={classes.statusBox}>未完成</Box>
-                        ) : (
-                            <Box className={classes.statusBox}>已完成</Box>
-                        )}
-                    </Box>
-                ),
-            },
+            // {
+            //     accessor: 'status',
+            //     Header: '狀態',
+            //     Cell: row => (
+            //         <Box className={`${classes.status} ${row.row.original.status === 'pending' ? 'processing' : 'finish'}`}>
+            //             {row.row.original.status === 'pending' ? (
+            //                 <Box className={classes.statusBox}>未完成</Box>
+            //             ) : (
+            //                 <Box className={classes.statusBox}>已完成</Box>
+            //             )}
+            //         </Box>
+            //     ),
+            // },
             {
                 accessor: 'patientID',
                 Header: '身分證字號',
@@ -99,8 +99,7 @@ const Report = () => {
             },
             { accessor: 'name', Header: '姓名', Cell: row => (row.row.original.patient ? row.row.original.patient.name : '無病人資料') },
             { accessor: 'version', Header: '報告版本', Cell: row => row.row.original.records.length || '無' },
-            { accessor: 'procedureCode', Header: '病例代碼', Cell: row => row.row.original.procedureCode },
-            { accessor: 'blood', Header: '抽血編號', Cell: row => row.row.original.blood },
+
             {
                 accessor: 'user',
                 Header: '完成者',
@@ -112,18 +111,14 @@ const Report = () => {
                 Header: '操作',
                 Cell: row => (
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        {row.row.original.status === 'finished' && (
-                            <>
-                                <IconButton onClick={() => handlePreviewReport(row.row.original._id)}>
-                                    <Visibility />
-                                </IconButton>
-                                <Authorized currentRole={user.role} authority={[3, 2]} noMatch={<></>}>
-                                    <IconButton onClick={() => handleDeleteReport(row.row.original._id)}>
-                                        <Delete />
-                                    </IconButton>
-                                </Authorized>
-                            </>
-                        )}
+                        <IconButton onClick={() => handlePreviewReport(row.row.original._id)}>
+                            <Visibility />
+                        </IconButton>
+                        <Authorized currentRole={user.role} authority={[3, 2]} noMatch={<></>}>
+                            <IconButton onClick={() => handleDeleteReport(row.row.original._id)}>
+                                <Delete />
+                            </IconButton>
+                        </Authorized>
                     </Box>
                 ),
             },

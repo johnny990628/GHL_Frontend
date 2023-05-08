@@ -13,7 +13,19 @@ import {
     Radio,
     CircularProgress,
 } from '@mui/material'
-import { CalendarToday, ArrowDropDown, Delete, Edit, Cancel, Check, DesignServices, AccessTime } from '@mui/icons-material'
+import {
+    CalendarToday,
+    ArrowDropDown,
+    Delete,
+    Edit,
+    Cancel,
+    Check,
+    DesignServices,
+    AccessTime,
+    ClearOutlined,
+    AirlineSeatFlat,
+    AirlineSeatIndividualSuite,
+} from '@mui/icons-material'
 
 import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
@@ -36,186 +48,10 @@ const Patient = () => {
 
     const columns = useMemo(
         () => [
-            {
-                accessor: 'schedule',
-                Header: '排程狀態',
-                Cell: row => {
-                    // const hasReport = row.row.original.report.length > 0
-                    const { id, name, gender } = row.row.original
-                    const mr = gender === 'm' ? '先生' : '小姐'
-
-                    const scheduleStatus = () => {
-                        switch (row.row.original?.schedule?.status) {
-                            case 'yet':
-                                return { status: 'yet', class: 'yet', text: '等待排程' }
-                            case 'wait-blood':
-                                return { status: 'wait-blood', class: 'blood', text: '等待抽血' }
-                            case 'wait-examination':
-                                return { status: 'wait-examination', class: 'examination', text: '完成抽血' }
-                            case 'on-call':
-                                return { status: 'on-call', class: 'call', text: '檢查中' }
-                            case 'finish':
-                                return { status: 'finish', class: 'finish', text: '完成報告' }
-                            default:
-                                return { status: 'yet', class: 'yet', text: '等待排程' }
-                        }
-                    }
-                    const status = scheduleStatus()
-
-                    return (
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            {(status.status === 'wait-blood' || status.status === 'wait-examination') && (
-                                <IconButton
-                                    onClick={() => {
-                                        dispatch(
-                                            openAlert({
-                                                alertTitle: `確定要取消 ${name} ${mr}的排程?`,
-                                                toastTitle: '取消排程',
-                                                text: `${name} ${mr}`,
-                                                type: 'confirm',
-                                                event: () => dispatch(removeSchedule(id)),
-                                            })
-                                        )
-                                    }}
-                                >
-                                    <Cancel />
-                                </IconButton>
-                            )}
-                            {status.status === 'yet' && (
-                                <IconButton
-                                    onClick={() => {
-                                        dispatch(
-                                            openAlert({
-                                                alertTitle: `請輸入${name}的抽血編號`,
-                                                toastTitle: '加入排程',
-                                                text: `${name} ${mr}`,
-                                                type: 'input',
-                                                event: text =>
-                                                    dispatch(addSchedule({ patientID: id, procedureCode: '19009C', blood: text })),
-                                                preConfirm: async text => {
-                                                    const { data: blood } = await apiCheckExists({ type: 'blood', value: text })
-                                                    const { data: schedule } = await apiCheckExists({ type: 'schedule', value: id })
-                                                    const regex = new RegExp('^[A-Za-z0-9]*$')
-                                                    const isIllegal = !regex.test(text)
-                                                    let warning = ''
-                                                    if (blood) warning += '此編號已被使用 '
-                                                    if (schedule) warning += '此病人已在排程中'
-                                                    if (isIllegal) warning += ' 含有非法字元'
-                                                    return { exists: blood || schedule || isIllegal, warning }
-                                                },
-                                            })
-                                        )
-                                    }}
-                                >
-                                    <CalendarToday />
-                                </IconButton>
-                            )}
-                            {status.status === 'on-call' && (
-                                <IconButton
-                                    onClick={() =>
-                                        dispatch(
-                                            openAlert({
-                                                alertTitle: `確定要取消 ${name} ${mr}的檢查狀態(非管理員請勿操作)`,
-                                                toastTitle: '取消檢查狀態',
-                                                text: `${name} ${mr}`,
-                                                type: 'confirm',
-                                                event: () =>
-                                                    dispatch(
-                                                        changeScheduleStatus({
-                                                            scheduleID: row.row.original?.schedule?._id,
-                                                            status: 'wait-examination',
-                                                        })
-                                                    ),
-                                            })
-                                        )
-                                    }
-                                >
-                                    <AccessTime />
-                                </IconButton>
-                            )}
-                            {status.status === 'finish' && (
-                                <IconButton>
-                                    <Check />
-                                </IconButton>
-                            )}
-                            <Box className={`${classes.status} ${status.class} `}>
-                                <Box className={classes.statusBox}>{status.text}</Box>
-                            </Box>
-                        </Box>
-                    )
-                },
-            },
-            {
-                accessor: 'blood',
-                Header: '抽血編號',
-                Cell: row => {
-                    const text = row.row.original?.blood?.number ? row.row.original.blood.number : '無'
-                    const status = row.row.original?.schedule?.status ? row.row.original.schedule.status : 'yet'
-                    return (
-                        <>
-                            {status === 'yet' && '無'}
-                            {status === 'wait-blood' && (
-                                <Button
-                                    variant="outlined"
-                                    startIcon={<DesignServices size={18} />}
-                                    onClick={() =>
-                                        dispatch(
-                                            updateSchedule({
-                                                scheduleID: row.row.original.schedule._id,
-                                                data: { status: 'wait-examination' },
-                                            })
-                                        )
-                                    }
-                                >
-                                    {text}
-                                </Button>
-                            )}
-                            {status === 'wait-examination' && (
-                                <Button
-                                    variant="outlined"
-                                    startIcon={<Check />}
-                                    onClick={() =>
-                                        dispatch(
-                                            updateSchedule({
-                                                scheduleID: row.row.original.schedule._id,
-                                                data: { status: 'wait-blood' },
-                                            })
-                                        )
-                                    }
-                                >
-                                    {text}
-                                </Button>
-                            )}
-                            {status === 'on-call' && (
-                                <Button variant="outlined" startIcon={<Check />}>
-                                    {text}
-                                </Button>
-                            )}
-                            {status === 'finish' && '已完成'}
-                        </>
-                    )
-                },
-            },
-            { accessor: 'name', Header: '姓名' },
+            { accessor: 'name', Header: '姓名', Cell: row => <Box sx={{ fontSize: '1.3rem' }}>{row.row.original.name}</Box> },
             { accessor: 'id', Header: '身分證字號' },
             { accessor: 'birth', Header: '生日', Cell: row => new Date(row.row.original.birth).toLocaleDateString() },
-            {
-                accessor: 'creator',
-                Header: '建立者',
-                Cell: row => (row.row.original?.creator?.name ? row.row.original.creator.name : '無'),
-            },
-            // { accessor: 'gender', Header: '性別', Cell: row => (row.row.original.gender === 'm' ? '男' : '女') },
-            // {
-            //     accessor: 'department',
-            //     Header: '部門',
-            //     Cell: row =>
-            //         row.row.original.department.length > 6 ? row.row.original.department.slice(0, 6) + '...' : row.row.original.department,
-            // },
-            {
-                accessor: 'createdAt',
-                Header: '建立日期',
-                Cell: row => new Date(row.row.original.createdAt).toLocaleString(),
-            },
+
             {
                 accessor: 'action',
                 Header: '操作',
@@ -223,14 +59,18 @@ const Patient = () => {
                     const { name, gender, id } = row.row.original
                     return (
                         <Box>
-                            <IconButton
+                            <Button
+                                startIcon={<Edit color="primary" />}
+                                sx={{ fontSize: '1.1rem' }}
                                 onClick={() => {
                                     dispatch(openDialog({ row: row.row.original, type: 'patient' }))
                                 }}
                             >
-                                <Edit />
-                            </IconButton>
-                            <IconButton
+                                編輯
+                            </Button>
+                            <Button
+                                startIcon={<Delete />}
+                                sx={{ color: 'red.main', fontSize: '1.1rem' }}
                                 onClick={() => {
                                     dispatch(
                                         openAlert({
@@ -244,12 +84,172 @@ const Patient = () => {
                                     )
                                 }}
                             >
-                                <Delete />
-                            </IconButton>
+                                刪除
+                            </Button>
                         </Box>
                     )
                 },
             },
+            {
+                accessor: 'createdAt',
+                Header: '建立日期',
+                Cell: row => (
+                    <Box>
+                        <Box>{new Date(row.row.original.createdAt).toLocaleDateString()}</Box>
+                        <Box sx={{ fontSize: '.8rem', color: 'gray.main' }}>
+                            {new Date(row.row.original.createdAt).toLocaleTimeString()}
+                        </Box>
+                    </Box>
+                ),
+            },
+            {
+                accessor: 'schedule',
+                Header: '排程狀態',
+                Cell: row => {
+                    // const hasReport = row.row.original.report.length > 0
+                    const { id, name, gender } = row.row.original
+                    const mr = gender === 'm' ? '先生' : '小姐'
+
+                    const scheduleStatus = () => {
+                        switch (row.row.original?.schedule?.status) {
+                            case 'yet':
+                                return { status: 'yet', class: 'yet', text: '等待排程', icon: <CalendarToday /> }
+                            case 'wait-examination':
+                                return { status: 'wait-examination', class: 'examination', text: '等待檢查', icon: <AccessTime /> }
+                            case 'on-call':
+                                return { status: 'on-call', class: 'call', text: '檢查中', icon: <AirlineSeatIndividualSuite /> }
+                            case 'finish':
+                                return { status: 'finish', class: 'finish', text: '完成報告', icon: <Check /> }
+                            default:
+                                return { status: 'yet', class: 'yet', text: '等待排程', icon: <CalendarToday /> }
+                        }
+                    }
+                    const status = scheduleStatus()
+
+                    return (
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Button
+                                className={`${classes.status} ${status.class} `}
+                                startIcon={status.icon}
+                                fullWidth
+                                onClick={() => {
+                                    switch (status.status) {
+                                        case 'wait-examination':
+                                            dispatch(
+                                                openAlert({
+                                                    alertTitle: `確定要取消 ${name} ${mr}的排程?`,
+                                                    toastTitle: '取消排程',
+                                                    text: `${name} ${mr}`,
+                                                    type: 'confirm',
+                                                    event: () => dispatch(removeSchedule(id)),
+                                                })
+                                            )
+
+                                            break
+                                        case 'yet':
+                                            dispatch(
+                                                openAlert({
+                                                    alertTitle: `請輸入${name}的抽血編號`,
+                                                    toastTitle: '加入排程',
+                                                    text: `${name} ${mr}`,
+                                                    type: 'input',
+                                                    event: text =>
+                                                        dispatch(addSchedule({ patientID: id, procedureCode: '19009C', blood: text })),
+                                                    preConfirm: async text => {
+                                                        const { data: blood } = await apiCheckExists({ type: 'blood', value: text })
+                                                        const { data: schedule } = await apiCheckExists({ type: 'schedule', value: id })
+                                                        const regex = new RegExp('^[A-Za-z0-9]*$')
+                                                        const isIllegal = !regex.test(text)
+                                                        let warning = ''
+                                                        if (blood) warning += '此編號已被使用 '
+                                                        if (schedule) warning += '此病人已在排程中'
+                                                        if (isIllegal) warning += ' 含有非法字元'
+                                                        return { exists: blood || schedule || isIllegal, warning }
+                                                    },
+                                                })
+                                            )
+
+                                            break
+                                        case 'on-call':
+                                            dispatch(
+                                                openAlert({
+                                                    alertTitle: `確定要取消 ${name} ${mr}的檢查狀態(非管理員請勿操作)`,
+                                                    toastTitle: '取消檢查狀態',
+                                                    text: `${name} ${mr}`,
+                                                    type: 'confirm',
+                                                    event: () =>
+                                                        dispatch(
+                                                            changeScheduleStatus({
+                                                                scheduleID: row.row.original?.schedule?._id,
+                                                                status: 'wait-examination',
+                                                            })
+                                                        ),
+                                                })
+                                            )
+
+                                            break
+                                        default:
+                                            break
+                                    }
+                                }}
+                            >
+                                <Box className={classes.statusBox}>{status.text}</Box>
+                            </Button>
+                        </Box>
+                    )
+                },
+            },
+            // {
+            //     accessor: 'blood',
+            //     Header: '抽血編號',
+            //     Cell: row => {
+            //         const text = row.row.original?.blood?.number ? row.row.original.blood.number : '無'
+            //         const status = row.row.original?.schedule?.status ? row.row.original.schedule.status : 'yet'
+            //         return (
+            //             <>
+            //                 {status === 'yet' && '無'}
+            //                 {status === 'wait-blood' && (
+            //                     <Button
+            //                         variant="outlined"
+            //                         startIcon={<DesignServices size={18} />}
+            //                         onClick={() =>
+            //                             dispatch(
+            //                                 updateSchedule({
+            //                                     scheduleID: row.row.original.schedule._id,
+            //                                     data: { status: 'wait-examination' },
+            //                                 })
+            //                             )
+            //                         }
+            //                     >
+            //                         {text}
+            //                     </Button>
+            //                 )}
+            //                 {status === 'wait-examination' && (
+            //                     <Button
+            //                         variant="outlined"
+            //                         startIcon={<Check />}
+            //                         onClick={() =>
+            //                             dispatch(
+            //                                 updateSchedule({
+            //                                     scheduleID: row.row.original.schedule._id,
+            //                                     data: { status: 'wait-blood' },
+            //                                 })
+            //                             )
+            //                         }
+            //                     >
+            //                         {text}
+            //                     </Button>
+            //                 )}
+            //                 {status === 'on-call' && (
+            //                     <Button variant="outlined" startIcon={<Check />}>
+            //                         {text}
+            //                     </Button>
+            //                 )}
+            //                 {status === 'finish' && '已完成'}
+            //             </>
+            //         )
+            //     },
+            // },
         ],
         []
     )

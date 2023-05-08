@@ -49,6 +49,7 @@ const whiteTheme = createTheme({
         text: {
             primary: 'rgba(36, 31, 33)',
             secondary: '#A34059',
+            gray: '#6c747f',
         },
         border: {
             main: 'rgba(193, 181, 184 , .5)',
@@ -58,11 +59,20 @@ const whiteTheme = createTheme({
             dark: 'rgba(64, 127, 127)',
         },
         status: {
-            call: 'rgba(163, 64, 89,.3)',
-            blood: 'rgb(244, 157, 26,.2)',
-            finish: 'rgba(46, 67, 114,.2)',
-            yet: 'rgba(64, 127, 127,.2)',
-            processing: 'rgb(235, 100, 64,.3)',
+            processing: 'rgba(226, 116, 111,.1)',
+            processing_dark: 'rgba(226, 116, 111)',
+            finish: 'rgba(95, 91, 160,.1)',
+            finish_dark: 'rgba(95, 91, 160)',
+            yet: 'rgba(109, 173, 173,.1)',
+            yet_dark: 'rgba(109, 173, 173)',
+            call: 'rgba(255, 183, 102,.1)',
+            call_dark: 'rgba(255, 183, 102)',
+        },
+        gray: {
+            main: '#9E9EA7',
+        },
+        red: {
+            main: 'rgba(226, 116, 111)',
         },
     },
     typography: {

@@ -76,15 +76,58 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, loading, totalPag
 
     return (
         <Grid container direction="column" wrap="nowrap" className={classes.container}>
-            <Grid container item xs={1}>
-                <Grid item xs={StatusRadioGroup ? 7 : 12} sx={{ display: 'flex', justifyContent: StatusRadioGroup ? 'right' : 'center' }}>
-                    {GlobalFilter && <GlobalFilter setSearch={setSearch} search={search} totalCount={totalCount} />}
+            <Grid
+                container
+                item
+                xs={1}
+                sx={{
+                    padding: 2,
+                    mb: 2,
+                }}
+            >
+                <Grid item xs={8} sx={{ display: 'flex', justifyContent: 'left' }}>
+                    {GlobalFilter && <GlobalFilter setSearch={setSearch} search={search} totalCount={totalCount} loading={loading} />}
                 </Grid>
-                <Grid item xs={StatusRadioGroup ? 5 : 0} sx={{ display: 'flex', justifyContent: 'right' }}>
-                    {StatusRadioGroup && <StatusRadioGroup status={status} setStatus={setStatus} />}
+                <Grid xs={4} sx={{ display: 'flex', justifyContent: 'right', alignItems: 'center', color: 'text.gray' }}>
+                    <Box className={classes.tableFooterItem} sx={{ fontSize: '1.1rem' }}>
+                        {`第${pageIndex + 1}/${pageOptions.length}頁`}
+                    </Box>
+                    <ButtonGroup variant="outlined" className={classes.tableFooterItem}>
+                        <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                            {'<<'}
+                        </Button>
+                        <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
+                            {'<'}
+                        </Button>
+                        <Button onClick={() => nextPage()} disabled={!canNextPage}>
+                            {'>'}
+                        </Button>
+                        <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                            {'>>'}
+                        </Button>
+                    </ButtonGroup>
+                    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                        <InputLabel id="rows">列數</InputLabel>
+                        <Select
+                            labelId="rows"
+                            label="列數"
+                            value={pageSize}
+                            onChange={e => {
+                                setPageSize(Number(e.target.value))
+                            }}
+                            className={classes.tableFooterItem}
+                            sx={{ color: 'text.gray' }}
+                        >
+                            {[5, 10, 20, 30, 40].map(pageSize => (
+                                <MenuItem key={pageSize} value={pageSize}>
+                                    {pageSize}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </Grid>
             </Grid>
-            <Grid item xs={9} {...getTableProps()}>
+            <Grid item xs={9} {...getTableProps()} className={classes.tableBody}>
                 <CustomScrollbar>
                     <Table stickyHeader>
                         <TableHead>
@@ -95,7 +138,7 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, loading, totalPag
                                             {...column.getHeaderProps(column.getSortByToggleProps())}
                                             className={classes.tableHeader}
                                         >
-                                            <Box sx={{ display: 'flex' }}>
+                                            <Box className={classes.headerFont} sx={{ display: 'flex' }}>
                                                 {column.render('Header')}
                                                 <Box>
                                                     {column.isSorted ? column.isSortedDesc ? <ArrowDropDown /> : <ArrowDropUp /> : ''}
@@ -112,10 +155,11 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, loading, totalPag
                                 prepareRow(row)
                                 return (
                                     <Fragment key={row.getRowProps().key}>
-                                        <TableRow {...row.getRowProps()}>
+                                        <TableRow {...row.getRowProps()} className={classes.tableRow}>
                                             {row.cells.map(cell => (
                                                 <TableCell
                                                     {...cell.getCellProps()}
+                                                    className={classes.tableCell}
                                                     sx={{
                                                         fontSize: '1rem',
                                                         [theme.breakpoints.down('lg')]: {
@@ -139,62 +183,51 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, loading, totalPag
                     </Table>
                 </CustomScrollbar>
             </Grid>
-            <Grid item xs={2} className={classes.tableFooter}>
-                {/* <Box className={classes.tableFooterItem}>
-                    <TextField
-                        type="number"
-                        variant="standard"
-                        label="頁數"
-                        defaultValue={pageIndex + 1}
-                        value={pageIndex + 1}
-                        onChange={e => {
-                            const page = e.target.value ? Number(e.target.value) - 1 : 0
-                            gotoPage(page)
+            {/* <Grid item xs={2} className={classes.tableFooter}>
+            <Box sx={{ display: 'flex', alignItems: 'center', color: 'text.gray' }}>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <InputLabel id="rows">列數</InputLabel>
+                    <Select
+                        labelId="rows"
+                        label="列數"
+                        value={pageSize}
+                        onChange={(e) => {
+                            setPageSize(Number(e.target.value))
                         }}
-                        style={{ width: '100px' }}
-                    />
-                </Box> */}
-
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel id="rows">列數</InputLabel>
-                        <Select
-                            labelId="rows"
-                            label="列數"
-                            value={pageSize}
-                            onChange={e => {
-                                setPageSize(Number(e.target.value))
-                            }}
-                            className={classes.tableFooterItem}
-                        >
-                            {[5, 10, 20, 30, 40].map(pageSize => (
-                                <MenuItem key={pageSize} value={pageSize}>
-                                    {pageSize}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <Box className={classes.tableFooterItem} sx={{ fontSize: '1.1rem' }}>{`總共${totalCount}筆資料`}</Box>
-                    <Box className={classes.tableFooterItem} sx={{ fontSize: '1.1rem' }}>
-                        {`第${pageIndex + 1}/${pageOptions.length}頁`}
-                    </Box>
-
-                    <ButtonGroup variant="outlined" className={classes.tableFooterItem}>
-                        <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                            {'<<'}
-                        </Button>
-                        <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
-                            {'<'}
-                        </Button>
-                        <Button onClick={() => nextPage()} disabled={!canNextPage}>
-                            {'>'}
-                        </Button>
-                        <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-                            {'>>'}
-                        </Button>
-                    </ButtonGroup>
+                        className={classes.tableFooterItem}
+                        sx={{ color: 'text.gray' }}
+                    >
+                        {[5, 10, 20, 30, 40].map((pageSize) => (
+                            <MenuItem key={pageSize} value={pageSize}>
+                                {pageSize}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <Box
+                    className={classes.tableFooterItem}
+                    sx={{ fontSize: '1.1rem' }}
+                >{`總共${totalCount}筆資料`}</Box>
+                <Box className={classes.tableFooterItem} sx={{ fontSize: '1.1rem' }}>
+                    {`第${pageIndex + 1}/${pageOptions.length}頁`}
                 </Box>
-            </Grid>
+
+                <ButtonGroup variant="outlined" className={classes.tableFooterItem}>
+                    <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                        {'<<'}
+                    </Button>
+                    <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
+                        {'<'}
+                    </Button>
+                    <Button onClick={() => nextPage()} disabled={!canNextPage}>
+                        {'>'}
+                    </Button>
+                    <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                        {'>>'}
+                    </Button>
+                </ButtonGroup>
+            </Box>
+        </Grid> */}
         </Grid>
     )
 }
