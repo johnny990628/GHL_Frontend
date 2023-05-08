@@ -10,16 +10,16 @@ import {
 } from '../../Axios/Schedule'
 import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
 
-export const fetchSchedule = createAsyncThunk('schedule/fetchSchedule', async (_, thunkAPI) => {
+export const fetchSchedule = createAsyncThunk('schedule/fetchSchedule', async (params, thunkAPI) => {
     try {
-        const response = await apiGetSchdules({})
+        const response = await apiGetSchdules(params)
         const { results, count } = response.data
-        const scheduleList = results.filter(r => r.status === 'wait-examination')
 
         return {
-            schedules: scheduleList,
-            patients: scheduleList.map(({ patient, blood }) => ({ ...patient, blood: blood.number })),
+            schedules: results,
+            patients: results.map(({ patient, blood }) => ({ ...patient, blood: blood.number })),
             count,
+            page: Math.ceil(count / params.limit),
         }
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))
@@ -58,9 +58,9 @@ export const changeScheduleStatus = createAsyncThunk('schedule/changeScheduleSta
     }
 })
 
-export const removeSchedule = createAsyncThunk('schedule/removeSchedule', async (patientID, thunkAPI) => {
+export const removeSchedule = createAsyncThunk('schedule/removeSchedule', async (scheduleID, thunkAPI) => {
     try {
-        const response = await apiDeleteScheduleAndBloodAndReport(patientID)
+        const response = await apiDeleteScheduleAndBloodAndReport(scheduleID)
         return response.data
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))
@@ -68,18 +68,36 @@ export const removeSchedule = createAsyncThunk('schedule/removeSchedule', async 
     }
 })
 
-const initialState = { schedules: [], patients: [], count: 0 }
+const initialState = { schedules: [], patients: [], count: 0, page: 1, loading: false }
 const scheduleSlice = createSlice({
     name: 'schedule',
     initialState,
-
+    reducers: {
+        scheduleTrigger: (state, action) => {
+            return { ...state, count: -1 }
+        },
+    },
     extraReducers: {
+        [fetchSchedule.pending]: (state, action) => {
+            return {
+                ...state,
+                loading: true,
+            }
+        },
         [fetchSchedule.fulfilled]: (state, action) => {
             return {
                 ...action.payload,
+                loading: false,
+            }
+        },
+        [fetchSchedule.rejected]: (state, action) => {
+            return {
+                ...state,
+                loading: false,
             }
         },
     },
 })
 
+export const { scheduleTrigger } = scheduleSlice.actions
 export default scheduleSlice.reducer

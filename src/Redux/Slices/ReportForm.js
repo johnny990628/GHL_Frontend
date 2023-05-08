@@ -4,22 +4,12 @@ import { apiDeleteScheduleAndBloodAndReport, apiUpdateScheduleStatus } from '../
 import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
 
 const initialState = {
-    create: {
-        liver: [],
-        gallbladder: [],
-        kidney: [],
-        pancreas: [],
-        spleen: [],
-        suggestion: [],
-    },
-    edit: {
-        liver: [],
-        gallbladder: [],
-        kidney: [],
-        pancreas: [],
-        spleen: [],
-        suggestion: [],
-    },
+    liver: [],
+    gallbladder: [],
+    kidney: [],
+    pancreas: [],
+    spleen: [],
+    suggestion: [],
 }
 
 export const createReport = createAsyncThunk('reportForm/createReport', async ({ patientID, scheduleID, reportID, data }, thunkAPI) => {
@@ -49,36 +39,27 @@ const reportFormSlice = createSlice({
     initialState,
     reducers: {
         addCancer: (state, action) => {
-            const { organ, name, type, value, mode } = action.payload
-            state[mode][organ].find(s => s.name === name) //if has the same name
-                ? (state[mode][organ] = [...state[mode][organ].filter(s => s.name !== name), { name, type, value }]) //replace the name with value
-                : (state[mode][organ] = [...state[mode][organ], { name, type, value }]) //or add the new one
+            const { organ, name, type, value } = action.payload
+            state[organ].find(s => s.name === name) //if has the same name
+                ? (state[organ] = [...state[organ].filter(s => s.name !== name), { name, type, value }]) //replace the name with value
+                : (state[organ] = [...state[organ], { name, type, value }]) //or add the new one
         },
         removeCancer: (state, action) => {
-            const { organ, name, mode } = action.payload
-            state[mode][organ] = state[mode][organ].filter(c => c.name !== name)
+            const { organ, name } = action.payload
+            state[organ] = state[organ].filter(c => c.name !== name)
         },
         clearCancer: (state, action) => {
-            const { organ, mode } = action.payload
-            state[mode][organ] = []
+            const { organ } = action.payload
+            state[organ] = []
         },
         fillReport: (state, action) => {
             const { report } = action.payload
             return {
-                ...state,
-                edit: { ...report },
+                ...report,
             }
         },
         resetReport: (state, action) => {
-            const { mode } = action.payload
-            state[mode] = {
-                liver: [],
-                gallbladder: [],
-                kidney: [],
-                pancreas: [],
-                spleen: [],
-                suggestion: [],
-            }
+            return initialState
         },
     },
     extraReducers: {

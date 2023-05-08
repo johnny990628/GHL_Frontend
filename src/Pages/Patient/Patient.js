@@ -60,8 +60,8 @@ const Patient = () => {
                     return (
                         <Box>
                             <Button
-                                startIcon={<Edit color="primary" />}
-                                sx={{ fontSize: '1.1rem' }}
+                                startIcon={<Edit color="contrast" />}
+                                sx={{ fontSize: '1.1rem', color: 'contrast.main' }}
                                 onClick={() => {
                                     dispatch(openDialog({ row: row.row.original, type: 'patient' }))
                                 }}
@@ -141,7 +141,7 @@ const Patient = () => {
                                                     toastTitle: '取消排程',
                                                     text: `${name} ${mr}`,
                                                     type: 'confirm',
-                                                    event: () => dispatch(removeSchedule(id)),
+                                                    event: () => dispatch(removeSchedule(row.row.original?.schedule?._id)),
                                                 })
                                             )
 
@@ -156,15 +156,15 @@ const Patient = () => {
                                                     event: text =>
                                                         dispatch(addSchedule({ patientID: id, procedureCode: '19009C', blood: text })),
                                                     preConfirm: async text => {
-                                                        const { data: blood } = await apiCheckExists({ type: 'blood', value: text })
+                                                        // const { data: blood } = await apiCheckExists({ type: 'blood', value: text })
                                                         const { data: schedule } = await apiCheckExists({ type: 'schedule', value: id })
                                                         const regex = new RegExp('^[A-Za-z0-9]*$')
                                                         const isIllegal = !regex.test(text)
                                                         let warning = ''
-                                                        if (blood) warning += '此編號已被使用 '
+                                                        // if (blood) warning += '此編號已被使用 '
                                                         if (schedule) warning += '此病人已在排程中'
                                                         if (isIllegal) warning += ' 含有非法字元'
-                                                        return { exists: blood || schedule || isIllegal, warning }
+                                                        return { exists: schedule || isIllegal, warning }
                                                     },
                                                 })
                                             )
@@ -199,57 +199,6 @@ const Patient = () => {
                     )
                 },
             },
-            // {
-            //     accessor: 'blood',
-            //     Header: '抽血編號',
-            //     Cell: row => {
-            //         const text = row.row.original?.blood?.number ? row.row.original.blood.number : '無'
-            //         const status = row.row.original?.schedule?.status ? row.row.original.schedule.status : 'yet'
-            //         return (
-            //             <>
-            //                 {status === 'yet' && '無'}
-            //                 {status === 'wait-blood' && (
-            //                     <Button
-            //                         variant="outlined"
-            //                         startIcon={<DesignServices size={18} />}
-            //                         onClick={() =>
-            //                             dispatch(
-            //                                 updateSchedule({
-            //                                     scheduleID: row.row.original.schedule._id,
-            //                                     data: { status: 'wait-examination' },
-            //                                 })
-            //                             )
-            //                         }
-            //                     >
-            //                         {text}
-            //                     </Button>
-            //                 )}
-            //                 {status === 'wait-examination' && (
-            //                     <Button
-            //                         variant="outlined"
-            //                         startIcon={<Check />}
-            //                         onClick={() =>
-            //                             dispatch(
-            //                                 updateSchedule({
-            //                                     scheduleID: row.row.original.schedule._id,
-            //                                     data: { status: 'wait-blood' },
-            //                                 })
-            //                             )
-            //                         }
-            //                     >
-            //                         {text}
-            //                     </Button>
-            //                 )}
-            //                 {status === 'on-call' && (
-            //                     <Button variant="outlined" startIcon={<Check />}>
-            //                         {text}
-            //                     </Button>
-            //                 )}
-            //                 {status === 'finish' && '已完成'}
-            //             </>
-            //         )
-            //     },
-            // },
         ],
         []
     )

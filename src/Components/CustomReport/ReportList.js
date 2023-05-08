@@ -14,22 +14,15 @@ const ReportList = ({ patient }) => {
     }
     return (
         <List>
-            {patient.reports.map((report, index) => (
-                <>
-                    {report.status === 'finished' && (
-                        <ListItem key={report._id} classes={{ root: classes.reportListItem }} onClick={() => handleClick(report._id)}>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Assignment />
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={`第${index + 1}次報告`}
-                                    secondary={new Date(report.createdAt).toLocaleDateString()}
-                                />
-                            </ListItemButton>
-                        </ListItem>
-                    )}
-                </>
+            {patient?.report?.records.map((report, index) => (
+                <ListItem key={report._id} classes={{ root: classes.reportListItem }} onClick={() => handleClick(report._id)}>
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <Assignment />
+                        </ListItemIcon>
+                        <ListItemText primary={`第${index + 1}次報告`} secondary={new Date(report.createdAt).toLocaleDateString()} />
+                    </ListItemButton>
+                </ListItem>
             ))}
         </List>
     )

@@ -33,7 +33,7 @@ import { openAlert } from '../../Redux/Slices/Alert'
 import { Box } from '@mui/system'
 import Authorized from './../Authorized/Authorized'
 
-const ReportDialog = ({ mode }) => {
+const ReportDialog = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const {
@@ -107,23 +107,15 @@ const ReportDialog = ({ mode }) => {
                     }
                 />
 
-                {mode === 'edit' && (
-                    <FormControl variant="standard" sx={{ width: '5rem' }}>
-                        <InputLabel id="select-label">版本</InputLabel>
-                        <Select labelId="select-label" value={version} onChange={handleSelectOnChange}>
-                            {records.length > 0 &&
-                                records.map((record, index) => (
-                                    <MenuItem key={record.id} value={record.id}>{`v${records.length - index}`}</MenuItem>
-                                ))}
-                        </Select>
-                    </FormControl>
-                )}
-
-                {mode === 'create' && (
-                    <IconButton onClick={handleClose} sx={{ padding: '1rem' }}>
-                        <Close />
-                    </IconButton>
-                )}
+                <FormControl variant="standard" sx={{ width: '5rem' }}>
+                    <InputLabel id="select-label">版本</InputLabel>
+                    <Select labelId="select-label" value={version} onChange={handleSelectOnChange}>
+                        {records.length > 0 &&
+                            records.map((record, index) => (
+                                <MenuItem key={record.id} value={record.id}>{`v${records.length - index}`}</MenuItem>
+                            ))}
+                    </Select>
+                </FormControl>
             </DialogTitle>
             <DialogContent sx={{ height: '90vh', display: 'flex', justifyContent: 'center' }}>
                 {isEditing ? (
@@ -138,7 +130,7 @@ const ReportDialog = ({ mode }) => {
                     </>
                 )}
             </DialogContent>
-            <DialogActions sx={{ padding: '1rem' }}>
+            {/* <DialogActions sx={{ padding: '1rem' }}>
                 {mode === 'edit' && (
                     <Authorized currentRole={currentUser.role} authority={[3, 2]} noMatch={<></>}>
                         <Button variant="contained" className={classes.actionButton} onClick={handleEdit}>
@@ -149,7 +141,7 @@ const ReportDialog = ({ mode }) => {
                         </Button>
                     </Authorized>
                 )}
-            </DialogActions>
+            </DialogActions> */}
         </Dialog>
     )
 }

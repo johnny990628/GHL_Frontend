@@ -117,15 +117,15 @@ const CustomForm = ({ title, row, mode, sendData }) => {
                         type: 'input',
                         event: text => dispatch(addSchedule({ patientID: id, procedureCode: '19009C', blood: text })),
                         preConfirm: async text => {
-                            const { data: blood } = await apiCheckExists({ type: 'blood', value: text })
+                            // const { data: blood } = await apiCheckExists({ type: 'blood', value: text })
                             const { data: schedule } = await apiCheckExists({ type: 'schedule', value: id })
                             const regex = new RegExp('^[A-Za-z0-9]*$')
                             const isIllegal = !regex.test(text)
                             let warning = ''
-                            if (blood) warning += '此編號已被使用 '
+                            // if (blood) warning += '此編號已被使用 '
                             if (schedule) warning += '此病人已在排程中'
                             if (isIllegal) warning += ' 含有非法字元'
-                            return { exists: blood || schedule || isIllegal, warning }
+                            return { exists: schedule || isIllegal, warning }
                         },
                     })
                 )

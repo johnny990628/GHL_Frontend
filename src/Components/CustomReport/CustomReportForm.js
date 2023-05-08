@@ -26,32 +26,23 @@ import CustomScrollbar from '../../Components/CustomScrollbar/CustomScrollbar'
 import { useDispatch, useSelector } from 'react-redux'
 import { addCancer, clearCancer } from '../../Redux/Slices/ReportForm'
 import ReportList from './ReportList'
-import { Cast, History, Mic } from '@mui/icons-material'
+import { Cast, CloudDone, History, Mic } from '@mui/icons-material'
 import useSpeech2Text from '../../Hooks/useSpeech2Text'
+import { apiAddWorklist } from '../../Axios/WorkList'
+import { openAlert } from '../../Redux/Slices/Alert'
 
-const FormSection = ({ list, mode }) => {
+const FormSection = ({ list }) => {
     const classes = useStyles()
 
     const dispatch = useDispatch()
-    const editReport = useSelector(state => state.reportForm.edit[list.name])
-    const createReport = useSelector(state => state.reportForm.create[list.name])
+    const report = useSelector(state => state.reportForm[list.name])
 
     const setupNormal = () => {
-        if (mode === 'create') {
-            return createReport.length === 0
-        }
-        if (mode === 'edit') {
-            return editReport.length === 0
-        }
+        return report?.length === 0
     }
 
     const setupValue = ({ row }) => {
-        if (mode === 'create') {
-            return createReport.find(d => d.name === row.name)
-        }
-        if (mode === 'edit') {
-            return editReport.find(d => d.name === row.name)
-        }
+        return report?.find(d => d.name === row.name)
     }
 
     return (
@@ -62,7 +53,7 @@ const FormSection = ({ list, mode }) => {
                 color="primary"
                 value="check"
                 selected={setupNormal()}
-                onClick={() => dispatch(clearCancer({ organ: list.name, mode }))}
+                onClick={() => dispatch(clearCancer({ organ: list.name }))}
                 className={classes.toggleButton}
             >
                 <Box className={classes.formLabel}>{list.label}</Box>
@@ -70,14 +61,14 @@ const FormSection = ({ list, mode }) => {
 
             <Box>
                 {list.cols.map(row => (
-                    <CustomReportInput key={row.label} row={row} organ={list.name} input={setupValue({ row })} mode={mode} />
+                    <CustomReportInput key={row.label} row={row} organ={list.name} input={setupValue({ row })} />
                 ))}
             </Box>
         </Box>
     )
 }
 
-const CustomReportForm = ({ lists, patient, mode }) => {
+const CustomReportForm = ({ lists, patient }) => {
     const classes = useStyles()
     const theme = useTheme()
     const isComputer = useMediaQuery(theme.breakpoints.up('xl'))
@@ -110,7 +101,6 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                             name: cancerOfTranscript.name,
                             type: cancerOfTranscript.type,
                             value: [option.value],
-                            mode,
                         })
                     )
                     audio.play()
@@ -124,7 +114,6 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                         name: cancerOfTranscript.name,
                         type: cancerOfTranscript.tㄓype,
                         value: true,
-                        mode,
                     })
                 )
                 audio.play()
@@ -134,7 +123,7 @@ const CustomReportForm = ({ lists, patient, mode }) => {
         //如果語音含有器官名稱
         if (!!organOfTranscript) {
             // 清除器官
-            if (transcript.includes('清除')) dispatch(clearCancer({ organ: organOfTranscript.name, name: organOfTranscript.name, mode }))
+            if (transcript.includes('清除')) dispatch(clearCancer({ organ: organOfTranscript.name, name: organOfTranscript.name }))
             // 新增備註
             else
                 dispatch(
@@ -143,7 +132,6 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                         name: 'other',
                         type: 'text',
                         value: transcript.replace(organOfTranscript.label, ''),
-                        mode,
                     })
                 )
             audio.play()
@@ -211,59 +199,86 @@ const CustomReportForm = ({ lists, patient, mode }) => {
 
     return (
         <>
-            {mode === 'create' && (
-                <Stack
-                    direction="row"
-                    spacing={1}
-                    sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', m: 1, height: '5%' }}
+            <Stack
+                direction="row"
+                spacing={1}
+                sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', m: 1, height: '5%' }}
+            >
+                <Box className={classes.patientInfo}>
+                    <Chip
+                        label={`${patient.id} / ${patient.name} / ${patient.gender === 'm' ? '男' : '女'}`}
+                        variant="outlined"
+                        className={classes.chip}
+                    />
+                </Box>
+
+                {/* <Tooltip
+                    onClose={() => setToolkitOpen(false)}
+                    open={toolkitOpen}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    title={transcript}
                 >
-                    <Box className={classes.patientInfo}>
-                        <Chip
-                            label={`${patient.id} / ${patient.name} / ${patient.gender === 'm' ? '男' : '女'}`}
-                            variant="outlined"
-                            className={classes.chip}
-                        />
-                    </Box>
-
-                    <Tooltip
-                        onClose={() => setToolkitOpen(false)}
-                        open={toolkitOpen}
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        title={transcript}
-                    >
-                        <Button
-                            variant={listening ? 'outlined' : 'contained'}
-                            onClick={handleRecordClick}
-                            startIcon={listening ? <CircularProgress size={20} /> : <Mic />}
-                            sx={{ borderRadius: '2rem', height: 'auto' }}
-                        >
-                            {listening ? '辨識中' : '語音辨識'}
-                        </Button>
-                    </Tooltip>
-
                     <Button
-                        variant={Boolean(dicomAnchorEl) ? 'outlined' : 'contained'}
-                        onClick={handleDicomClick}
-                        startIcon={Boolean(dicomAnchorEl) ? <CircularProgress color="contrast" size={20} /> : <Cast />}
-                        color="contrast"
-                        sx={{ borderRadius: '2rem', height: 'auto', color: Boolean(dicomAnchorEl) ? 'contrast.main' : 'white' }}
+                        variant={listening ? 'outlined' : 'contained'}
+                        onClick={handleRecordClick}
+                        startIcon={listening ? <CircularProgress size={20} /> : <Mic />}
+                        sx={{ borderRadius: '2rem', height: 'auto' }}
                     >
-                        超音波影像
+                        {listening ? '辨識中' : '語音辨識'}
                     </Button>
+                </Tooltip> */}
 
-                    {!isComputer && patient.reports.length > 1 && (
-                        <Badge badgeContent={patient.reports.length - 1} color="primary">
-                            <IconButton onClick={handleHistoryClick}>
-                                <History />
-                            </IconButton>
-                        </Badge>
-                    )}
-                    <HistoryPopover />
-                    {DicomPopperCom}
-                </Stack>
-            )}
+                <Button
+                    variant="contained"
+                    onClick={() => {
+                        apiAddWorklist(patient.id)
+                            .then(res =>
+                                dispatch(
+                                    openAlert({
+                                        toastTitle: '開單成功',
+                                        text: `新增workList ${res.data.name}`,
+                                        icon: 'success',
+                                    })
+                                )
+                            )
+                            .catch(err =>
+                                dispatch(
+                                    openAlert({
+                                        toastTitle: '開單失敗',
+                                        text: err.response.data.message,
+                                        icon: 'error',
+                                    })
+                                )
+                            )
+                    }}
+                    startIcon={<CloudDone />}
+                    color="primary"
+                    sx={{ borderRadius: '2rem', height: 'auto', color: 'white' }}
+                >
+                    超音波開單
+                </Button>
+                <Button
+                    variant={Boolean(dicomAnchorEl) ? 'outlined' : 'contained'}
+                    onClick={handleDicomClick}
+                    startIcon={Boolean(dicomAnchorEl) ? <CircularProgress color="contrast" size={20} /> : <Cast />}
+                    color="contrast"
+                    sx={{ borderRadius: '2rem', height: 'auto', color: Boolean(dicomAnchorEl) ? 'contrast.main' : 'white' }}
+                >
+                    超音波影像
+                </Button>
+
+                {!isComputer && patient?.report?.records.length > 1 && (
+                    <Badge badgeContent={patient?.report?.records.length - 1} color="primary">
+                        <IconButton onClick={handleHistoryClick}>
+                            <History />
+                        </IconButton>
+                    </Badge>
+                )}
+                <HistoryPopover />
+                {DicomPopperCom}
+            </Stack>
 
             <Box className={classes.container}>
                 {isComputer && (
@@ -282,32 +297,24 @@ const CustomReportForm = ({ lists, patient, mode }) => {
                         </Tabs>
                     </Scrollspy>
                 )}
-                {mode === 'create' && (
-                    <Grid container sx={{ height: '100%' }} spacing={2}>
-                        <Grid item xs={12} xl={10}>
-                            <CustomScrollbar onScroll={onScrollEvent}>
-                                {lists.map(list => (
-                                    <FormSection key={list.name} list={list} mode={mode} />
-                                ))}
+
+                <Grid container sx={{ height: '100%' }} spacing={2}>
+                    <Grid item xs={12} xl={10}>
+                        <CustomScrollbar onScroll={onScrollEvent}>
+                            {lists.map(list => (
+                                <FormSection key={list.name} list={list} />
+                            ))}
+                        </CustomScrollbar>
+                    </Grid>
+                    {/* {isComputer && (
+                        <Grid item xs={2}>
+                            <CustomScrollbar>
+                                <Box className={classes.formLabel}>歷史報告</Box>
+                                <ReportList patient={patient} />
                             </CustomScrollbar>
                         </Grid>
-                        {isComputer && (
-                            <Grid item xs={2}>
-                                <CustomScrollbar>
-                                    <Box className={classes.formLabel}>歷史報告</Box>
-                                    <ReportList patient={patient} />
-                                </CustomScrollbar>
-                            </Grid>
-                        )}
-                    </Grid>
-                )}
-                {mode === 'edit' && (
-                    <CustomScrollbar>
-                        {lists.map(list => (
-                            <FormSection key={list.name} list={list} mode={mode} />
-                        ))}
-                    </CustomScrollbar>
-                )}
+                    )} */}
+                </Grid>
             </Box>
         </>
     )

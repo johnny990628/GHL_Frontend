@@ -57,7 +57,7 @@ const ReportFormHtml = ({ print }) => {
 
 const FormSection = ({ list }) => {
     const classes = useStyles()
-    const report = useSelector(state => state.reportForm.edit)
+    const report = useSelector(state => state.reportForm)
     const [cancerArr, setCancerArr] = useState([])
     useEffect(() => {
         if (report) {

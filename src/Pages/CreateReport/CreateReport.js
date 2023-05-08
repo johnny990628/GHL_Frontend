@@ -5,7 +5,6 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera'
 import { useTheme } from '@mui/styles'
 import useStyles from './Style'
 
-
 import { useDispatch, useSelector } from 'react-redux'
 import { v4 } from 'uuid'
 import Lottie from 'lottie-react'
@@ -27,7 +26,6 @@ import { changeScheduleStatus, fetchSchedule, removeSchedule } from '../../Redux
 import success from '../../Assets/Animation/success.json'
 import { apiUpdateScheduleStatus } from '../../Axios/Schedule'
 import { apiAddWorklist } from '../../Axios/WorkList'
-
 
 const CreateReport = () => {
     const [currentStep, setCurrentStep] = useState(0)
@@ -51,19 +49,22 @@ const CreateReport = () => {
             const { _id, patient, reportID, reports } = schedules.find(s => s.patientID === selection[0])
             setPatient({ ...patient, reportID, reports })
             setScheduleID(_id)
-            if (!selectTrigger){
+            if (!selectTrigger) {
                 setCurrentStep(1)
                 dispatch(changeScheduleStatus({ scheduleID: _id, status: 'on-call' }))
-            } 
+            }
             setSelectTrigger(false)
         }
     }, [selection])
 
     useEffect(() => {
+        dispatch(fetchSchedule({ status: 'wait-examination' }))
+    }, [count])
+    useEffect(() => {
         if (currentStep === 0) {
             setReportDialogMode('create')
             if (scheduleID) dispatch(changeScheduleStatus({ scheduleID, status: 'wait-examination' }))
-            dispatch(fetchSchedule())
+            dispatch(fetchSchedule({ status: 'wait-examination' }))
             dispatch(resetReport({ mode: 'create' }))
         }
         if (currentStep === 2) {
@@ -136,12 +137,12 @@ const CreateReport = () => {
         {
             field: 'workList',
             headerName: '超音波開單',
-            renderCell: (params) => {
+            renderCell: params => {
                 return (
                     <IconButton
                         onClick={() => {
                             apiAddWorklist(params.row.id)
-                                .then((res) =>
+                                .then(res =>
                                     dispatch(
                                         openAlert({
                                             toastTitle: '開單成功',
@@ -150,7 +151,7 @@ const CreateReport = () => {
                                         })
                                     )
                                 )
-                                .catch((err) =>
+                                .catch(err =>
                                     dispatch(
                                         openAlert({
                                             toastTitle: '開單失敗',

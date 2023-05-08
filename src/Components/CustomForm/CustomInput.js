@@ -7,6 +7,7 @@ import useStyles from './Style'
 
 import { apiGetDepartments } from '../../Axios/Department'
 import { zhTW } from 'date-fns/locale'
+import { useSelector } from 'react-redux'
 
 const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperText, error, mode, required }) => {
     const classes = useStyles()
@@ -85,11 +86,7 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
     }
 
     const Department = ({ value, setValue, error }) => {
-        const [departments, setDepartments] = useState([])
-
-        useEffect(() => {
-            apiGetDepartments({ limit: 100, offset: 0 }).then(res => setDepartments(res.data.results))
-        }, [])
+        const { departments } = useSelector(state => state.department4List)
 
         const handleSelectOnChange = e => {
             setValue(e.target.value)
