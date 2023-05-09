@@ -53,7 +53,6 @@ function WebSocketComponent() {
                 dispatch(fetchDepartments4List())
                 break
             case 'reports':
-                dispatch(reportTrigger())
                 dispatch(scheduleTrigger())
                 break
             case 'users':

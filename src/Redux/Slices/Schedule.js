@@ -17,7 +17,6 @@ export const fetchSchedule = createAsyncThunk('schedule/fetchSchedule', async (p
 
         return {
             schedules: results,
-            patients: results.map(({ patient, blood }) => ({ ...patient, blood: blood.number })),
             count,
             page: Math.ceil(count / params.limit),
         }
@@ -68,7 +67,7 @@ export const removeSchedule = createAsyncThunk('schedule/removeSchedule', async 
     }
 })
 
-const initialState = { schedules: [], patients: [], count: 0, page: 1, loading: false }
+const initialState = { schedules: [], count: 0, page: 1, loading: false }
 const scheduleSlice = createSlice({
     name: 'schedule',
     initialState,
