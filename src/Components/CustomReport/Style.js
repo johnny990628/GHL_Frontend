@@ -57,6 +57,7 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.primary.main,
         // borderRadius: '1rem',
         padding: '1rem',
+        fontSize: '1.4rem',
     },
     chip: {
         borderColor: theme.palette.primary.main,

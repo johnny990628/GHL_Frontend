@@ -199,18 +199,8 @@ const CustomReportForm = ({ lists, patient }) => {
 
     return (
         <>
-            <Stack
-                direction="row"
-                spacing={1}
-                sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', m: 1, height: '5%' }}
-            >
-                <Box className={classes.patientInfo}>
-                    <Chip
-                        label={`${patient.id} / ${patient.name} / ${patient.gender === 'm' ? '男' : '女'}`}
-                        variant="outlined"
-                        className={classes.chip}
-                    />
-                </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', m: 1, height: '5%' }}>
+                <Box className={classes.patientInfo}>{`${patient.id} / ${patient.name} / ${patient.gender === 'm' ? '男' : '女'}`}</Box>
 
                 {/* <Tooltip
                     onClose={() => setToolkitOpen(false)}
@@ -229,56 +219,56 @@ const CustomReportForm = ({ lists, patient }) => {
                         {listening ? '辨識中' : '語音辨識'}
                     </Button>
                 </Tooltip> */}
-
-                <Button
-                    variant="contained"
-                    onClick={() => {
-                        apiAddWorklist(patient.id)
-                            .then(res =>
-                                dispatch(
-                                    openAlert({
-                                        toastTitle: '開單成功',
-                                        text: `新增workList ${res.data.name}`,
-                                        icon: 'success',
-                                    })
+                <Stack direction="row" spacing={1}>
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            apiAddWorklist(patient.id)
+                                .then(res =>
+                                    dispatch(
+                                        openAlert({
+                                            toastTitle: '開單成功',
+                                            text: `新增workList ${res.data.name}`,
+                                            icon: 'success',
+                                        })
+                                    )
                                 )
-                            )
-                            .catch(err =>
-                                dispatch(
-                                    openAlert({
-                                        toastTitle: '開單失敗',
-                                        text: err.response.data.message,
-                                        icon: 'error',
-                                    })
+                                .catch(err =>
+                                    dispatch(
+                                        openAlert({
+                                            toastTitle: '開單失敗',
+                                            text: err.response.data.message,
+                                            icon: 'error',
+                                        })
+                                    )
                                 )
-                            )
-                    }}
-                    startIcon={<CloudDone />}
-                    color="primary"
-                    sx={{ borderRadius: '2rem', height: 'auto', color: 'white' }}
-                >
-                    超音波開單
-                </Button>
-                <Button
-                    variant={Boolean(dicomAnchorEl) ? 'outlined' : 'contained'}
-                    onClick={handleDicomClick}
-                    startIcon={Boolean(dicomAnchorEl) ? <CircularProgress color="contrast" size={20} /> : <Cast />}
-                    color="contrast"
-                    sx={{ borderRadius: '2rem', height: 'auto', color: Boolean(dicomAnchorEl) ? 'contrast.main' : 'white' }}
-                >
-                    超音波影像
-                </Button>
+                        }}
+                        startIcon={<CloudDone />}
+                        color="primary"
+                        sx={{ borderRadius: '2rem', height: 'auto', color: 'white' }}
+                    >
+                        超音波開單
+                    </Button>
+                    <Button
+                        variant={Boolean(dicomAnchorEl) ? 'outlined' : 'contained'}
+                        onClick={handleDicomClick}
+                        startIcon={Boolean(dicomAnchorEl) ? <CircularProgress color="contrast" size={20} /> : <Cast />}
+                        color="contrast"
+                        sx={{ borderRadius: '2rem', height: 'auto', color: Boolean(dicomAnchorEl) ? 'contrast.main' : 'white' }}
+                    >
+                        超音波影像
+                    </Button>
+                </Stack>
 
-                {!isComputer && patient?.report?.records.length > 1 && (
-                    <Badge badgeContent={patient?.report?.records.length - 1} color="primary">
+                {/* <Badge badgeContent={patient?.report?.records.length ? patient?.report?.records.length - 1 : 0} color="primary">
                         <IconButton onClick={handleHistoryClick}>
                             <History />
                         </IconButton>
-                    </Badge>
-                )}
+                    </Badge> */}
+
                 <HistoryPopover />
                 {DicomPopperCom}
-            </Stack>
+            </Box>
 
             <Box className={classes.container}>
                 {isComputer && (
