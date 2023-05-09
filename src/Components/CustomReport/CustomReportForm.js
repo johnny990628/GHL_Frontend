@@ -199,7 +199,7 @@ const CustomReportForm = ({ lists, patient }) => {
 
     return (
         <>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', m: 1, height: '5%' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', m: 1, pt: 1, height: '5%' }}>
                 <Box className={classes.patientInfo}>{`${patient.id} / ${patient.name} / ${patient.gender === 'm' ? '男' : '女'}`}</Box>
 
                 {/* <Tooltip

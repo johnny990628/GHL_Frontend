@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { Box, FormControl, IconButton, InputLabel, MenuItem, Select } from '@mui/material'
+import { Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select } from '@mui/material'
 import { AssignmentTurnedIn, Delete, Edit } from '@mui/icons-material'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -37,7 +37,31 @@ const Report = () => {
         () => [
             { accessor: 'username', Header: '用戶名', Cell: row => row.row.original.username },
             { accessor: 'name', Header: '姓名', Cell: row => row.row.original.name },
-            { accessor: 'createdAt', Header: '註冊時間', Cell: row => new Date(row.row.original.createdAt).toLocaleString() },
+            {
+                accessor: 'actions',
+                Header: '操作',
+                Cell: row => (
+                    <Button
+                        startIcon={<Delete />}
+                        sx={{ color: 'red.main', fontSize: '1.1rem' }}
+                        onClick={() => handleDeleteUser(row.row.original._id)}
+                    >
+                        刪除
+                    </Button>
+                ),
+            },
+            {
+                accessor: 'createdAt',
+                Header: '註冊時間',
+                Cell: row => (
+                    <Box>
+                        <Box>{new Date(row.row.original.createdAt).toLocaleDateString()}</Box>
+                        <Box sx={{ fontSize: '.8rem', color: 'gray.main' }}>
+                            {new Date(row.row.original.createdAt).toLocaleTimeString()}
+                        </Box>
+                    </Box>
+                ),
+            },
             {
                 accessor: 'status',
                 Header: '狀態',
@@ -54,17 +78,6 @@ const Report = () => {
                         </Select>
                     )
                 },
-            },
-            {
-                accessor: 'actions',
-                Header: '操作',
-                Cell: row => (
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <IconButton onClick={() => handleDeleteUser(row.row.original._id)}>
-                            <Delete />
-                        </IconButton>
-                    </Box>
-                ),
             },
         ],
         []

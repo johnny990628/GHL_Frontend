@@ -66,6 +66,35 @@ const Department = () => {
 
     const columns = useMemo(
         () => [
+            { accessor: 'name', Header: '部門名稱', Cell: row => row.row.original.name },
+            { accessor: 'address', Header: '部門地址', Cell: row => row.row.original.address },
+            {
+                accessor: 'action',
+                Header: '操作',
+                Cell: row => {
+                    const { _id, name, address } = row.row.original
+                    return (
+                        <Button
+                            startIcon={<Delete />}
+                            sx={{ color: 'red.main', fontSize: '1.1rem' }}
+                            onClick={() => {
+                                dispatch(
+                                    openAlert({
+                                        alertTitle: '確定刪除該部門?',
+                                        toastTitle: '刪除成功',
+                                        text: `${name} - ${address}`,
+                                        icon: 'success',
+                                        type: 'confirm',
+                                        event: () => dispatch(deleteDepartment(_id)),
+                                    })
+                                )
+                            }}
+                        >
+                            刪除
+                        </Button>
+                    )
+                },
+            },
             {
                 accessor: 'active',
                 Header: '啟用',
@@ -76,35 +105,6 @@ const Department = () => {
                             checked={active}
                             onChange={e => dispatch(activeDepartment({ departmentID: _id, active: e.target.checked }))}
                         />
-                    )
-                },
-            },
-            { accessor: 'name', Header: '部門名稱', Cell: row => row.row.original.name },
-            { accessor: 'address', Header: '部門地址', Cell: row => row.row.original.address },
-            {
-                accessor: 'action',
-                Header: '操作',
-                Cell: row => {
-                    const { _id, name, address } = row.row.original
-                    return (
-                        <Box>
-                            <IconButton
-                                onClick={() => {
-                                    dispatch(
-                                        openAlert({
-                                            alertTitle: '確定刪除該部門?',
-                                            toastTitle: '刪除成功',
-                                            text: `${name} - ${address}`,
-                                            icon: 'success',
-                                            type: 'confirm',
-                                            event: () => dispatch(deleteDepartment(_id)),
-                                        })
-                                    )
-                                }}
-                            >
-                                <Delete />
-                            </IconButton>
-                        </Box>
                     )
                 },
             },
