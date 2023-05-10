@@ -30,9 +30,8 @@ export const addSchedule = createAsyncThunk('schedule/addSchedule', async ({ pat
     try {
         const reportResponse = await apiCreateReport({ patientID })
         const reportID = reportResponse.data._id
-        const scheduleResponse = await apiAddSchedule({ patientID, reportID, procedureCode, status: 'wait-examination' })
-        const scheduleID = scheduleResponse.data._id
-        await apiAddBlood({ patientID, number: blood, scheduleID })
+        const bloodResponse = await apiAddBlood({ patientID, number: blood })
+        await apiAddSchedule({ patientID, reportID, procedureCode, status: 'wait-examination', bloodID: bloodResponse.data._id })
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()
