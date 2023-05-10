@@ -6,6 +6,7 @@ import { reportTrigger } from '../Redux/Slices/Report'
 import { userTrigger } from '../Redux/Slices/User'
 import { fetchSchedule, scheduleTrigger } from './../Redux/Slices/Schedule'
 import { fetchDepartments4List } from './../Redux/Slices/Department4List'
+import { eventTrigger } from '../Redux/Slices/Event'
 
 function WebSocketComponent() {
     const ws = useRef(null)
@@ -57,6 +58,9 @@ function WebSocketComponent() {
                 break
             case 'users':
                 dispatch(userTrigger())
+                break
+            case 'events':
+                dispatch(eventTrigger())
                 break
         }
     }

@@ -4,7 +4,8 @@ const useStyles = makeStyles(theme => ({
     container: {
         // borderRadius: '0 .5rem .5rem 0',
         width: 'var(--sidebar-open-width)',
-        height: '100vh',
+        marginTop: '5vh',
+        height: '95vh',
         transition: 'width .4s ease-in',
         '&.close': {
             width: 'var(--sidebar-close-width)',
@@ -49,8 +50,10 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.primary.main,
     },
     openIcon: {
-        padding: '3rem 1.5rem',
-        backgroundColor: theme.palette.secondary.main,
+        position: 'absolute',
+        bottom: 30,
+        left: '1.5rem',
+
         color: theme.palette.primary.main,
         '&:hover': {
             cursor: 'pointer',

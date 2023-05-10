@@ -13,7 +13,7 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
     const classes = useStyles()
     const theme = useTheme()
 
-    const DatePickerCustomInput = ({ value, setValue, error }) => {
+    const DatePickerCustomInput = ({ label, value, setValue, error }) => {
         const [dateAnchorEl, setDateAnchorEl] = useState(null)
         const handleDateClick = event => {
             setDateAnchorEl(event.currentTarget)
@@ -49,7 +49,7 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
                 <TextField
                     variant="standard"
                     className={classes.textField}
-                    label="生日"
+                    label={label}
                     required
                     value={new Date(value).toLocaleDateString()}
                     InputProps={{
@@ -125,8 +125,8 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
         )
     }
 
-    return name === 'birth' ? (
-        <DatePickerCustomInput value={value} setValue={setValue} error={error} />
+    return name === 'birth' || name === 'datetime' ? (
+        <DatePickerCustomInput label={label} value={value} setValue={setValue} error={error} />
     ) : name === 'gender' ? (
         <GenderPicker />
     ) : name === 'department' ? (

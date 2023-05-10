@@ -66,18 +66,14 @@ const Sidebar = () => {
                     </Authorized>
                 ))}
             </List>
-            {isOpen && (
+            {isOpen ? (
                 <Box className={classes.closeIcon} onClick={() => dispatch(closeSidebar())}>
                     <DoubleArrow sx={{ transform: 'rotate(180deg)' }} />
                 </Box>
-            )}
-            {isOpen && (
-                <img
-                    src="./logo.jpg"
-                    className={classes.logo}
-                    alt="logo"
-                    style={{ width: '3.8rem', height: '4rem', position: 'fixed', top: 2 }}
-                />
+            ) : (
+                <Box className={classes.openIcon} onClick={() => dispatch(openSidebar())}>
+                    <DoubleArrow />
+                </Box>
             )}
         </Drawer>
     )

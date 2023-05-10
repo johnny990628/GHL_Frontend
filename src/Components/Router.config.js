@@ -5,6 +5,7 @@ import Department from '../Pages/Department/Department'
 import Report from '../Pages/Report/Report'
 import User from '../Pages/User/User'
 import Image from '../Pages/Image/Image'
+import Event from '../Pages/Event/Event'
 import {
     HomeOutlined,
     EventAvailableOutlined,
@@ -54,6 +55,14 @@ const routerList = [
         path: '/user',
         Component: User,
         authority: [3],
+    },
+    {
+        display_name: '活動管理',
+        name: 'event',
+        icon: <EventAvailableOutlined />,
+        path: '/event',
+        Component: Event,
+        authority: [3, 1],
     },
     {
         display_name: '部門管理',

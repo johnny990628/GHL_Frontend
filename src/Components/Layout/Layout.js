@@ -22,6 +22,7 @@ import { fetchSchedule } from '../../Redux/Slices/Schedule'
 import { fillAuthState, logout } from '../../Redux/Slices/Auth'
 import { apiVerify } from '../../Axios/Auth'
 import Login from '../../Pages/Login/Login'
+import CustomNavbar from '../CustomNavbar/CustomNavbar'
 
 const Layout = () => {
     const { verify } = useSelector(state => state.auth)
@@ -96,6 +97,7 @@ const Main = () => {
 
     return (
         <Box sx={{ height: '100vh', display: 'flex' }}>
+            <CustomNavbar />
             <Sidebar />
             <CustomScrollbar>
                 <Box className={`${classes.container} ${isOpen || 'close'}`}>
