@@ -239,7 +239,7 @@ const Report = () => {
                         patient={selection.patient}
                         mode="create"
                     />
-                    <Box sx={{ width: '98%', display: 'flex', justifyContent: 'end', padding: '2rem 0' }}>
+                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'end', padding: '2rem 1rem' }}>
                         <Button
                             variant="contained"
                             startIcon={<Check />}
