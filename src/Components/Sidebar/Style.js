@@ -5,8 +5,11 @@ const useStyles = makeStyles(theme => ({
         // borderRadius: '0 .5rem .5rem 0',
         width: 'var(--sidebar-open-width)',
         marginTop: '5vh',
-        height: '95vh',
+        height: '96vh',
+        backgroundColor: theme.palette.secondary.main,
         transition: 'width .4s ease-in',
+        borderRight: `1px solid ${theme.palette.gray.main}`,
+        zIndex: 1,
         '&.close': {
             width: 'var(--sidebar-close-width)',
         },
@@ -14,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     },
     list: {
         height: '100%',
-        backgroundColor: theme.palette.secondary.main,
+
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -24,6 +27,7 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1),
         borderRadius: '1rem',
         transition: 'transform .4s ease-out',
+
         '&.active': {
             backgroundColor: theme.palette.primary.light,
         },
@@ -32,7 +36,7 @@ const useStyles = makeStyles(theme => ({
         },
     },
     text: {
-        color: '#000000',
+        color: theme.palette.text.primary,
         fontSize: '1.3rem',
         marginLeft: '1rem',
         whiteSpace: 'nowrap',

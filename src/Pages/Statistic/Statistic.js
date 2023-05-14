@@ -508,200 +508,198 @@ const Statistic = () => {
 
     return (
         <Box className={classes.container}>
-            <CustomScrollbar>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>
-                        統計數據
-                    </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>
+                    統計數據
+                </Typography>
 
-                    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                        <ToggleButtonGroup color="primary" value={pickerMode} onChange={handlePickerMode} sx={{ mr: 2 }}>
-                            <ToggleButton value="all" key="all">
-                                全部
-                            </ToggleButton>
-                            <ToggleButton value="single" key="single">
-                                單日
-                            </ToggleButton>
-                            <ToggleButton value="range" key="range">
-                                範圍
-                            </ToggleButton>
-                        </ToggleButtonGroup>
-                        {pickerMode !== 'all' && (
-                            <TextField
-                                variant="standard"
-                                placeholder="請選擇日期"
-                                value={inputDateValue()}
-                                sx={{ minWidth: 220, mr: 2 }}
-                                onClick={() => setOpen(true)}
+                <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                    <ToggleButtonGroup color="primary" value={pickerMode} onChange={handlePickerMode} sx={{ mr: 2 }}>
+                        <ToggleButton value="all" key="all">
+                            全部
+                        </ToggleButton>
+                        <ToggleButton value="single" key="single">
+                            單日
+                        </ToggleButton>
+                        <ToggleButton value="range" key="range">
+                            範圍
+                        </ToggleButton>
+                    </ToggleButtonGroup>
+                    {pickerMode !== 'all' && (
+                        <TextField
+                            variant="standard"
+                            placeholder="請選擇日期"
+                            value={inputDateValue()}
+                            sx={{ minWidth: 220, mr: 2 }}
+                            onClick={() => setOpen(true)}
+                        >
+                            選擇日期
+                        </TextField>
+                    )}
+                    {pickerMode === 'single' && (
+                        <FormControl variant="standard" sx={{ minWidth: 120, mr: 2 }}>
+                            <InputLabel id="time">時段選擇</InputLabel>
+                            <Select
+                                labelId="time"
+                                value={time}
+                                onChange={e => setTime(e.target.value)}
+                                MenuProps={{ classes: { paper: classes.menu } }}
                             >
-                                選擇日期
-                            </TextField>
-                        )}
-                        {pickerMode === 'single' && (
-                            <FormControl variant="standard" sx={{ minWidth: 120, mr: 2 }}>
-                                <InputLabel id="time">時段選擇</InputLabel>
-                                <Select
-                                    labelId="time"
-                                    value={time}
-                                    onChange={e => setTime(e.target.value)}
-                                    MenuProps={{ classes: { paper: classes.menu } }}
-                                >
-                                    <MenuItem value={'all'}>整天</MenuItem>
-                                    {TIMELIST.map(item => (
-                                        <MenuItem key={item[0]} value={item.toString()}>
-                                            {`${item[0]} - ${item[1]}`}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        )}
-
-                        <FormControl variant="standard" sx={{ minWidth: 120 }}>
-                            <InputLabel id="department">部門選擇</InputLabel>
-                            <Select labelId="department" value={selectDepartment} onChange={handleSelectDepartment}>
-                                <MenuItem value={'all'}>全部</MenuItem>
-                                {departments &&
-                                    departments.map(department => (
-                                        <MenuItem key={department._id} value={department._id}>
-                                            {department.name}
-                                        </MenuItem>
-                                    ))}
+                                <MenuItem value={'all'}>整天</MenuItem>
+                                {TIMELIST.map(item => (
+                                    <MenuItem key={item[0]} value={item.toString()}>
+                                        {`${item[0]} - ${item[1]}`}
+                                    </MenuItem>
+                                ))}
                             </Select>
                         </FormControl>
-                    </Box>
+                    )}
+
+                    <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                        <InputLabel id="department">部門選擇</InputLabel>
+                        <Select labelId="department" value={selectDepartment} onChange={handleSelectDepartment}>
+                            <MenuItem value={'all'}>全部</MenuItem>
+                            {departments &&
+                                departments.map(department => (
+                                    <MenuItem key={department._id} value={department._id}>
+                                        {department.name}
+                                    </MenuItem>
+                                ))}
+                        </Select>
+                    </FormControl>
                 </Box>
+            </Box>
 
-                <Grid container wrap="nowrap">
-                    <Grid container item xs={6} spacing={2} sx={{ m: 2 }}>
-                        {numsOfPeople.map(d => (
-                            <Grid item xs={4} key={d.name}>
-                                <Card
-                                    className={`${classes.card} ${d.name === peopleActiveName && 'active'}`}
-                                    onClick={() => handleCardClick('people', d.name)}
-                                >
-                                    <CardContent>
-                                        <Typography fontSize={{ xs: 20, md: 24 }} color="text.secondary" gutterBottom>
-                                            {d.label}
-                                        </Typography>
-                                        <Typography fontSize={{ xs: 26, md: 30 }}>{d.amount}</Typography>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
-                    <Grid container item xs={6} spacing={2} sx={{ m: 2 }}>
-                        {numsOfReport.map(d => (
-                            <Grid item xs={4} key={d.name}>
-                                <Card
-                                    className={`${classes.card} ${d.name === organActiveName && 'active'}`}
-                                    onClick={() => handleCardClick('organ', d.name)}
-                                >
-                                    <CardContent>
-                                        <Typography fontSize={{ xs: 20, md: 24 }} color="text.secondary" gutterBottom>
-                                            {d.label}
-                                        </Typography>
-
-                                        <Typography fontSize={{ xs: 26, md: 30 }}>{d.amount}</Typography>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        ))}
-                    </Grid>
+            <Grid container wrap="nowrap">
+                <Grid container item xs={6} spacing={2} sx={{ m: 2 }}>
+                    {numsOfPeople.map(d => (
+                        <Grid item xs={4} key={d.name}>
+                            <Card
+                                className={`${classes.card} ${d.name === peopleActiveName && 'active'}`}
+                                onClick={() => handleCardClick('people', d.name)}
+                            >
+                                <CardContent>
+                                    <Typography fontSize={{ xs: 20, md: 24 }} color="text.secondary" gutterBottom>
+                                        {d.label}
+                                    </Typography>
+                                    <Typography fontSize={{ xs: 26, md: 30 }}>{d.amount}</Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
                 </Grid>
+                <Grid container item xs={6} spacing={2} sx={{ m: 2 }}>
+                    {numsOfReport.map(d => (
+                        <Grid item xs={4} key={d.name}>
+                            <Card
+                                className={`${classes.card} ${d.name === organActiveName && 'active'}`}
+                                onClick={() => handleCardClick('organ', d.name)}
+                            >
+                                <CardContent>
+                                    <Typography fontSize={{ xs: 20, md: 24 }} color="text.secondary" gutterBottom>
+                                        {d.label}
+                                    </Typography>
 
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, mr: 3 }}>
-                    <ToggleButtonGroup color="primary" exclusive value={chartType} onChange={e => setChartType(e.target.value)}>
-                        <ToggleButton value="bar">長條圖</ToggleButton>
-                        <ToggleButton value="radar">雷達圖</ToggleButton>
-                        <ToggleButton value="table">表格</ToggleButton>
-                    </ToggleButtonGroup>
-                    <Button variant="text" onClick={handleExcelClick} sx={{ ml: 2 }} startIcon={<Print />}>
-                        Excel
-                    </Button>
-                </Box>
-
-                <Grid container sx={{ width: '100%', height: '46%' }} spacing={3} wrap="nowrap">
-                    {[numsOfPeople, numsOfReport].map((data, index) => {
-                        return (
-                            <Grid item xs={6}>
-                                {chartType === 'bar' && (
-                                    <ResponsiveContainer>
-                                        <BarChart
-                                            data={data}
-                                            margin={{
-                                                top: 30,
-                                                right: 50,
-                                                left: 40,
-                                                bottom: 40,
-                                            }}
-                                            barSize={40}
-                                        >
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="label" />
-
-                                            <YAxis />
-                                            <Tooltip />
-                                            <Bar dataKey="amount" fill={theme.palette.primary.light_secondary} />
-
-                                            {organActiveName &&
-                                                index === 1 &&
-                                                Object.values(numsOfReport.find(d => d.name === organActiveName))
-                                                    .filter(value => typeof value === 'object')
-                                                    .sort((a, b) => b.value - a.value)
-                                                    .map((child, index) => (
-                                                        <Bar
-                                                            key={child.name}
-                                                            dataKey={`${child.name}.value`}
-                                                            // stackId="a"
-                                                            name={child.label}
-                                                            fill={COLORS[index % COLORS.length]}
-                                                        />
-                                                    ))}
-                                            {peopleActiveName &&
-                                                index === 0 &&
-                                                Object.values(numsOfPeople.find(d => d.name === peopleActiveName))
-                                                    .filter(value => typeof value === 'object')
-                                                    .sort((a, b) => b.value - a.value)
-                                                    .map((child, index) => (
-                                                        <Bar
-                                                            key={child.name}
-                                                            dataKey={`${child.name}.value`}
-                                                            stackId="a"
-                                                            name={child.label}
-                                                            fill={COLORS[index % COLORS.length]}
-                                                        />
-                                                    ))}
-
-                                            <Legend />
-                                        </BarChart>
-                                    </ResponsiveContainer>
-                                )}
-                                {chartType === 'radar' && (
-                                    <ResponsiveContainer>
-                                        <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
-                                            <PolarGrid />
-                                            <PolarAngleAxis dataKey="label" />
-                                            <PolarRadiusAxis />
-                                            <Radar
-                                                name="Mike"
-                                                dataKey="amount"
-                                                stroke={theme.palette.primary.main}
-                                                fill={theme.palette.primary.light_secondary}
-                                                fillOpacity={0.6}
-                                            />
-                                        </RadarChart>
-                                    </ResponsiveContainer>
-                                )}
-                                {chartType === 'table' && (
-                                    <ResponsiveContainer>
-                                        <CustomDataGrid data={data} columns={columns} getRowId={row => row.name} Toolbar={CustomToolbar} />
-                                    </ResponsiveContainer>
-                                )}
-                            </Grid>
-                        )
-                    })}
+                                    <Typography fontSize={{ xs: 26, md: 30 }}>{d.amount}</Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
                 </Grid>
-            </CustomScrollbar>
+            </Grid>
+
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3, mr: 3 }}>
+                <ToggleButtonGroup color="primary" exclusive value={chartType} onChange={e => setChartType(e.target.value)}>
+                    <ToggleButton value="bar">長條圖</ToggleButton>
+                    <ToggleButton value="radar">雷達圖</ToggleButton>
+                    <ToggleButton value="table">表格</ToggleButton>
+                </ToggleButtonGroup>
+                <Button variant="text" onClick={handleExcelClick} sx={{ ml: 2 }} startIcon={<Print />}>
+                    Excel
+                </Button>
+            </Box>
+
+            <Grid container sx={{ width: '100%', height: '46vh' }} spacing={3} wrap="nowrap">
+                {[numsOfPeople, numsOfReport].map((data, index) => {
+                    return (
+                        <Grid item xs={6}>
+                            {chartType === 'bar' && (
+                                <ResponsiveContainer>
+                                    <BarChart
+                                        data={data}
+                                        margin={{
+                                            top: 30,
+                                            right: 50,
+                                            left: 40,
+                                            bottom: 40,
+                                        }}
+                                        barSize={40}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="label" />
+
+                                        <YAxis />
+                                        <Tooltip />
+                                        <Bar dataKey="amount" fill={theme.palette.primary.light_secondary} />
+
+                                        {organActiveName &&
+                                            index === 1 &&
+                                            Object.values(numsOfReport.find(d => d.name === organActiveName))
+                                                .filter(value => typeof value === 'object')
+                                                .sort((a, b) => b.value - a.value)
+                                                .map((child, index) => (
+                                                    <Bar
+                                                        key={child.name}
+                                                        dataKey={`${child.name}.value`}
+                                                        // stackId="a"
+                                                        name={child.label}
+                                                        fill={COLORS[index % COLORS.length]}
+                                                    />
+                                                ))}
+                                        {peopleActiveName &&
+                                            index === 0 &&
+                                            Object.values(numsOfPeople.find(d => d.name === peopleActiveName))
+                                                .filter(value => typeof value === 'object')
+                                                .sort((a, b) => b.value - a.value)
+                                                .map((child, index) => (
+                                                    <Bar
+                                                        key={child.name}
+                                                        dataKey={`${child.name}.value`}
+                                                        stackId="a"
+                                                        name={child.label}
+                                                        fill={COLORS[index % COLORS.length]}
+                                                    />
+                                                ))}
+
+                                        <Legend />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            )}
+                            {chartType === 'radar' && (
+                                <ResponsiveContainer>
+                                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={data}>
+                                        <PolarGrid />
+                                        <PolarAngleAxis dataKey="label" />
+                                        <PolarRadiusAxis />
+                                        <Radar
+                                            name="Mike"
+                                            dataKey="amount"
+                                            stroke={theme.palette.primary.main}
+                                            fill={theme.palette.primary.light_secondary}
+                                            fillOpacity={0.6}
+                                        />
+                                    </RadarChart>
+                                </ResponsiveContainer>
+                            )}
+                            {chartType === 'table' && (
+                                <ResponsiveContainer>
+                                    <CustomDataGrid data={data} columns={columns} getRowId={row => row.name} Toolbar={CustomToolbar} />
+                                </ResponsiveContainer>
+                            )}
+                        </Grid>
+                    )
+                })}
+            </Grid>
 
             <Dialog open={open} onClose={handleDialogClose}>
                 <DialogContent>

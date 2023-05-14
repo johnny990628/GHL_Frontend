@@ -290,11 +290,11 @@ const CustomReportForm = ({ lists, patient }) => {
 
                 <Grid container sx={{ height: '100%' }} spacing={2}>
                     <Grid item xs={12} xl={10}>
-                        <CustomScrollbar onScroll={onScrollEvent}>
+                        <Box sx={{ height: '68vh', overflowY: 'auto' }}>
                             {lists.map(list => (
                                 <FormSection key={list.name} list={list} />
                             ))}
-                        </CustomScrollbar>
+                        </Box>
                     </Grid>
                     {/* {isComputer && (
                         <Grid item xs={2}>

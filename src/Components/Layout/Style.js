@@ -3,14 +3,14 @@ import { makeStyles } from '@mui/styles'
 const useStyles = makeStyles(theme => ({
     container: {
         position: 'relative',
-        height: '100%',
         width: 'calc(100% - var(--sidebar-open-width))',
         left: 'var(--sidebar-open-width)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'left',
-        padding: '4rem 6rem 2rem 2rem',
-        backgroundColor: theme.palette.background.default,
+        padding: '5rem 2rem 2rem 2rem',
+        // backgroundColor: theme.palette.background.main,
+        borderRadius: '1rem',
         transition: 'all .4s ease-in',
         '&.close': {
             width: 'calc(100% - var(--sidebar-close-width))',

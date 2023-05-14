@@ -32,13 +32,13 @@ const Sidebar = () => {
 
     return (
         <Drawer variant={'permanent'} classes={{ paper: `${classes.container} ${isOpen || 'close'}` }}>
-            {isOpen ? (
+            {/* {isOpen ? (
                 <img src="./GHL.png" className={classes.logo} alt="logo" />
             ) : (
                 <Box className={classes.openIcon} onClick={() => dispatch(openSidebar())}>
                     <Dehaze />
                 </Box>
-            )}
+            )} */}
             <List className={classes.list}>
                 {SidebarItem.map((item, index) => (
                     <Authorized key={item.display_name} currentRole={user.role} authority={item.authority} noMatch={<></>}>

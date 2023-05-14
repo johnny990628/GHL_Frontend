@@ -14,6 +14,7 @@ import dashboardReducer from './Slices/Dashboard'
 import statisticReducer from './Slices/Statistic'
 import dicomReducer from './Slices/Dicom'
 import eventReducer from './Slices/Event'
+import event4ListReducer from './Slices/Event4List'
 
 export default configureStore({
     reducer: {
@@ -32,5 +33,6 @@ export default configureStore({
         statistic: statisticReducer,
         dicom: dicomReducer,
         event: eventReducer,
+        event4List: event4ListReducer,
     },
 })

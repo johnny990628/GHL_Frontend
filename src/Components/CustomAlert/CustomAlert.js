@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { closeAlert } from '../../Redux/Slices/Alert'
+import './style.css'
 
 const CustomAlert = () => {
     const dispatch = useDispatch()
@@ -16,6 +17,7 @@ const CustomAlert = () => {
         showConfirmButton: false,
         timer: 1500,
         timerProgressBar: true,
+        customClass: { container: 'alert' },
         didOpen: toast => {
             toast.addEventListener('mouseenter', Swal.stopTimer)
             toast.addEventListener('mouseleave', Swal.resumeTimer)

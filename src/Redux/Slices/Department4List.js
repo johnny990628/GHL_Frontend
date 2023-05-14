@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { apiGetDepartments } from '../../Axios/Department'
 import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
 
-export const fetchDepartments4List = createAsyncThunk('department4lsit/fetchDepartments4List', async (_, thunkAPI) => {
+export const fetchDepartments4List = createAsyncThunk('department4list/fetchDepartments4List', async (_, thunkAPI) => {
     try {
         const departments = await apiGetDepartments({ limit: 100, offset: 0 })
         return { departments: departments.data.results }
@@ -14,7 +14,7 @@ export const fetchDepartments4List = createAsyncThunk('department4lsit/fetchDepa
 
 const initialState = { departments: [] }
 const department4ListSlice = createSlice({
-    name: 'department4lsit',
+    name: 'department4list',
     initialState,
     extraReducers: {
         [fetchDepartments4List.pending]: (state, action) => {
