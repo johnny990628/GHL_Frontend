@@ -89,24 +89,7 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, loading, totalPag
                     {GlobalFilter && <GlobalFilter setSearch={setSearch} search={search} totalCount={totalCount} loading={loading} />}
                 </Grid>
                 <Grid xs={4} sx={{ display: 'flex', justifyContent: 'right', alignItems: 'center', color: 'text.gray' }}>
-                    <Box className={classes.tableFooterItem} sx={{ fontSize: '1.1rem' }}>
-                        {`第${pageIndex + 1}/${pageOptions.length}頁`}
-                    </Box>
-                    <ButtonGroup variant="outlined" className={classes.tableFooterItem}>
-                        <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                            {'<<'}
-                        </Button>
-                        <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
-                            {'<'}
-                        </Button>
-                        <Button onClick={() => nextPage()} disabled={!canNextPage}>
-                            {'>'}
-                        </Button>
-                        <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-                            {'>>'}
-                        </Button>
-                    </ButtonGroup>
-                    <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                    <FormControl variant="outlined" sx={{ m: 1, minWidth: 120 }} size="small">
                         <InputLabel id="rows">列數</InputLabel>
                         <Select
                             labelId="rows"
@@ -125,6 +108,23 @@ const CustomTable = ({ columns, renderSubRow, fetchData, data, loading, totalPag
                             ))}
                         </Select>
                     </FormControl>
+                    <Box className={classes.tableFooterItem} sx={{ fontSize: '1.1rem' }}>
+                        {`第${pageIndex + 1}/${pageOptions.length}頁`}
+                    </Box>
+                    <ButtonGroup variant="outlined" className={classes.tableFooterItem}>
+                        <Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                            {'<<'}
+                        </Button>
+                        <Button onClick={() => previousPage()} disabled={!canPreviousPage}>
+                            {'<'}
+                        </Button>
+                        <Button onClick={() => nextPage()} disabled={!canNextPage}>
+                            {'>'}
+                        </Button>
+                        <Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                            {'>>'}
+                        </Button>
+                    </ButtonGroup>
                 </Grid>
             </Grid>
             <Grid item xs={9} {...getTableProps()} className={classes.tableBody}>
