@@ -11,16 +11,13 @@ const useStyles = makeStyles(theme => ({
     },
     tableHeader: {
         fontSize: '1.1rem',
-
-        backgroundColor: theme.palette.secondary.main,
+        backgroundColor: 'transparent',
         borderBottom: `1px solid ${theme.palette.primary.light}`,
         [theme.breakpoints.down('lg')]: {
             fontSize: '1rem',
         },
     },
-    tableBody: {
-        // backgroundColor: theme.palette.secondary.main,
-    },
+    tableBody: {},
     tableCell: {
         border: 0,
         fontSize: '1.1rem',

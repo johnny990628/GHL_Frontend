@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme => ({
         height: '96vh',
         backgroundColor: theme.palette.secondary.main,
         transition: 'width .4s ease-in',
-        borderRight: `1px solid ${theme.palette.gray.main}`,
+        // borderRight: `1px solid ${theme.palette.gray.main}`,
         zIndex: 1,
         '&.close': {
             width: 'var(--sidebar-close-width)',
@@ -26,22 +26,24 @@ const useStyles = makeStyles(theme => ({
         textDecoration: 'none',
         margin: theme.spacing(1),
         borderRadius: '1rem',
-        transition: 'transform .4s ease-out',
+        transition: 'all .2s ease-out',
 
         '&.active': {
             backgroundColor: theme.palette.primary.light,
+            transform: 'scale(1.05)',
         },
         '&:hover': {
             transform: 'scale(1.03)',
         },
     },
     text: {
-        color: theme.palette.text.primary,
         fontSize: '1.3rem',
         marginLeft: '1rem',
         whiteSpace: 'nowrap',
+        color: theme.palette.text.gray,
+        transition: 'color .2s ease-out',
         '&.active': {
-            color: theme.palette.primary.main,
+            color: theme.palette.text.secondary,
         },
     },
     logo: {
@@ -51,14 +53,17 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        color: theme.palette.primary.main,
+        color: theme.palette.text.gray,
+        transition: 'color .2s ease-out',
+        '&.active': {
+            color: theme.palette.text.secondary,
+        },
     },
     openIcon: {
         position: 'absolute',
         bottom: 30,
         left: '1.5rem',
-
-        color: theme.palette.primary.main,
+        color: theme.palette.text.secondary,
         '&:hover': {
             cursor: 'pointer',
         },
@@ -68,7 +73,7 @@ const useStyles = makeStyles(theme => ({
         bottom: 10,
         left: '10rem',
         padding: '1.5rem',
-        color: theme.palette.primary.main,
+        color: theme.palette.text.secondary,
         '&:hover': {
             cursor: 'pointer',
         },

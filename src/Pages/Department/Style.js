@@ -5,15 +5,15 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: theme.palette.secondary.main,
+        backgroundColor: theme.palette.background.default,
         borderRadius: '.5rem',
         // boxShadow: '6px 6px 10px rgba(0,0,0,0.2)',
         border: `1px solid ${theme.palette.border.main}`,
         // height: '100%',
     },
     accordion: {
-        backgroundColor: theme.palette.secondary.main,
-        width: '90%',
+        backgroundColor: 'transparent',
+        width: '98%',
     },
     formWrapper: {
         display: 'flex',

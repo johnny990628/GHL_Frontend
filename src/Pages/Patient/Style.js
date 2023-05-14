@@ -6,8 +6,8 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        backgroundColor: theme.palette.background.default,
 
-        backgroundColor: theme.palette.secondary.main,
         borderRadius: '.5rem',
         // boxShadow: '6px 6px 10px rgba(0,0,0,0.2)',
         border: `1px solid ${theme.palette.border.main}`,
@@ -15,8 +15,8 @@ const useStyles = makeStyles(theme => ({
         // height: '100%',
     },
     accordion: {
-        backgroundColor: theme.palette.secondary.main,
-        width: '90%',
+        backgroundColor: 'transparent',
+        width: '98%',
     },
     status: {
         // backgroundColor: theme.palette.status.yet,

@@ -225,7 +225,7 @@ const Patient = () => {
     return (
         <Box className={classes.container}>
             <Accordion elevation={0} className={classes.accordion}>
-                <AccordionSummary expandIcon={<ArrowDropDown />} sx={{ flexDirection: 'column-reverse' }} />
+                <AccordionSummary expandIcon={<ArrowDropDown />} sx={{ flexDirection: 'column-reverse' }} className={classes.accordion} />
                 <AccordionDetails>
                     <CustomForm title="新增病人" sendData={sendData} mode="create" />
                 </AccordionDetails>
