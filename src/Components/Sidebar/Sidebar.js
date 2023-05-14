@@ -56,7 +56,7 @@ const Sidebar = () => {
                                     <Box className={`${classes.icon} ${index === activeItem && 'active'}`}>{item.icon}</Box>
                                 ) : (
                                     <Tooltip title={item.display_name} placement="right-start" arrow>
-                                        <Box className={`${classes.icon} active`}>{item.icon}</Box>
+                                        <Box className={`${classes.icon} ${index === activeItem && 'active'}`}>{item.icon}</Box>
                                     </Tooltip>
                                 )}
 
