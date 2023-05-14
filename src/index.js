@@ -41,11 +41,12 @@ const whiteTheme = createTheme({
             light_secondary: 'rgba(223, 142, 162 , .5)',
         },
         secondary: {
-            main: 'rgba(251, 248, 242,.8)',
+            main: 'rgba(251, 248, 242,.7)',
         },
         background: {
             main: 'rgb(247, 222, 227)',
-            default: 'rgba(251, 248, 242,.9)',
+            default: 'rgba(251, 248, 242,.85)',
+            secondary: 'rgba(251, 248, 242,.95)',
         },
         text: {
             primary: 'rgba(36, 31, 33)',

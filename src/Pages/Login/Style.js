@@ -8,7 +8,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        backgroundColor: 'white',
+        backgroundColor: theme.palette.background.default,
         padding: '2rem',
         borderRadius: '1rem',
         width: '30rem',

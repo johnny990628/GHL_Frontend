@@ -63,6 +63,9 @@ const useStyles = makeStyles(theme => ({
         left: 20,
         top: 30,
     },
+    dialogPaper: {
+        backgroundColor: theme.palette.background.secondary,
+    },
 }))
 
 export default useStyles
