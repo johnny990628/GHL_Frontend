@@ -42,8 +42,8 @@ const CustomNavbar = () => {
         <AppBar elevation={0} position="fixed" className={`${classes.container} ${isOpen || 'close'}`}>
             <Toolbar className={classes.toolbar} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <img src="./logo.png" className={classes.logo} alt="logo" style={{ width: '2.8rem', height: '2.8rem' }} />
-                    <Box sx={{ color: 'primary.main', fontSize: '1.8rem' }}>奇異鳥報告系統</Box>
+                    <img src="./logo.gif" className={classes.logo} alt="logo" style={{ width: '2.8rem', height: '2.8rem' }} />
+                    <Box sx={{ color: 'primary.main', fontSize: '1.8rem', ml: 1 }}>奇異鳥報告系統</Box>
                     <FormControl sx={{ width: '10rem', ml: 4 }} size="small">
                         <InputLabel id="event-select-label">選擇活動</InputLabel>
                         <Select labelId="event-select-label" variant="outlined" value={event} onChange={handleChange} label="選擇活動">
