@@ -3,7 +3,7 @@ import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
 import { apiCreateEvent, apiDeleteEvent, apiGetEvents, apiUpdateEvent } from '../../Axios/Event'
 import { openAlert } from './Alert'
 
-export const fetchEvent = createAsyncThunk('event/fetchREvent', async (params, thunkAPI) => {
+export const fetchEvent = createAsyncThunk('event/fetchEvent', async (params, thunkAPI) => {
     try {
         const response = await apiGetEvents(params)
         const { results, count } = response.data
@@ -14,9 +14,9 @@ export const fetchEvent = createAsyncThunk('event/fetchREvent', async (params, t
     }
 })
 
-export const createEvent = createAsyncThunk('event/createEvent', async ({ name, datetime }, thunkAPI) => {
+export const createEvent = createAsyncThunk('event/createEvent', async ({ name, datetime, departmentID }, thunkAPI) => {
     try {
-        const response = await apiCreateEvent({ name, datetime })
+        const response = await apiCreateEvent({ name, datetime, departmentID })
         thunkAPI.dispatch(
             openAlert({
                 toastTitle: '新增成功',

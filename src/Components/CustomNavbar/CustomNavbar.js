@@ -69,7 +69,7 @@ const CustomNavbar = () => {
                         ></Avatar>
                         <Box ml={2}>
                             <Box sx={{ color: 'primary.main' }}>{user.name}</Box>
-                            <Box sx={{ fontSize: '.8rem', color: 'gray.main' }}>{roleConfig(user.role)}</Box>
+                            <Box sx={{ fontSize: '.9rem', color: 'gray.main' }}>{roleConfig(user.role)}</Box>
                         </Box>
                     </Box>
                     <Button variant="outlined" startIcon={<Logout />} sx={{ ml: 4 }} onClick={() => dispatch(logout())}>

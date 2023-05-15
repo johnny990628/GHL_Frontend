@@ -102,7 +102,16 @@ const CustomForm = ({ title, row, mode, sendData }) => {
 
     const handleSubmit = async data => {
         try {
-            if (hasEmptyField() || idUsed || !validID || !validPhone) return
+            if (hasEmptyField() || idUsed || !validID || !validPhone) {
+                dispatch(
+                    openAlert({
+                        toastTitle: '新增失敗',
+                        text: '有錯誤欄位',
+                        icon: 'error',
+                    })
+                )
+                return
+            }
             //身份證字號判斷性別
             const gender = data.id.substring(1, 2) === '1' ? 'm' : 'f'
             const mr = gender === 'm' ? '先生' : '小姐'
@@ -197,7 +206,7 @@ const CustomForm = ({ title, row, mode, sendData }) => {
                                     id,
                                     name,
                                     phone,
-                                    department,
+                                    departmentID: department,
                                     birth,
                                 })
                             }

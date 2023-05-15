@@ -6,7 +6,7 @@ export const fetchEvent4List = createAsyncThunk('event/fetchREvent4List', async 
     try {
         const response = await apiGetEvents({ limit: 100, offset: 0 })
         const { results, count } = response.data
-        return { events: results }
+        return { events: results.filter(r => r.active) }
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()

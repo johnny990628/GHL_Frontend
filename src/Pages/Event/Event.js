@@ -30,6 +30,7 @@ import { useDebouncedCallback } from 'use-debounce'
 const Report = () => {
     const [name, setName] = useState('')
     const [datetime, setDatetime] = useState(new Date())
+    const [department, setDepartment] = useState('')
     const [errorField, setErrorField] = useState([])
     const classes = useStyles()
     const dispatch = useDispatch()
@@ -50,7 +51,7 @@ const Report = () => {
     }
 
     const hasEmptyField = () => {
-        const errorFieldList = Object.entries({ name, datetime })
+        const errorFieldList = Object.entries({ name, datetime, department })
             .map(([key, value]) => !value && key)
             .filter(key => key)
         setErrorField(errorFieldList)
@@ -58,8 +59,18 @@ const Report = () => {
     }
 
     const handleSubmit = async () => {
-        if (hasEmptyField()) return
-        dispatch(createEvent({ name, datetime }))
+        if (hasEmptyField()) {
+            dispatch(
+                openAlert({
+                    toastTitle: '新增失敗',
+                    text: '有錯誤欄位',
+                    icon: 'error',
+                })
+            )
+            return
+        }
+
+        dispatch(createEvent({ name, datetime, departmentID: department }))
         setName('')
         setDatetime(new Date())
     }
@@ -145,6 +156,7 @@ const Report = () => {
 
     const inputModel = [
         { name: 'name', label: '活動名稱', value: name, setValue: setName, required: true },
+        { name: 'department', label: '部門', value: department, setValue: setDepartment, required: true },
         { name: 'datetime', label: '活動日期', value: datetime, setValue: setDatetime, required: true },
     ]
 
