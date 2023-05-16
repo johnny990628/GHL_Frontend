@@ -13,6 +13,7 @@ import { scheduleTrigger } from '../../Redux/Slices/Schedule'
 import { departmentTrigger } from '../../Redux/Slices/Department'
 import { userTrigger } from '../../Redux/Slices/User'
 import { eventTrigger } from '../../Redux/Slices/Event'
+import { apiGetCookie } from '../../Axios/Cookie'
 
 const CustomNavbar = () => {
     const [event, setEvent] = useState('all')
@@ -23,8 +24,9 @@ const CustomNavbar = () => {
     const { user } = useSelector(state => state.auth)
     const { events } = useSelector(state => state.event4List)
 
-    useEffect(() => {
+    useEffect(async () => {
         dispatch(fetchEvent4List())
+        setupEvent()
     }, [])
 
     const handleEventChange = () => {
@@ -36,6 +38,13 @@ const CustomNavbar = () => {
                 dispatch(scheduleTrigger())
                 break
         }
+    }
+
+    const setupEvent = () => {
+        apiGetCookie().then(res => {
+            const { event } = res.data
+            setEvent(event)
+        })
     }
 
     const handleChange = async e => {
