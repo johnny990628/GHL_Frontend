@@ -6,11 +6,19 @@ import { AppBar, Toolbar, Box, Select, MenuItem, FormControl, InputLabel, TextFi
 import { fetchEvent4List } from '../../Redux/Slices/Event4List'
 import { Logout, Search } from '@mui/icons-material'
 import { logout } from '../../Redux/Slices/Auth'
+import { apiRegisterEvent } from '../../Axios/Event'
+import { useLocation } from 'react-router-dom'
+import { patientTrigger } from '../../Redux/Slices/Patient'
+import { scheduleTrigger } from '../../Redux/Slices/Schedule'
+import { departmentTrigger } from '../../Redux/Slices/Department'
+import { userTrigger } from '../../Redux/Slices/User'
+import { eventTrigger } from '../../Redux/Slices/Event'
 
 const CustomNavbar = () => {
-    const [event, setEvent] = useState()
+    const [event, setEvent] = useState('all')
     const classes = useStyles()
     const dispatch = useDispatch()
+    const location = useLocation()
     const { isOpen } = useSelector(state => state.sidebar)
     const { user } = useSelector(state => state.auth)
     const { events } = useSelector(state => state.event4List)
@@ -19,8 +27,21 @@ const CustomNavbar = () => {
         dispatch(fetchEvent4List())
     }, [])
 
-    const handleChange = e => {
+    const handleEventChange = () => {
+        switch (location.pathname) {
+            case '/patient':
+                dispatch(patientTrigger())
+                break
+            case '/report':
+                dispatch(scheduleTrigger())
+                break
+        }
+    }
+
+    const handleChange = async e => {
         setEvent(e.target.value)
+        await apiRegisterEvent(e.target.value)
+        handleEventChange()
     }
 
     const config = genConfig(user.username)
@@ -47,7 +68,7 @@ const CustomNavbar = () => {
                     <FormControl sx={{ width: '10rem', ml: 4 }} size="small">
                         <InputLabel id="event-select-label">選擇活動</InputLabel>
                         <Select labelId="event-select-label" variant="outlined" value={event} onChange={handleChange} label="選擇活動">
-                            <MenuItem value="">
+                            <MenuItem value="all">
                                 <em>所有活動</em>
                             </MenuItem>
                             {events.map(e => (

@@ -38,7 +38,7 @@ const CustomForm = ({ title, row, mode, sendData }) => {
             setId(row?.id)
             setName(row?.name)
             setPhone(row?.phone)
-            setDepartment(row?.department)
+            setDepartment(row?.departmentID)
             setBirth(new Date(row.birth))
             setAutoProcessSwitch(false)
         }

@@ -6,3 +6,5 @@ export const apiDeleteEvent = eventID => Request.delete(`/event/${eventID}`)
 
 export const apiGetEvents = params => Request.get('/event', { params })
 export const apiGetEventByEventID = eventID => Request.get(`/event/${eventID}`)
+
+export const apiRegisterEvent = eventID => Request.post(`/event/${eventID}`)
