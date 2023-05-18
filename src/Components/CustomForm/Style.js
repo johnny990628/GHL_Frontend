@@ -6,17 +6,20 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: '1rem',
     },
     formHeader: {
-        fontSize: '3rem',
+        display: 'flex',
+        justifyContent: 'flex-start',
+        width: '100%',
     },
     formContainer: {
         display: 'flex',
         flexDirection: 'column',
     },
     textField: {
-        margin: '1rem 2.8rem',
-        width: '28rem',
+        margin: '.8rem 0',
+        width: '30rem',
 
         [theme.breakpoints.down('md')]: {
             width: '15rem',
@@ -33,7 +36,7 @@ const useStyles = makeStyles(theme => ({
         color: theme.palette.primary.main,
     },
     button: {
-        width: '100%',
+        width: '20%',
         fontSize: '1.2rem',
         margin: '1rem',
     },

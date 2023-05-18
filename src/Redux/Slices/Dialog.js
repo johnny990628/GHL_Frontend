@@ -5,6 +5,8 @@ import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
 const initialState = {
     patient: { isOpen: false, row: {} },
     report: { isOpen: false, row: { patient: {}, records: {}, reportID: '' } },
+    department: { isOpen: false, row: {} },
+    event: { isOpen: false, row: {} },
 }
 
 export const fetchReportByReportID = createAsyncThunk('dialog/fetchReportByReportID', async (reportID, thunkAPI) => {

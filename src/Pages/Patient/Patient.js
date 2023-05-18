@@ -30,7 +30,7 @@ import {
 import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
 import CustomForm from '../../Components/CustomForm/CustomForm'
-import EditDialog from './EditDialog'
+import PatientDialog from './PatientDialog'
 import GlobalFilter from '../../Components/GlobalFilter/GlobalFilter'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -241,7 +241,7 @@ const Patient = () => {
                 StatusRadioGroup={StatusRadioGroup}
                 GlobalFilter={GlobalFilter}
             />
-            <EditDialog />
+            <PatientDialog />
         </Box>
     )
 }

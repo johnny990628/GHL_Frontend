@@ -2,18 +2,19 @@ import { useEffect, useState } from 'react'
 import useStyles from './Style'
 import { useDispatch, useSelector } from 'react-redux'
 import Avatar, { genConfig } from 'react-nice-avatar'
-import { AppBar, Toolbar, Box, Select, MenuItem, FormControl, InputLabel, TextField, IconButton, Button } from '@mui/material'
+import { AppBar, Toolbar, Box, Select, MenuItem, FormControl, InputLabel, TextField, IconButton, Button, Stack } from '@mui/material'
 import { fetchEvent4List } from '../../Redux/Slices/Event4List'
-import { Logout, Search } from '@mui/icons-material'
+import { AccessibleForwardOutlined, AccountBalanceOutlined, EventAvailableOutlined, Logout, Search } from '@mui/icons-material'
 import { logout } from '../../Redux/Slices/Auth'
 import { apiRegisterEvent } from '../../Axios/Event'
 import { useLocation } from 'react-router-dom'
 import { patientTrigger } from '../../Redux/Slices/Patient'
 import { scheduleTrigger } from '../../Redux/Slices/Schedule'
-import { departmentTrigger } from '../../Redux/Slices/Department'
-import { userTrigger } from '../../Redux/Slices/User'
-import { eventTrigger } from '../../Redux/Slices/Event'
+
 import { apiGetCookie } from '../../Axios/Cookie'
+
+import { openDialog } from '../../Redux/Slices/Dialog'
+import CreateDialog from '../CreateDialog/CreateDialog'
 
 const CustomNavbar = () => {
     const [event, setEvent] = useState('all')
@@ -89,6 +90,27 @@ const CustomNavbar = () => {
                     </FormControl>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Stack direction="row" mr={4} spacing={2}>
+                        <Button
+                            variant="outlined"
+                            className={classes.button}
+                            startIcon={<AccessibleForwardOutlined />}
+                            onClick={() => dispatch(openDialog({ row: {}, type: 'patient' }))}
+                        >
+                            新增病患
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            className={classes.button}
+                            startIcon={<AccountBalanceOutlined />}
+                            // onClick={() => dispatch(openDialog({ row: {}, type: 'department' }))}
+                        >
+                            新增部門
+                        </Button>
+                        <Button variant="outlined" className={classes.button} startIcon={<EventAvailableOutlined />}>
+                            新增活動
+                        </Button>
+                    </Stack>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <Avatar
                             style={{
@@ -107,6 +129,7 @@ const CustomNavbar = () => {
                     </Button>
                 </Box>
             </Toolbar>
+            <CreateDialog title="新增病患" type="patient" />
         </AppBar>
     )
 }

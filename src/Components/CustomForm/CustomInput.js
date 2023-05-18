@@ -47,7 +47,7 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
         return (
             <>
                 <TextField
-                    variant="standard"
+                    variant="outlined"
                     className={classes.textField}
                     label={label}
                     required
@@ -63,7 +63,6 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
                     onClick={handleDateClick}
                 />
                 <DatePickerPopover />
-                <Box className={classes.textField} />
             </>
         )
     }
@@ -94,7 +93,7 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
 
         return (
             <TextField
-                variant="standard"
+                variant="outlined"
                 label="部門"
                 select
                 value={value}
@@ -133,11 +132,11 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
         <Department value={value} setValue={setValue} error={error} />
     ) : (
         <TextField
+            variant="outlined"
             error={error}
             helperText={handleHelperText(name)}
             disabled={name === 'id' && mode === 'edit'}
             label={label}
-            variant="standard"
             required={required}
             value={value}
             onChange={e => {

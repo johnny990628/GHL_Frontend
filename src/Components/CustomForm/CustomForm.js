@@ -169,7 +169,6 @@ const CustomForm = ({ title, row, mode, sendData }) => {
 
     return (
         <Box className={classes.formWrapper}>
-            <Box className={classes.formHeader}>{title}</Box>
             {mode === 'create' && (
                 <FormGroup>
                     <FormControlLabel
@@ -182,39 +181,27 @@ const CustomForm = ({ title, row, mode, sendData }) => {
             <Box className={classes.formContainer}>
                 <Box className={classes.formBody}>
                     {inputModel.map(({ name, label, value, setValue, required }) => (
-                        <CustomInput
-                            key={name}
-                            name={name}
-                            label={label}
-                            value={value}
-                            setValue={setValue}
-                            handleChange={handleChange}
-                            handleHelperText={handleHelperText}
-                            error={errorField.includes(name)}
-                            mode={mode}
-                            required={required}
-                        />
+                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <Box sx={{ fontSize: '1.3rem', minWidth: '13rem' }}>{label}</Box>
+                            <CustomInput
+                                key={name}
+                                name={name}
+                                label={label}
+                                value={value}
+                                setValue={setValue}
+                                handleChange={handleChange}
+                                handleHelperText={handleHelperText}
+                                error={errorField.includes(name)}
+                                mode={mode}
+                                required={required}
+                            />
+                        </Box>
                     ))}
 
-                    <Box sx={{ display: 'flex', flexDirection: 'column', width: '70%', alignItems: 'center' }}>
-                        {mode === 'create' && <QRScanner onResult={res => setQrcode(JSON.parse(res))} />}
+                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '2rem' }}>
+                        {/* {mode === 'create' && <QRScanner onResult={res => setQrcode(JSON.parse(res))} />} */}
+
                         <Button
-                            variant="contained"
-                            className={classes.button}
-                            onClick={() =>
-                                handleSubmit({
-                                    id,
-                                    name,
-                                    phone,
-                                    departmentID: department,
-                                    birth,
-                                })
-                            }
-                        >
-                            {mode === 'create' ? '新增' : '修改'}
-                        </Button>
-                        <Button
-                            variant="outlined"
                             className={classes.button}
                             sx={{
                                 color: theme.palette.primary.main,
@@ -229,6 +216,21 @@ const CustomForm = ({ title, row, mode, sendData }) => {
                             }}
                         >
                             {mode === 'create' ? '清除' : '取消'}
+                        </Button>
+                        <Button
+                            variant="contained"
+                            className={classes.button}
+                            onClick={() =>
+                                handleSubmit({
+                                    id,
+                                    name,
+                                    phone,
+                                    departmentID: department,
+                                    birth,
+                                })
+                            }
+                        >
+                            {mode === 'create' ? '新增' : '修改'}
                         </Button>
                     </Box>
                 </Box>

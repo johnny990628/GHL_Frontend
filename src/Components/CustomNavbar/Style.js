@@ -15,6 +15,9 @@ const useStyles = makeStyles(theme => ({
     toolbar: {
         height: '100%',
     },
+    button: {
+        fontSize: '1rem',
+    },
 }))
 
 export default useStyles
