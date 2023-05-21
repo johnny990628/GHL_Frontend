@@ -74,7 +74,7 @@ const useDepartmentForm = () => {
             )
             return
         }
-        dispatch(updateDepartment({ departmentID: row._id, data: { name, address, creator: user._id } }))
+        dispatch(updateDepartment({ departmentID: row._id, data: { name, address } }))
         dispatch(closeDialog({ type: 'department' }))
     }
 

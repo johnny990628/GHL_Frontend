@@ -78,7 +78,7 @@ const useEventForm = () => {
             return
         }
 
-        dispatch(updateEvent({ eventID: row._id, data: { name, datetime, departmentID: department, creator: user._id } }))
+        dispatch(updateEvent({ eventID: row._id, data: { name, datetime, departmentID: department } }))
         dispatch(closeDialog({ type: 'event' }))
     }
     const inputModel = [
