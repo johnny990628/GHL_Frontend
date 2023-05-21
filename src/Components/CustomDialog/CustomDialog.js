@@ -4,14 +4,14 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconBut
 import { useSelector, useDispatch } from 'react-redux'
 
 import { closeDialog } from '../../Redux/Slices/Dialog'
-import { updatePatient } from '../../Redux/Slices/Patient'
+
 import { useTheme } from '@mui/styles'
 
-import CustomForm from '../../Components/CustomForm/CustomForm'
+import CustomForm from '../CustomForm/CustomForm'
 import useStyles from './Style'
 import { Close } from '@mui/icons-material'
 
-const CreateDialog = ({ title, type, sendData }) => {
+const CustomDialog = ({ title, type, mode }) => {
     const { isOpen, row } = useSelector(state => state.dialog[type])
 
     const dispatch = useDispatch()
@@ -35,10 +35,10 @@ const CreateDialog = ({ title, type, sendData }) => {
                 </IconButton>
             </DialogTitle>
             <DialogContent>
-                <CustomForm row={row} mode="edit" sendData={sendData} />
+                <CustomForm row={row} type={type} mode={mode} />
             </DialogContent>
         </Dialog>
     )
 }
 
-export default CreateDialog
+export default CustomDialog

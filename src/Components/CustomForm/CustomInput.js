@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Box, FormControl, FormControlLabel, FormLabel, MenuItem, Popover, Radio, RadioGroup, TextField } from '@mui/material'
+import {
+    Box,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    InputAdornment,
+    MenuItem,
+    Popover,
+    Radio,
+    RadioGroup,
+    TextField,
+} from '@mui/material'
 import { useTheme } from '@mui/styles'
 import { DayPicker } from 'react-day-picker'
 
@@ -8,12 +19,13 @@ import useStyles from './Style'
 import { apiGetDepartments } from '../../Axios/Department'
 import { zhTW } from 'date-fns/locale'
 import { useSelector } from 'react-redux'
+import { AccessTime } from '@mui/icons-material'
 
-const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperText, error, mode, required }) => {
+const CustomInput = ({ label, name, type, options, value, setValue, handleChange, handleHelperText, error, required }) => {
     const classes = useStyles()
     const theme = useTheme()
 
-    const DatePickerCustomInput = ({ label, value, setValue, error }) => {
+    const DatePicker = ({ label, value, setValue, error }) => {
         const [dateAnchorEl, setDateAnchorEl] = useState(null)
         const handleDateClick = event => {
             setDateAnchorEl(event.currentTarget)
@@ -48,16 +60,22 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
             <>
                 <TextField
                     variant="outlined"
+                    required
                     className={classes.textField}
                     label={label}
-                    required
                     value={new Date(value).toLocaleDateString()}
+                    error={error}
                     InputProps={{
                         style: {
                             fontSize: '1.3rem',
                             color: theme.palette.primary.main,
                         },
                         readOnly: true,
+                        endAdornment: (
+                            <InputAdornment position="end">
+                                <AccessTime />
+                            </InputAdornment>
+                        ),
                     }}
                     InputLabelProps={{ style: { fontSize: '1.3rem', color: theme.palette.primary.main } }}
                     onClick={handleDateClick}
@@ -67,26 +85,7 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
         )
     }
 
-    const GenderPicker = () => {
-        return (
-            <>
-                <FormControl className={classes.textField}>
-                    <FormLabel id="genderPicker" sx={{ fontSize: '1.5rem' }}>
-                        性別
-                    </FormLabel>
-                    <RadioGroup row aria-labelledby="genderPicker" value={value} onChange={e => setValue(e.target.value)}>
-                        <FormControlLabel value="男" control={<Radio />} label={<Box className={classes.labelText}>男</Box>} />
-                        <FormControlLabel value="女" control={<Radio />} label={<Box className={classes.labelText}>女</Box>} />
-                    </RadioGroup>
-                </FormControl>
-                <Box className={classes.textField} />
-            </>
-        )
-    }
-
-    const Department = ({ value, setValue, error }) => {
-        const { departments } = useSelector(state => state.department4List)
-
+    const CustomSelect = ({ value, setValue, options, error }) => {
         const handleSelectOnChange = e => {
             setValue(e.target.value)
         }
@@ -108,8 +107,8 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
                 }}
                 InputLabelProps={{ style: { fontSize: '1.3rem', color: theme.palette.primary.main } }}
             >
-                {departments.length > 0 &&
-                    departments
+                {options.length > 0 &&
+                    options
                         .filter(department => department.active)
                         .map(department => (
                             <MenuItem
@@ -124,18 +123,15 @@ const CustomInput = ({ label, name, value, setValue, handleChange, handleHelperT
         )
     }
 
-    return name === 'birth' || name === 'datetime' ? (
-        <DatePickerCustomInput label={label} value={value} setValue={setValue} error={error} />
-    ) : name === 'gender' ? (
-        <GenderPicker />
-    ) : name === 'department' ? (
-        <Department value={value} setValue={setValue} error={error} />
+    return type === 'date' ? (
+        <DatePicker label={label} value={value} setValue={setValue} error={error} />
+    ) : type === 'select' ? (
+        <CustomSelect value={value} setValue={setValue} options={options} error={error} />
     ) : (
         <TextField
             variant="outlined"
             error={error}
             helperText={handleHelperText(name)}
-            disabled={name === 'id' && mode === 'edit'}
             label={label}
             required={required}
             value={value}

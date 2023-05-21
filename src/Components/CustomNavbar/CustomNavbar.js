@@ -14,10 +14,12 @@ import { scheduleTrigger } from '../../Redux/Slices/Schedule'
 import { apiGetCookie } from '../../Axios/Cookie'
 
 import { openDialog } from '../../Redux/Slices/Dialog'
-import CreateDialog from '../CreateDialog/CreateDialog'
+import CustomDialog from '../CustomDialog/CustomDialog'
 
 const CustomNavbar = () => {
     const [event, setEvent] = useState('all')
+    const [type, setType] = useState('patient')
+    const [title, setTitle] = useState('')
     const classes = useStyles()
     const dispatch = useDispatch()
     const location = useLocation()
@@ -52,6 +54,24 @@ const CustomNavbar = () => {
         setEvent(e.target.value)
         await apiRegisterEvent(e.target.value)
         handleEventChange()
+    }
+
+    const handleOpenDialog = type => {
+        setType(type)
+        switch (type) {
+            case 'patient':
+                setTitle('新增病患')
+                break
+            case 'department':
+                setTitle('新增部門')
+                break
+            case 'event':
+                setTitle('新增活動')
+                break
+            default:
+                break
+        }
+        dispatch(openDialog({ row: {}, type }))
     }
 
     const config = genConfig(user.username)
@@ -95,7 +115,7 @@ const CustomNavbar = () => {
                             variant="outlined"
                             className={classes.button}
                             startIcon={<AccessibleForwardOutlined />}
-                            onClick={() => dispatch(openDialog({ row: {}, type: 'patient' }))}
+                            onClick={() => handleOpenDialog('patient')}
                         >
                             新增病患
                         </Button>
@@ -103,11 +123,16 @@ const CustomNavbar = () => {
                             variant="outlined"
                             className={classes.button}
                             startIcon={<AccountBalanceOutlined />}
-                            // onClick={() => dispatch(openDialog({ row: {}, type: 'department' }))}
+                            onClick={() => handleOpenDialog('department')}
                         >
                             新增部門
                         </Button>
-                        <Button variant="outlined" className={classes.button} startIcon={<EventAvailableOutlined />}>
+                        <Button
+                            variant="outlined"
+                            className={classes.button}
+                            startIcon={<EventAvailableOutlined />}
+                            onClick={() => handleOpenDialog('event')}
+                        >
                             新增活動
                         </Button>
                     </Stack>
@@ -129,7 +154,7 @@ const CustomNavbar = () => {
                     </Button>
                 </Box>
             </Toolbar>
-            <CreateDialog title="新增病患" type="patient" />
+            <CustomDialog title={title} type={type} mode="create" />
         </AppBar>
     )
 }

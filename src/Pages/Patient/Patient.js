@@ -1,44 +1,19 @@
 import React, { useCallback, useMemo } from 'react'
-import {
-    Box,
-    Button,
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
-    IconButton,
-    FormControl,
-    FormLabel,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
-    CircularProgress,
-} from '@mui/material'
-import {
-    CalendarToday,
-    ArrowDropDown,
-    Delete,
-    Edit,
-    Cancel,
-    Check,
-    DesignServices,
-    AccessTime,
-    ClearOutlined,
-    AirlineSeatFlat,
-    AirlineSeatIndividualSuite,
-} from '@mui/icons-material'
+import { Box, Button } from '@mui/material'
+import { CalendarToday, Delete, Edit, Check, AccessTime, AirlineSeatIndividualSuite } from '@mui/icons-material'
 
 import useStyles from './Style'
 import CustomTable from '../../Components/CustomTable/CustomTable'
-import CustomForm from '../../Components/CustomForm/CustomForm'
-import PatientDialog from './PatientDialog'
+
 import GlobalFilter from '../../Components/GlobalFilter/GlobalFilter'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { deletePatient, createPatient, fetchPatients, patientTrigger } from '../../Redux/Slices/Patient'
+import { deletePatient, fetchPatients } from '../../Redux/Slices/Patient'
 import { openDialog } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
 import { apiCheckExists } from '../../Axios/Exists'
-import { addSchedule, changeScheduleStatus, removeSchedule, updateSchedule } from '../../Redux/Slices/Schedule'
+import { addSchedule, changeScheduleStatus, removeSchedule } from '../../Redux/Slices/Schedule'
+import CustomDialog from '../../Components/CustomDialog/CustomDialog'
 
 const Patient = () => {
     const classes = useStyles()
@@ -205,32 +180,8 @@ const Patient = () => {
 
     const fetchData = useCallback(params => dispatch(fetchPatients(params)), [])
 
-    const sendData = useCallback(data => dispatch(createPatient(data)), [])
-
-    const StatusRadioGroup = ({ status, setStatus }) => {
-        const handleOnChange = e => setStatus(e.target.value)
-        return (
-            <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">狀態</FormLabel>
-                <RadioGroup row aria-labelledby="demo-radio-buttons-group-label" value={status} onChange={handleOnChange}>
-                    <FormControlLabel value="all" control={<Radio />} label="全部" />
-                    <FormControlLabel value="wait-blood" control={<Radio />} label="等待抽血" />
-                    <FormControlLabel value="wait-examination" control={<Radio />} label="完成抽血" />
-                    <FormControlLabel value="finish" control={<Radio />} label="完成報告" />
-                </RadioGroup>
-            </FormControl>
-        )
-    }
-
     return (
         <Box className={classes.container}>
-            <Accordion elevation={0} className={classes.accordion}>
-                <AccordionSummary expandIcon={<ArrowDropDown />} sx={{ flexDirection: 'column-reverse' }} className={classes.accordion} />
-                <AccordionDetails>
-                    <CustomForm title="新增病人" sendData={sendData} mode="create" />
-                </AccordionDetails>
-            </Accordion>
-
             <CustomTable
                 columns={columns}
                 fetchData={fetchData}
@@ -238,10 +189,9 @@ const Patient = () => {
                 loading={loading}
                 totalPage={page}
                 totalCount={count}
-                StatusRadioGroup={StatusRadioGroup}
                 GlobalFilter={GlobalFilter}
             />
-            <PatientDialog />
+            <CustomDialog title="修改病患" type="patient" mode="edit" />
         </Box>
     )
 }

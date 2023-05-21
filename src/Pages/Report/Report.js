@@ -269,7 +269,7 @@ const Report = () => {
                     GlobalFilter={GlobalFilter}
                 />
             )}
-            <ReportDialog mode="edit" />
+            <ReportDialog />
         </Box>
     )
 }

@@ -4,6 +4,7 @@ import { apiDeleteScheduleAndBloodAndReport } from '../../Axios/Schedule'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
+import { openAlert } from './Alert'
 
 const initialState = { loading: false, data: [], count: 0, page: 1 }
 
@@ -20,6 +21,13 @@ export const fetchPatients = createAsyncThunk('patients/fetchPatients', async ({
 export const createPatient = createAsyncThunk('patients/createPatient', async (data, thunkAPI) => {
     try {
         const response = await apiCreatePatient(data)
+        thunkAPI.dispatch(
+            openAlert({
+                toastTitle: '新增成功',
+                text: data.name,
+                icon: 'success',
+            })
+        )
         return response.data
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))
@@ -30,6 +38,13 @@ export const createPatient = createAsyncThunk('patients/createPatient', async (d
 export const updatePatient = createAsyncThunk('patients/updatePatient', async (data, thunkAPI) => {
     try {
         const response = await apiUpdatePatient(data.id, data)
+        thunkAPI.dispatch(
+            openAlert({
+                toastTitle: '修改成功',
+                text: data.name,
+                icon: 'success',
+            })
+        )
         return response.data
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))

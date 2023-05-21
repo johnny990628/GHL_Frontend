@@ -12,6 +12,7 @@ import {
     Close,
     CloudDone,
     Delete,
+    Edit,
     Visibility,
 } from '@mui/icons-material'
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,12 +27,10 @@ import { removeSchedule } from '../../Redux/Slices/Schedule'
 import { activeEvent, createEvent, deleteEvent, fetchEvent } from '../../Redux/Slices/Event'
 import CustomInput from '../../Components/CustomForm/CustomInput'
 import { useDebouncedCallback } from 'use-debounce'
+import { openDialog } from '../../Redux/Slices/Dialog'
+import CustomDialog from '../../Components/CustomDialog/CustomDialog'
 
-const Report = () => {
-    const [name, setName] = useState('')
-    const [datetime, setDatetime] = useState(new Date())
-    const [department, setDepartment] = useState('')
-    const [errorField, setErrorField] = useState([])
+const Event = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
 
@@ -40,54 +39,6 @@ const Report = () => {
     const fetchData = async params => {
         dispatch(fetchEvent(params))
     }
-
-    const handleHelperText = fieldName => {
-        switch (fieldName) {
-            case 'name':
-                return results.find(d => d.name === name) && '此活動已存在'
-            default:
-                return ''
-        }
-    }
-
-    const hasEmptyField = () => {
-        const errorFieldList = Object.entries({ name, datetime, department })
-            .map(([key, value]) => !value && key)
-            .filter(key => key)
-        setErrorField(errorFieldList)
-        return errorFieldList.length !== 0
-    }
-
-    const handleSubmit = async () => {
-        if (hasEmptyField()) {
-            dispatch(
-                openAlert({
-                    toastTitle: '新增失敗',
-                    text: '有錯誤欄位',
-                    icon: 'error',
-                })
-            )
-            return
-        }
-
-        dispatch(createEvent({ name, datetime, departmentID: department }))
-        setName('')
-        setDatetime(new Date())
-    }
-
-    const handleChange = useDebouncedCallback((value, name) => {
-        switch (name) {
-            case 'name':
-                setName(value)
-                break
-            case 'datetime':
-                setDatetime(value)
-                break
-
-            default:
-                break
-        }
-    }, 500)
 
     const handleDeleteEvent = event =>
         dispatch(
@@ -122,11 +73,13 @@ const Report = () => {
                 Header: '操作',
                 Cell: row => (
                     <Button
-                        startIcon={<Delete />}
-                        sx={{ color: 'red.main', fontSize: '1.1rem' }}
-                        onClick={() => handleDeleteEvent(row.row.original)}
+                        startIcon={<Edit color="contrast" />}
+                        sx={{ fontSize: '1.1rem', color: 'contrast.main' }}
+                        onClick={() => {
+                            dispatch(openDialog({ row: row.row.original, type: 'event' }))
+                        }}
                     >
-                        刪除
+                        編輯
                     </Button>
                 ),
             },
@@ -154,49 +107,8 @@ const Report = () => {
         []
     )
 
-    const inputModel = [
-        { name: 'name', label: '活動名稱', value: name, setValue: setName, required: true },
-        { name: 'department', label: '部門', value: department, setValue: setDepartment, required: true },
-        { name: 'datetime', label: '活動日期', value: datetime, setValue: setDatetime, required: true },
-    ]
-
     return (
         <Box className={classes.container}>
-            <Accordion elevation={0} className={classes.accordion}>
-                <AccordionSummary expandIcon={<ArrowDropDown />} sx={{ flexDirection: 'column-reverse' }} />
-                <AccordionDetails>
-                    <Box className={classes.formWrapper}>
-                        <Box className={classes.formHeader}>新增活動</Box>
-
-                        <Box className={classes.formContainer}>
-                            <Box className={classes.formBody}>
-                                {inputModel.map(({ name, label, value, setValue, required }) => (
-                                    <CustomInput
-                                        key={name}
-                                        name={name}
-                                        label={label}
-                                        value={value}
-                                        setValue={setValue}
-                                        handleChange={handleChange}
-                                        handleHelperText={handleHelperText}
-                                        error={errorField.includes(name)}
-                                        required={required}
-                                    />
-                                ))}
-                            </Box>
-                            <Button
-                                variant="contained"
-                                className={classes.button}
-                                fullWidth
-                                sx={{ fontSize: '1.1rem ', padding: '.5rem', margin: '1rem' }}
-                                onClick={handleSubmit}
-                            >
-                                新增
-                            </Button>
-                        </Box>
-                    </Box>
-                </AccordionDetails>
-            </Accordion>
             <CustomTable
                 columns={columns}
                 fetchData={fetchData}
@@ -206,8 +118,9 @@ const Report = () => {
                 totalCount={count}
                 GlobalFilter={GlobalFilter}
             />
+            <CustomDialog title="修改活動" type="event" mode="edit" />
         </Box>
     )
 }
 
-export default Report
+export default Event

@@ -14,9 +14,9 @@ export const fetchEvent = createAsyncThunk('event/fetchEvent', async (params, th
     }
 })
 
-export const createEvent = createAsyncThunk('event/createEvent', async ({ name, datetime, departmentID }, thunkAPI) => {
+export const createEvent = createAsyncThunk('event/createEvent', async ({ name, datetime, departmentID, creator }, thunkAPI) => {
     try {
-        const response = await apiCreateEvent({ name, datetime, departmentID })
+        const response = await apiCreateEvent({ name, datetime, departmentID, creator })
         thunkAPI.dispatch(
             openAlert({
                 toastTitle: '新增成功',
@@ -30,6 +30,24 @@ export const createEvent = createAsyncThunk('event/createEvent', async ({ name, 
         return thunkAPI.rejectWithValue()
     }
 })
+
+export const updateEvent = createAsyncThunk('event/updateEvent', async ({ eventID, data }, thunkAPI) => {
+    try {
+        const response = await apiUpdateEvent(eventID, data)
+        thunkAPI.dispatch(
+            openAlert({
+                toastTitle: '修改成功',
+                text: data.name,
+                icon: 'success',
+            })
+        )
+        return response.data
+    } catch (e) {
+        thunkAPI.dispatch(tokenExpirationHandler(e.response))
+        return thunkAPI.rejectWithValue()
+    }
+})
+
 export const deleteEvent = createAsyncThunk('event/deleteEvent', async (eventID, thunkAPI) => {
     try {
         const response = await apiDeleteEvent(eventID)
