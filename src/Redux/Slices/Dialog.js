@@ -7,6 +7,8 @@ const initialState = {
     report: { isOpen: false, row: { patient: {}, records: {}, reportID: '' } },
     department: { isOpen: false, row: {} },
     event: { isOpen: false, row: {} },
+    mode: 'create',
+    type: 'patient',
 }
 
 export const fetchReportByReportID = createAsyncThunk('dialog/fetchReportByReportID', async (reportID, thunkAPI) => {
@@ -24,9 +26,11 @@ const dialogSlice = createSlice({
     initialState,
     reducers: {
         openDialog: (state, action) => {
-            const { row, type } = action.payload
+            const { row, type, mode } = action.payload
             state[type].isOpen = true
             state[type].row = row
+            state.mode = mode
+            state.type = type
         },
         closeDialog: (state, action) => {
             const { type } = action.payload

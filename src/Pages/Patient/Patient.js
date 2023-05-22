@@ -38,7 +38,7 @@ const Patient = () => {
                                 startIcon={<Edit color="contrast" />}
                                 sx={{ fontSize: '1.1rem', color: 'contrast.main' }}
                                 onClick={() => {
-                                    dispatch(openDialog({ row: row.row.original, type: 'patient' }))
+                                    dispatch(openDialog({ row: row.row.original, type: 'patient', mode: 'edit' }))
                                 }}
                             >
                                 編輯
@@ -191,7 +191,6 @@ const Patient = () => {
                 totalCount={count}
                 GlobalFilter={GlobalFilter}
             />
-            <CustomDialog title="修改病患" type="patient" mode="edit" />
         </Box>
     )
 }

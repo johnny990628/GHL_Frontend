@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -11,8 +11,23 @@ import CustomForm from '../CustomForm/CustomForm'
 import useStyles from './Style'
 import { Close } from '@mui/icons-material'
 
-const CustomDialog = ({ title, type, mode }) => {
+const CustomDialog = () => {
+    const { type, mode } = useSelector(state => state.dialog)
     const { isOpen, row } = useSelector(state => state.dialog[type])
+
+    const [title, setTitle] = useState('')
+
+    const titleSurface = {
+        patient: '病患',
+        department: '部門',
+        event: '活動',
+        edit: '編輯',
+        create: '新增',
+    }
+
+    useEffect(() => {
+        setTitle(titleSurface[mode] + titleSurface[type])
+    }, [type, mode])
 
     const dispatch = useDispatch()
     const classes = useStyles()

@@ -10,7 +10,7 @@ import { closeDialog } from '../../Redux/Slices/Dialog'
 
 import useForm from './useForm'
 
-const CustomForm = ({ type = 'patient', row, mode }) => {
+const CustomForm = ({ type, row, mode }) => {
     const { inputModel, handleChange, handleSubmit, handleUpdate, handleHelperText, errorField } = useForm(type)
     const classes = useStyles()
     const theme = useTheme()

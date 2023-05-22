@@ -36,7 +36,7 @@ const Department = () => {
                             startIcon={<Edit color="contrast" />}
                             sx={{ fontSize: '1.1rem', color: 'contrast.main' }}
                             onClick={() => {
-                                dispatch(openDialog({ row: row.row.original, type: 'department' }))
+                                dispatch(openDialog({ row: row.row.original, type: 'department', mode: 'edit' }))
                             }}
                         >
                             編輯
@@ -72,7 +72,6 @@ const Department = () => {
                 totalCount={count}
                 GlobalFilter={GlobalFilter}
             />
-            <CustomDialog title="修改部門" type="department" mode="edit" />
         </Box>
     )
 }

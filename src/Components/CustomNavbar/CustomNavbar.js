@@ -18,8 +18,7 @@ import CustomDialog from '../CustomDialog/CustomDialog'
 
 const CustomNavbar = () => {
     const [event, setEvent] = useState('all')
-    const [type, setType] = useState('patient')
-    const [title, setTitle] = useState('')
+
     const classes = useStyles()
     const dispatch = useDispatch()
     const location = useLocation()
@@ -57,21 +56,7 @@ const CustomNavbar = () => {
     }
 
     const handleOpenDialog = type => {
-        setType(type)
-        switch (type) {
-            case 'patient':
-                setTitle('新增病患')
-                break
-            case 'department':
-                setTitle('新增部門')
-                break
-            case 'event':
-                setTitle('新增活動')
-                break
-            default:
-                break
-        }
-        dispatch(openDialog({ row: {}, type }))
+        dispatch(openDialog({ row: {}, type, mode: 'create' }))
     }
 
     const config = genConfig(user.username)
@@ -154,7 +139,7 @@ const CustomNavbar = () => {
                     </Button>
                 </Box>
             </Toolbar>
-            <CustomDialog title={title} type={type} mode="create" />
+            <CustomDialog />
         </AppBar>
     )
 }

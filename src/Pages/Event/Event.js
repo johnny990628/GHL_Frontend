@@ -76,7 +76,7 @@ const Event = () => {
                         startIcon={<Edit color="contrast" />}
                         sx={{ fontSize: '1.1rem', color: 'contrast.main' }}
                         onClick={() => {
-                            dispatch(openDialog({ row: row.row.original, type: 'event' }))
+                            dispatch(openDialog({ row: row.row.original, type: 'event', mode: 'edit' }))
                         }}
                     >
                         編輯
@@ -118,7 +118,6 @@ const Event = () => {
                 totalCount={count}
                 GlobalFilter={GlobalFilter}
             />
-            <CustomDialog title="修改活動" type="event" mode="edit" />
         </Box>
     )
 }
