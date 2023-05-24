@@ -47,6 +47,7 @@ const whiteTheme = createTheme({
             main: 'rgb(247, 222, 227)',
             default: 'rgba(251, 248, 242,.85)',
             secondary: 'rgba(251, 248, 242,.95)',
+            opaque: 'rgb(248, 240, 235)',
         },
         text: {
             primary: 'rgba(36, 31, 33)',

@@ -26,7 +26,7 @@ const CustomNavbar = () => {
     const { user } = useSelector(state => state.auth)
     const { events } = useSelector(state => state.event4List)
 
-    useEffect(async () => {
+    useEffect(() => {
         dispatch(fetchEvent4List())
         setupEvent()
     }, [])
@@ -38,6 +38,8 @@ const CustomNavbar = () => {
                 break
             case '/report':
                 dispatch(scheduleTrigger())
+                break
+            default:
                 break
         }
     }
@@ -79,7 +81,7 @@ const CustomNavbar = () => {
             <Toolbar className={classes.toolbar} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <img src="./logo.gif" className={classes.logo} alt="logo" style={{ width: '2.8rem', height: '2.8rem' }} />
-                    <Box sx={{ color: 'primary.main', fontSize: '1.8rem', ml: 1 }}>奇異鳥報告系統</Box>
+                    <Box sx={{ color: 'primary.main', fontSize: '1.4rem', ml: 1 }}>奇異鳥報告系統</Box>
                     <FormControl sx={{ width: '10rem', ml: 4 }} size="small">
                         <InputLabel id="event-select-label">選擇活動</InputLabel>
                         <Select labelId="event-select-label" variant="outlined" value={event} onChange={handleChange} label="選擇活動">

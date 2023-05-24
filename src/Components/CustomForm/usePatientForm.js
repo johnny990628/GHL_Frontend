@@ -6,6 +6,7 @@ import { apiCheckExists } from '../../Axios/Exists'
 import { createPatient, updatePatient } from '../../Redux/Slices/Patient'
 import { closeDialog } from '../../Redux/Slices/Dialog'
 import { openAlert } from '../../Redux/Slices/Alert'
+import { addSchedule } from '../../Redux/Slices/Schedule'
 
 const usePatientForm = () => {
     const [id, setId] = useState('')
@@ -13,6 +14,7 @@ const usePatientForm = () => {
     const [phone, setPhone] = useState('')
     const [department, setDepartment] = useState('')
     const [birth, setBirth] = useState('')
+    const [blood, setBlood] = useState('')
     const [errorField, setErrorField] = useState([])
     const [validID, setValidID] = useState(true)
     const [validPhone, setValidPhone] = useState(true)
@@ -68,6 +70,7 @@ const usePatientForm = () => {
                     icon: 'error',
                 })
             )
+
             return
         }
 
@@ -75,6 +78,7 @@ const usePatientForm = () => {
         const gender = id.substring(1, 2) === '1' ? 'm' : 'f'
 
         dispatch(createPatient({ id, name, phone, departmentID: department, birth, gender, creator: user._id }))
+        if (blood) dispatch(addSchedule({ patientID: id, procedureCode: '19009C', blood }))
 
         dispatch(closeDialog({ type: 'patient' }))
     }
@@ -100,6 +104,7 @@ const usePatientForm = () => {
     }
 
     const inputModel = [
+        { name: 'blood', label: '抽血編號', type: 'text', value: blood, setValue: setBlood, required: false },
         { name: 'id', label: '身分證字號', type: 'text', value: id, setValue: setId, required: true },
         { name: 'name', label: '姓名', type: 'text', value: name, setValue: setName, required: true },
         { name: 'phone', label: '電話', type: 'text', value: phone, setValue: setPhone, required: true },

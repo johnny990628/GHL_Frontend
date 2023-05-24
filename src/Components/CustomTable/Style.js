@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
     },
     tableHeader: {
         fontSize: '1.1rem',
-        backgroundColor: 'transparent',
+        backgroundColor: theme.palette.background.opaque,
         borderBottom: `1px solid ${theme.palette.primary.light}`,
         [theme.breakpoints.down('lg')]: {
             fontSize: '1rem',
