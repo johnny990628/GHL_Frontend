@@ -2,7 +2,7 @@ import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles(theme => ({
     dialogPaper: {
-        backgroundColor: theme.palette.background.secondary,
+        backgroundColor: theme.palette.background.opaque,
     },
 }))
 

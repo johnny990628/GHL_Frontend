@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Progressbar from '../../Components/Progressbar/Progressbar'
 import useStyles from './Style'
 import LittleTable from '../../Components/LittleTable/LittleTable'
-import { fetchDashboard, fetchDepartment } from '../../Redux/Slices/Dashboard'
+import { fetchDashboard } from '../../Redux/Slices/Dashboard'
 import { DayPicker } from 'react-day-picker'
 import { format, isValid, addDays } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
@@ -15,7 +15,8 @@ const Home = () => {
     const classes = useStyles()
     const dispatch = useDispatch()
     const theme = useTheme()
-    const { patients, reports, schedules, count, departments } = useSelector(state => state.dashboard)
+    const { patients, waitExaminationSchedule, finishSchedule, count } = useSelector(state => state.dashboard)
+    const { departments } = useSelector(state => state.department4List)
     const isComputer = useMediaQuery(theme.breakpoints.up('xl'))
     const [selectDepartment, setSelectDepartment] = useState('all')
     const [date, setDate] = useState(new Date())
@@ -23,32 +24,26 @@ const Home = () => {
 
     const patientCol = useMemo(
         () => [
-            { accessor: 'id', Header: '身分證字號' },
-            { accessor: 'name', Header: '姓名' },
-            { accessor: 'gender', Header: '性別' },
+            { accessor: 'id', Header: '身分證字號', type: 'text' },
+            { accessor: 'name', Header: '姓名', type: 'text' },
+            { accessor: 'gender', Header: '性別', type: 'text' },
         ],
         []
     )
-    const scheduleCol = useMemo(
+    const waitScheduleCol = useMemo(
         () => [
-            { accessor: 'patientID', Header: '身分證字號' },
-            { accessor: 'procedureCode', Header: '病例代碼' },
+            { accessor: 'patientID', Header: '身分證字號', type: 'text' },
+            { accessor: 'createdAt', Header: '排程時間', type: 'datetime' },
         ],
         []
     )
-    const reportCol = useMemo(
+    const finishScheduleCol = useMemo(
         () => [
-            { accessor: 'patientID', Header: '身分證字號' },
-            { accessor: 'blood', Header: '抽血編號' },
-            { accessor: 'procedureCode', Header: '病例代碼' },
-            { accessor: 'status', Header: '狀態' },
+            { accessor: 'patientID', Header: '身分證字號', type: 'text' },
+            { accessor: 'updatedAt', Header: '完成時間', type: 'datetime' },
         ],
         []
     )
-
-    useEffect(() => {
-        dispatch(fetchDepartment())
-    }, [])
 
     useEffect(() => {
         const [dateFrom, dateTo] = [date.toLocaleDateString(), new Date(addDays(date, 1)).toLocaleDateString()]
@@ -105,12 +100,12 @@ const Home = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={6} lg={4}>
                             <Box className={classes.box}>
-                                <LittleCard title={'未檢查'} value={count?.schedule} total={count?.patient} />
+                                <LittleCard title={'尚未檢查'} value={count?.waitExamination} total={count?.patient} />
                             </Box>
                         </Grid>
                         <Grid item xs={6} lg={4}>
                             <Box className={classes.box}>
-                                <LittleCard title={'報告數'} value={count?.report} total={count?.patient} />
+                                <LittleCard title={'完成檢查'} value={count?.finish} total={count?.patient} />
                             </Box>
                         </Grid>
                         <Grid item xs={6} lg={4}>
@@ -126,7 +121,7 @@ const Home = () => {
                     </Grid>
                 </Grid>
                 <Grid container item md={12} xl={4} spacing={2}>
-                    {isComputer && (
+                    {/* {isComputer && (
                         <Grid container item xs={12} spacing={2}>
                             <Grid item xs={6}>
                                 <Box className={classes.box}>
@@ -156,16 +151,16 @@ const Home = () => {
                                 </Box>
                             </Grid>
                         </Grid>
-                    )}
+                    )} */}
 
                     <Grid item xs={12}>
                         <Box className={classes.box}>
-                            <LittleTable title={'未檢查'} rows={schedules} cols={scheduleCol} route={'/createReport'} />
+                            <LittleTable title={'尚未檢查'} rows={waitExaminationSchedule} cols={waitScheduleCol} route={'/patient'} />
                         </Box>
                     </Grid>
                     <Grid item xs={12}>
                         <Box className={classes.box}>
-                            <LittleTable title={'當日報告'} rows={reports} cols={reportCol} route={'/report'} />
+                            <LittleTable title={'完成檢查'} rows={finishSchedule} cols={finishScheduleCol} route={'/report'} />
                         </Box>
                     </Grid>
                 </Grid>

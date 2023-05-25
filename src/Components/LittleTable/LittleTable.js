@@ -28,7 +28,15 @@ const LittleTable = ({ title, rows, cols, route }) => {
                             <TableRow key={row.id} className={[classes.tableRow, classes.link]} component={Link} to={route}>
                                 {cols.map(col => (
                                     <TableCell key={col.accessor} component="th" scope="row" className={classes.tableCell}>
-                                        {row[col.accessor]}
+                                        {col.type === 'text' && row[col.accessor]}
+                                        {col.type === 'datetime' && (
+                                            <Box>
+                                                <Box>{new Date(row[col.accessor]).toLocaleDateString()}</Box>
+                                                <Box sx={{ fontSize: '.8rem', color: 'gray.main' }}>
+                                                    {new Date(row[col.accessor]).toLocaleTimeString()}
+                                                </Box>
+                                            </Box>
+                                        )}
                                     </TableCell>
                                 ))}
                             </TableRow>

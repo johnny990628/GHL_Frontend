@@ -15,6 +15,7 @@ import { apiGetCookie } from '../../Axios/Cookie'
 
 import { openDialog } from '../../Redux/Slices/Dialog'
 import CustomDialog from '../CustomDialog/CustomDialog'
+import { fetchDashboard } from '../../Redux/Slices/Dashboard'
 
 const CustomNavbar = () => {
     const [event, setEvent] = useState('all')
@@ -38,6 +39,9 @@ const CustomNavbar = () => {
                 break
             case '/report':
                 dispatch(scheduleTrigger())
+                break
+            case '/':
+                dispatch(fetchDashboard())
                 break
             default:
                 break
