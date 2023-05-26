@@ -104,7 +104,7 @@ const usePatientForm = () => {
     }
 
     const inputModel = [
-        { name: 'blood', label: '抽血編號', type: 'text', value: blood, setValue: setBlood, required: false },
+        { name: 'blood', label: '抽血編號(非必填)', type: 'text', value: blood, setValue: setBlood, required: false },
         { name: 'id', label: '身分證字號', type: 'text', value: id, setValue: setId, required: true },
         { name: 'name', label: '姓名', type: 'text', value: name, setValue: setName, required: true },
         { name: 'phone', label: '電話', type: 'text', value: phone, setValue: setPhone, required: true },

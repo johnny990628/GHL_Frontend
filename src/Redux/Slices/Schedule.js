@@ -9,6 +9,7 @@ import {
     apiUpdateScheduleStatus,
 } from '../../Axios/Schedule'
 import { tokenExpirationHandler } from '../../Utils/ErrorHandle'
+import { apiAddWorklist } from '../../Axios/WorkList'
 
 export const fetchSchedule = createAsyncThunk('schedule/fetchSchedule', async (params, thunkAPI) => {
     try {
@@ -31,7 +32,15 @@ export const addSchedule = createAsyncThunk('schedule/addSchedule', async ({ pat
         const reportResponse = await apiCreateReport({ patientID })
         const reportID = reportResponse.data._id
         const bloodResponse = await apiAddBlood({ patientID, number: blood })
-        await apiAddSchedule({ patientID, reportID, procedureCode, status: 'wait-examination', bloodID: bloodResponse.data._id })
+        const worklistResponse = await apiAddWorklist(patientID)
+        await apiAddSchedule({
+            patientID,
+            reportID,
+            procedureCode,
+            status: 'wait-examination',
+            bloodID: bloodResponse.data._id,
+            StudyInstanceUID: worklistResponse.data.studyInstanceUID,
+        })
     } catch (e) {
         thunkAPI.dispatch(tokenExpirationHandler(e.response))
         return thunkAPI.rejectWithValue()

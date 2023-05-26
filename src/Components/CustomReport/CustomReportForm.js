@@ -220,7 +220,7 @@ const CustomReportForm = ({ lists, patient }) => {
                     </Button>
                 </Tooltip> */}
                 <Stack direction="row" spacing={1}>
-                    <Button
+                    {/* <Button
                         variant="contained"
                         onClick={() => {
                             apiAddWorklist(patient.id)
@@ -248,7 +248,7 @@ const CustomReportForm = ({ lists, patient }) => {
                         sx={{ borderRadius: '2rem', height: 'auto', color: 'white' }}
                     >
                         超音波開單
-                    </Button>
+                    </Button> */}
                     <Button
                         variant={Boolean(dicomAnchorEl) ? 'outlined' : 'contained'}
                         onClick={handleDicomClick}
@@ -257,6 +257,17 @@ const CustomReportForm = ({ lists, patient }) => {
                         sx={{ borderRadius: '2rem', height: 'auto', color: Boolean(dicomAnchorEl) ? 'contrast.main' : 'white' }}
                     >
                         超音波影像
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        onClick={() => {
+                            window.open(`${process.env.REACT_APP_BLUELIGHT_URL}?PatientID=${patient.id}`, '_blank').focus()
+                        }}
+                        startIcon={<Cast />}
+                        color="contrast"
+                        sx={{ borderRadius: '2rem', height: 'auto', color: 'contrast.main' }}
+                    >
+                        新分頁開啟影像
                     </Button>
                 </Stack>
 

@@ -146,7 +146,7 @@ const Report = () => {
                         >
                             刪除
                         </Button>
-                        <Button
+                        {/* <Button
                             startIcon={<CloudDone />}
                             color="primary"
                             sx={{ color: 'primary.main', fontSize: '1.1rem' }}
@@ -173,7 +173,7 @@ const Report = () => {
                             }}
                         >
                             超音波開單
-                        </Button>
+                        </Button> */}
                     </Box>
                 ),
             },
